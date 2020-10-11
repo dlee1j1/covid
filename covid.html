@@ -217,7 +217,7 @@
             <td><input readonly=true :value="Others.risk()" :key="Others.risk()"></input>
             </td>
         </tr>
-        <tr v-if="Others.score() && Self.score() && Others.score() > Self.score()">
+        <tr v-if="Others.score() && Self.score() && Others.score() > Self.score() &&  Self.risk() != Others.risk() ">
             <td colspan="2">
                 Compare your risk ({{Self.risk()}}) to the risk of those living with you ({{Others.risk()}}). 
                 Consider whether to increase your preferred risk tolerance when determining your final risk tolerance. </span>
