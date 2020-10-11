@@ -108,11 +108,7 @@
     }
 
     @media print {
-        button {
-            display: none;
-        }
-
-        :placeholder-shown { 
+        button, :placeholder-shown, .debug {
             display: none;
         }
     }
@@ -144,10 +140,10 @@
 }
 </style>
 
-<!--
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
--->
+<!--
 <script src="vue.js"></script>
+-->
 
 <div id="complications">
 <table class="purpleTable">
@@ -240,7 +236,7 @@
     </tbody>
 </table>
 <div> 
-    <span v-if="debug"> <input v-model="key"><button @click="load()">Load</button> <button @click="save()">Save</button> </span>   
+    <span v-if="debug" class="debug"> <input v-model="key"><button @click="load()">Load</button> <button @click="save()">Save</button> </span>   
     <button type="button" @click="resetFields()" >Reset</button> 
 </div>
 
@@ -273,6 +269,11 @@
             if (!val) return val
             return Math.round(val*1000)/1000 
          })
+
+    Vue.filter('keycheck',
+        function(tuple) {        
+            return tuple ? tuple[0] : null
+        })
     
     Vue.component('DictSelect', {
         props: ['value','dict'],
@@ -431,7 +432,7 @@
 
     </table>
     <div style="float: left;">
-        <span v-if="debug"> <input v-model="key"><button @click="load()">Load</button> <button @click="save()">Save</button> </span>    
+        <span v-if="debug" class="debug"> <input v-model="key"><button @click="load()">Load</button> <button @click="save()">Save</button> </span>    
         <button type="button" @click="resetFields()" >Reset</button> 
     </div>
 </div>
@@ -512,11 +513,11 @@
                    </tr>
                    <tr>
                     <td> When meeting with other people indoor, does he/she maintain social distance (at least 6 feet)? </td>
-                    <td> <BehaviorSelect v-model="mem.socialdistance" :hasunknown=true  @input="updateScore()" :key="mem.socialdistance[0]" ></BehaviorSelect> </td>
+                    <td> <BehaviorSelect v-model="mem.socialdistance" :hasunknown=true  @input="updateScore()" :key="mem.socialdistance | keycheck" ></BehaviorSelect> </td>
                    </tr>
                    <tr>
                     <td> When meeting with other people indoor, does he/she use a face mask? </td>
-                    <td> <BehaviorSelect v-model="mem.mask" :hasunknown=true @input="updateScore()" :key="mem.mask[0]"></BehaviorSelect> </td>
+                    <td> <BehaviorSelect v-model="mem.mask" :hasunknown=true @input="updateScore()" :key="mem.mask | keycheck"></BehaviorSelect> </td>
                   </tr>
                   <tr v-if="memberscount > 1">
                     <td> Household member {{identifier()}} score </td>
@@ -592,22 +593,22 @@
                   <template v-if="contact.count > 0">
                   <tr>
                     <td> When you met with them, did you maintain social distance from them (at least 6 feet)? </td>
-                    <td> <BehaviorSelect v-model="contact.socialdistance"  @input="updateScore()" :key="contact.socialdistance[0]" ></BehaviorSelect> </td>
+                    <td> <BehaviorSelect v-model="contact.socialdistance"  @input="updateScore()" :key="contact.socialdistance | keycheck" ></BehaviorSelect> </td>
                    </tr>
                    <tr>
                     <td> When you met with them, did you use a face mask? </td>
-                    <td> <BehaviorSelect v-model="contact.mask" @input="updateScore()" :key="contact.mask[0]"></BehaviorSelect> </td>
+                    <td> <BehaviorSelect v-model="contact.mask" @input="updateScore()" :key="contact.mask | keycheck"></BehaviorSelect> </td>
                   </tr>
                   <tr>
                     <td> What proportion of the time did you meet them in a room the size of or smaller than a small 
                         restaurant or a Starbucks? (If you only met in a larger room, then answer “none of the time”.)
                     </td>
-                    <td> <DictSelect :dict="SmallRoomDict" v-model="contact.smallroom" @input="updateScore()" :key="contact.smallroom[0]" ></DictSelect> </td>
+                    <td> <DictSelect :dict="SmallRoomDict" v-model="contact.smallroom" @input="updateScore()" :key="contact.smallroom | keycheck" ></DictSelect> </td>
                   </tr>
                   <tr>
                     <td> How frequently did you meet with them?
                     </td>    
-                    <td> <DictSelect :dict="FrequencyDict" v-model="contact.frequency" @input="updateScore()" :key="contact.frequency[0]"></DictSelect> </td>                    
+                    <td> <DictSelect :dict="FrequencyDict" v-model="contact.frequency" @input="updateScore()" :key="contact.frequency | keycheck"></DictSelect> </td>                    
                   </tr>
                   <tr>
                     <td> {{isoutdoor?'Outdoor':'Indoor'}}  {{contact.index}} contact score </td>
