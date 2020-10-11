@@ -248,6 +248,8 @@
     let debug = u.get("debug") != null;
 
 
+    const eventBus = new Vue() 
+
     function amend(dict,prefix,key,val) {
         let delim = prefix && key ? "_" : ""
         let k = `${prefix}${delim}${key}`
@@ -345,6 +347,9 @@
                     key:null
                 } )
         },
+        created () {
+            eventBus.$on('toggleDebug',this.toggleDebug)
+        },
         methods: {
             resetFields() {
                 Object.assign(this.$data, this.$options.data.call(this));
@@ -367,6 +372,9 @@
                 this.Self.flatten(dict);
                 this.Others.flatten(dict);
                 amend(dict,'self','PerceivedRisk',this.PerceivedRisk)
+            },
+            toggleDebug() {
+                this.debug = !this.debug; this.$forceUpdate()
             }
         }
     })
@@ -389,7 +397,7 @@
         <tr>
             <td>Consider the people you live with, how many of them met with other people indoor over the past 2
                 weeks?</td>
-            <td><input  type="number" v-model="HouseholdSize" placeholder="household" @input="checksize()">   </input> 
+            <td><input  type="number" v-model="HouseholdSize" placeholder="household" @input="checksize()" @keyup="checkkey($event)">   </input> 
             </td>
         </tr>
 
@@ -674,7 +682,10 @@
             key:null
         }},
         methods: {
-            checksize: function() {
+            checkkey: function(e) { 
+                if (e.key === '@') { this.debug = !this.debug; eventBus.$emit('toggleDebug'); this.$forceUpdate() } 
+            },
+            checksize: function(str) {
                 if (this.HouseholdSize < 0) { this.HouseholdSize = 0; this.$forceUpdate(); }
                 if (this.HouseholdSize > 10) { this.HouseholdSize = 10; this.$forceUpdate(); }
 
