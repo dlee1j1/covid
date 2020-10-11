@@ -359,7 +359,7 @@
             },
             save() {
                 let complications = JSON.stringify(complicationsApp.$data)
-                let k = 'complications' + this.key?this.key:""
+                let k = 'complications' + (this.key?this.key:"")
                 localStorage.setItem(k, complications )
             },
             flatten(dict) {
@@ -431,7 +431,7 @@
 
 
     </table>
-    <div style="float: left;">
+    <div style="float:right;">
         <span v-if="debug" class="debug"> <input v-model="key"><button @click="load()">Load</button> <button @click="save()">Save</button> </span>    
         <button type="button" @click="resetFields()" >Reset</button> 
     </div>
@@ -729,7 +729,7 @@
             },
             save() {
                 let infection = JSON.stringify(this.$data)
-                let k = 'infection' + this.key?this.key:""
+                let k = 'infection' + (this.key?this.key:"")
                 localStorage.setItem(k, infection )
             },
             flatten(dict) {
