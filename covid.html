@@ -409,7 +409,7 @@
             For the questions below, close contact is defined as being together within <b> 6 feet or 2 meters for at least 15 minutes</b> over the past 2 weeks. 
             Multiple short contacts over the past 2 weeks adding up to 15 minutes meets this definition.
             <p/>
-            Consider the close contacts whom you don’t live with but met with indoor over the past 2 weeks. 
+            Consider the close contacts whom you don&apos;t live with but met with indoor over the past 2 weeks. 
             What is the number of close contact you met with at work, at social activities, at school, or at other activities?
         </td></tr>        
         <tbody v-for="insidetype in Insides" is="ContactScore" :contact="insidetype" :key="insidetype.index" @updatescore="UpdateTotalScore()"></tbody>
@@ -420,7 +420,7 @@
 
         <tr> <td colspan="2" class="category" >Close outdoor contacts</td></tr>
         <tr> <td colspan="2"> 
-            Consider the close contacts whom you don’t live with but met with outdoor over the past 2 weeks.        
+            Consider the close contacts whom you don&apos;t live with but met with outdoor over the past 2 weeks.        
         </td></tr>
 
         <tbody  is="ContactScore" :contact="Outside" :isoutdoor="true" @updatescore="UpdateTotalScore()"></tbody>
@@ -646,7 +646,7 @@
         },
         methods: {
             updateScore() { this.score = this.contact.score(); this.$emit('updatescore') },
-            checkContact() { if (this.contact.count <= 0) { this.contact.count = null;  } 
+            checkContact() { if (this.contact.count < 0) { this.contact.count = null;  } 
                             this.updateScore(); }
         },
     })
