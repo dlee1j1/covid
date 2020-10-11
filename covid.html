@@ -1,0 +1,1116 @@
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+    table html body {
+        max-height: 999999px;
+        font-family: serif;
+        font-size: calc(1rem + 1vw);
+    }
+    
+    div.footnote {
+        max-height: 999999px;
+        font-size: 80%
+    }
+    
+    @media(min-width:30em) {
+        html {
+            font-size: 90%
+        }
+        div.footnote {
+            font-size: 90%
+        }
+    }
+    
+    table {
+        border: 1px solid #1C6EA4;
+        background-color: #EEEEEE;
+        width: 100%;
+        text-align: left;
+        border-collapse: collapse;
+    }
+    
+    table td,
+    table th {
+        border: 1px solid #AAAAAA;
+        padding: 2px 3px;
+        padding-left: 5px;
+        vertical-align: top;
+    }
+    
+    table tbody td {
+        max-height: 999999px;
+    }
+    
+    table tbody td.bold {
+        font-style: italic;
+    }
+    
+    table tbody td input:read-only {
+        border: 0px;
+        background-color: yellow;
+    }
+    
+    table tbody td input {
+        width: 20vw;
+        max-width: 20vw;
+        height: 110%;
+        text-align: right;
+        font-size: 1rem;
+    }
+    
+    table tbody td select {
+        width: 20vw;
+        height: 110%;
+        max-width: 20vw;
+        font-size: 1rem;
+    }
+    
+    table tr:nth-child(even) {
+        background: #D0E4F5;
+    }
+    
+    table thead {
+        background: #1C6EA4;
+        background: -moz-linear-gradient(top, #5592bb 0%, #327cad 66%, #1C6EA4 100%);
+        background: -webkit-linear-gradient(top, #5592bb 0%, #327cad 66%, #1C6EA4 100%);
+        background: linear-gradient(to bottom, #5592bb 0%, #327cad 66%, #1C6EA4 100%);
+        border-bottom: 2px solid #444444;
+    }
+    
+    table thead th {
+        font-size: 0.9em;
+        font-weight: bold;
+        text-align: center;
+        color: #FFFFFF;
+        border-left: 2px solid #D0E4F5;
+    }
+    
+    table thead th:first-child {
+        border-left: none;
+    }
+    
+    table.purpleTable tr:nth-child(even) {
+        background: #F3D4F5;
+    }
+    
+    table.purpleTable thead {
+        background: #A220A4;
+        background: -moz-linear-gradient(top, #b958bb 0%, #ab36ad 66%, #A220A4 100%);
+        background: -webkit-linear-gradient(top, #b958bb 0%, #ab36ad 66%, #A220A4 100%);
+        background: linear-gradient(to bottom, #b958bb 0%, #ab36ad 66%, #A220A4 100%);
+    }
+
+    .category {
+        font-weight: bold;
+    }
+
+    .subcategiry {
+        font-style: italic;
+    }
+
+    /* Tooltip container */
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+/* Tooltip text */
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+ 
+  /* Position the tooltip text  */
+  position: absolute;
+  z-index: 1;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
+</style>
+
+<!--
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+-->
+<script src="vue.js"></script>
+
+<div id="complications">
+<table class="purpleTable">
+    <thead>
+        <tr>
+            <th colspan="2">UNDERSTANDING YOUR RISK FOR COVID-19 COMPLICATIONS</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td colspan="2">Understanding your risk for serious COVID-19 complications can help you decide whether to meet with others face-to-face. Older ages and having certain health conditions (see Note) are the main risk factors for COVID-19 complications. However,
+                other personal considerations could factor into your <em>perceived risk</em> for COVID complications.
+            </td>
+        </tr>
+        <tr>
+            <td class="tooltip">What age group are you in?
+                <span class="tooltiptext"> Older people have substantially greater risk for
+                    COVID-19 complications, hospitalizations, ICU care, and
+                    deaths. Those in older age groups are assigned a higher risk
+                    score: &lt;30, 30-49, 50-64, and &ge;65 has a risk score of 0.5, 1, 2,
+                    and 3, respectively </span>
+            </td>
+            <td> <select is="DictSelect" v-model="Self.age" :dict=AgeDict></select> </td>
+        </tr>
+        <tr>
+            <td>How many health conditions do you have that put you at increased risk of COVID-19 complications?
+            </td>
+            <td> <select is="DictSelect" v-model="Self.health" :dict="HealthDict"></select></td>
+        </tr>
+        <tr>
+            <td colspan="2" style="font-size:85%; padding-left: 5px;">
+                The most common health conditions associated with serious COVID-19 complications include: obesity, cardiovascular diseases, chronic respiratory diseases, chronic kidney diseases, diabetes, hypertension, cancer, immunosuppressive drugs. A full list can
+                be found on CDC website.
+            </td>
+        </tr>
+        <tr>
+            <td>Risk Score</td>
+            <td><input readonly=true :value="Self.score()" :key="Self.score()"></input>
+            </td>
+        </tr>
+        <tr>
+            <td>Calculated Risk</td>
+            <td><input readonly=true :value="Self.risk()" :key="Self.risk()"></input>
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="2" class=bold>Among those living with you</td>
+        </tr>
+        <td colspan="2">
+        <p>You should consider the risk of serious complications among those living with you because if you get infected, you may infect them and put them at risk for COVID-19 complications. Together, these considerations help to
+            determine your <em>final risk</em> for COVID-19 complications. </td>
+        <tr>
+            <td>What is the age group of the oldest person you are living with?</td>
+            <td> <select is="DictSelect" v-model="Others.age" :dict=AgeDict></select> </td>
+        </tr>
+        <tr>
+            <td>Among those living with you, think about the person with the highest number of health conditions that put him/her at increased risk of COVID-19 complications. How many health conditions does that person have?</td>
+            <td> <select is="DictSelect" v-model="Others.health" :dict="HealthDict"></select></td>
+        </tr>
+        <tr>
+            <td>Risk score for others you live with </td>
+            <td><input readonly=true :value="Others.score()" :key="Others.score()"></input>
+            </td>
+        </tr>
+        <tr>
+            <td>Risk of those living with you</td>
+            <td><input readonly=true :value="Others.risk()" :key="Others.risk()"></input>
+            </td>
+        </tr>
+        <tr v-if="Others.score() && Self.score() && Others.score() > Self.score()">
+            <td colspan="2">
+                Compare your risk ({{Self.risk()}}) to the risk of those living with you ({{Others.risk()}}). 
+                Consider whether to increase your preferred risk tolerance when determining your final risk tolerance. </span>
+            </td>
+        </tr>
+        <tr v-if="Self.score()">
+            <td>Consider whether you would like to change your risk based on other considerations you might have. This is your Perceived Risk</td>
+            <td> <select v-model="PerceivedRisk">
+            <option></option>
+            <option>Very Low</option>
+            <option>Low</option>
+            <option>Medium</option>
+            <option>Medium</option>
+        </select></td>
+        </tr>
+    </tbody>
+</table>
+<div> 
+    <span v-if="debug"> <input v-model="key"><button @click="load()">Load</button> <button @click="save()">Save</button> </span>   
+    <button type="button" @click="resetFields()" >Reset</button> 
+</div>
+
+</div>
+
+<script>
+    let u = new URLSearchParams(window.location.search)
+    let debug = u.get("debug") != null;
+
+
+    function amend(dict,prefix,key,val) {
+        let delim = prefix && key ? "_" : ""
+        let k = `${prefix}${delim}${key}`
+        if (val) {
+            dict[k] = val
+        }
+    }
+
+    function amendTuple(dict,prefix,key,val) {
+        let delim = prefix && key ? "_" : ""
+        let k = `${prefix}${delim}${key}`
+        if (val) {
+            dict[k] = val?val[0]:null
+            dict[`${k}_val`] = val?val[1]:null
+        }
+    }
+
+    Vue.component('DictSelect', {
+        props: ['value','dict'],
+        template: `<select  @input="$emit('input',[$event.target.value,dict[$event.target.value]])" :value="value?value[0]:null">
+            <option selected="true" disabled="true" ></option>
+            <option v-for="(val,key) in dict" :key="key"> {{ key }} </option>
+            </select>
+        `
+    })
+
+    const AgeDict = {
+        "Under 30":0.5,
+        "30-49":1,
+        "50-64":2,
+        "over 65":3
+    }
+
+    const HealthDict = {
+        0:1,
+        1:2,
+        "more than 1":3
+    }
+
+    class ComplicationRisk {
+        constructor(index) {
+            this.index = index
+            this.health = null
+            this.age = null
+        }
+
+        healthscore() { return this.health?this.health[1]:null }
+        agescore() { return this.age?this.age[1]:null }
+
+        score() {
+            let t = this.healthscore()*this.agescore() 
+            return t > 0 ? t : null;
+        }
+
+        risk() {
+            if (this.score() == null) return null;
+            if (this.score() < 1) return "Very Low";
+            if (this.score() < 3) return "Low";
+            if (this.score() <= 5) return "Medium";
+            if (this.score() > 5) return "High";
+            return null
+        }
+
+        flatten(dict) {
+            let prefix = this.index
+            amendTuple(dict,prefix,'health',this.health)
+            amendTuple(dict,prefix,'age',this.age)
+            amend(dict,prefix,'score',this.score())
+            amend(dict,prefix,'risk',this.risk())
+        }
+    }
+
+    var complicationsApp = new Vue({
+        el: '#complications',
+        data() { 
+            return(                 
+                {
+                    AgeDict: AgeDict,
+                    HealthDict: HealthDict,
+                    Self: new ComplicationRisk("self"),
+                    Others: new ComplicationRisk("others"),
+                    PerceivedRisk: null,
+                    debug:debug,
+                    key:null
+                } )
+        },
+        methods: {
+            resetFields() {
+                Object.assign(this.$data, this.$options.data.call(this));
+            },
+        
+            load(){
+                let k = 'complications' + (this.key?this.key:"")
+                data = localStorage.getItem(k)
+                Object.assign(this.$data, JSON.parse(data))
+                let cr = new ComplicationRisk()
+                this.Self.__proto__ = cr
+                this.Others.__proto__ = cr
+            },
+            save() {
+                let complications = JSON.stringify(complicationsApp.$data)
+                let k = 'complications' + this.key?this.key:""
+                localStorage.setItem(k, complications )
+            },
+            flatten(dict) {
+                this.Self.flatten(dict);
+                this.Others.flatten(dict);
+                amend(dict,'self','PerceivedRisk',this.PerceivedRisk)
+            }
+        }
+    })
+
+</script>
+
+<br/>
+<br/>
+
+
+<div id="infection">
+
+    <table>
+        <thead>
+            <tr>
+                <th colspan="2">UNDERSTANDING A PERSON&apos;S RISK OF BEING INFECTED WITH COVID-19 </householdmember>
+            </tr>
+        </thead>
+        <tr> <td colspan="2" class="category" >Contacts of those living with you</td></tr>
+        <tr>
+            <td>Consider the people you live with, how many of them met with other people indoor over the past 2
+                weeks?</td>
+            <td><input  type="number" v-model="HouseholdSize" placeholder="household" @input="checksize()">   </input> 
+            </td>
+        </tr>
+
+        <tr v-if="HouseholdMembers.length > 0">
+            <td colspan="2"> 
+            List each of these individuals and their relationship with you: spouse or significant other, child, sibling, other relative, or other. 
+            </td></tr>
+        <tbody v-for="member in HouseholdMembers" is="HouseholdMember" :key="member.index" :mem="member" :memberscount="HouseholdSize" 
+                @updatescore="UpdateTotalScore()"></tbody>     
+        <tr v-if="HouseholdSize > 0">
+            <td> Total Household Contact Score </td>
+            <td> <input readonly :value=HouseholdScore :key=HouseholdScore ></input> </td>
+        </tr>
+
+        <tr> <td colspan="2" class="category" >Close indoor contacts</td></tr>
+        <tr> <td colspan="2"> 
+            For the questions below, close contact is defined as being together within <b> 6 feet or 2 meters for at least 15 minutes</b> over the past 2 weeks. 
+            Multiple short contacts over the past 2 weeks adding up to 15 minutes meets this definition.
+            <p/>
+            Consider the close contacts whom you don’t live with but met with indoor over the past 2 weeks. 
+            What is the number of close contact you met with at work, at social activities, at school, or at other activities?
+        </td></tr>        
+        <tbody v-for="insidetype in Insides" is="ContactScore" :contact="insidetype" :key="insidetype.index" @updatescore="UpdateTotalScore()"></tbody>
+        <tr v-if="InsideScore > 0">
+            <td> Total Indoor Contact Score </td>
+            <td> <input readonly :value=InsideScore :key=InsideScore ></input> </td>
+        </tr>
+
+        <tr> <td colspan="2" class="category" >Close outdoor contacts</td></tr>
+        <tr> <td colspan="2"> 
+            Consider the close contacts whom you don’t live with but met with outdoor over the past 2 weeks.        
+        </td></tr>
+
+        <tbody  is="ContactScore" :contact="Outside" :isoutdoor="true" @updatescore="UpdateTotalScore()"></tbody>
+
+        <tr style="font-size:large;font-weight:bold;">
+            <td> Overall Contact Score </td>
+            <td> <input readonly :value=TotalScore :key=TotalScore ></input> </td>
+        </tr>
+
+
+    </table>
+    <div style="float: left;">
+        <span v-if="debug"> <input v-model="key"><button @click="load()">Load</button> <button @click="save()">Save</button> </span>    
+        <button type="button" @click="resetFields()" >Reset</button> 
+    </div>
+</div>
+
+<script>
+    Vue.component('BehaviorSelect', {
+        props: ['value','hasunknown'],
+        template: `
+            <DictSelect  
+                v-model="selectedOption"
+                @input="$emit('input',selectedOption)"
+                :dict=BehaviorDict :value="value">
+            </DictSelect>
+        `,
+        data() {
+            var BehaviorDict = {
+                'All of the time':0.5,
+                'Half of the time or more':0.75,
+                'Less than half of the time': 1,
+            } 
+            if (this.hasunknown) {  Object.assign(BehaviorDict, {'Do not know':1 }) }
+
+            return { BehaviorDict:BehaviorDict, selectedOption: this.value}
+        },
+    })
+
+
+    
+    class HouseholdMember {
+         constructor(index) {
+             this.index = index,
+             this.name = null,
+             this.mask = null,
+             this.socialdistance = null,
+             this.relationship = null
+         };
+
+         maskScore() {
+             return this.mask == null?0:this.mask[1];
+         }
+
+         sdScore() {
+             return this.socialdistance == null?0:this.socialdistance[1];
+         }
+
+         score() {
+            return 12*this.maskScore() * this.sdScore()     
+         }
+
+         flatten(dict){
+             let prefix = `household_${this.index}`
+             amend(dict, prefix, 'relationship', this.relationship)
+             amendTuple(dict, prefix, 'mask', this.mask)
+             amendTuple(dict, prefix, 'socialdistance', this.socialdistance)
+             amend(dict, prefix, 'score', this.score())
+        }
+    }
+
+    Vue.component('HouseholdMember', {
+        props: ['mem','memberscount'],
+        template: `<tbody>
+                   <tr>
+                   <tr>
+                    <td colspan=2 style="padding-left:2rem"> {{mem.index + 1}} of {{memberscount}}  
+                        <span style="float:right;margin-right:1rem">
+                        <input placeholder="Nickname (optional)" v-model:value="mem.name"> </input> 
+                        <span style="margin-left:1rem"></span>
+                        <select v-model:value="mem.relationship">
+                            <option :value=null disabled="true"> Relation to you </option>
+                            <option> spouse </option>
+                            <option> child </option>
+                            <option> sibling </option>
+                            <option> relative </option>
+                            <option> other </option>
+                        </select>
+                        </span>
+                    </td>
+                   </tr>
+                   <tr>
+                    <td> When meeting with other people indoor, does he/she maintain social distance (at least 6 feet)? </td>
+                    <td> <BehaviorSelect v-model="mem.socialdistance" :hasunknown=true  @input="updateScore()" ></BehaviorSelect> </td>
+                   </tr>
+                   <tr>
+                    <td> When meeting with other people indoor, does he/she use a face mask? </td>
+                    <td> <BehaviorSelect v-model="mem.mask" :hasunknown=true @input="updateScore()" ></BehaviorSelect> </td>
+                  </tr>
+                  <tr v-if="memberscount > 1">
+                    <td> Household member {{identifier()}} score </td>
+                    <td> <input readonly :value="mem.score()" :key="mem.score()"></input> </td>
+                  </tr>
+                  </tbody>
+                `,
+
+        methods: {
+            updateScore() { this.score = this.mem.score(); this.$emit('updatescore') },
+            identifier() {
+                if (this.mem.name) {return this.mem.name}
+                if (this.mem.relationship) {return this.mem.relationship}
+                return `${this.mem.index + 1} of ${this.memberscount}`   
+            }
+        },
+    })
+
+    
+
+    class ContactScore {
+        constructor(index,prompt) {
+            this.index = index
+            this.mask = null
+            this.socialdistance = null
+            this.smallroom = null
+            this.count = null
+            this.frequency = null
+            this.prompt = prompt?prompt:`at ${index}`
+        };
+
+        maskScore() {
+             return this.mask == null?0:this.mask[1];
+        }
+
+        sdScore() {
+             return this.socialdistance == null?0:this.socialdistance[1];
+        }
+
+        smallroomScore() {
+            if (this.index == 'outside') { return 1}
+            return this.smallroom == null?0:this.smallroom[1];
+        }
+
+        frequencyScore() {
+            return this.frequency == null?0:this.frequency[1];
+        }
+
+        score() {
+            return  this.count*this.maskScore()*this.sdScore()*this.smallroomScore()*this.frequencyScore();
+        }
+
+        flatten(dict) {
+            let prefix = this.index
+            amendTuple(dict,prefix,'mask',this.mask)
+            amendTuple(dict,prefix,'socialdistance',this.socialdistance)
+            amendTuple(dict,prefix,'smallroom',this.smallroom)
+            amendTuple(dict,prefix,'frequency',this.frequency)
+            amend(dict,prefix,'score',this.score())
+            amend(dict,prefix,'count',this.count)
+        }
+    }  
+
+
+
+    Vue.component('ContactScore', {
+        props: ['contact','isoutdoor'],
+        template: `<tbody>
+                  <tr>
+                    <td> Number of {{isoutdoor?'outdoor':'indoor'}} close contacts you met with <b>{{contact.prompt}}</b>? </td>
+                    <td> <input  type="number" v-model="contact.count" :placeholder="contact.index" @input="checkContact()" ></input> </td>
+                  </tr>
+                   <tr v-if="contact.count > 0">
+                    <td> When you met with them, did you maintain social distance from them (at least 6 feet)? </td>
+                    <td> <BehaviorSelect v-model="contact.socialdistance"  @input="updateScore()" ></BehaviorSelect> </td>
+                   </tr>
+                   <tr v-if="contact.count > 0">
+                    <td> When you met with them, did you use a face mask? </td>
+                    <td> <BehaviorSelect v-model="contact.mask" @input="updateScore()" ></BehaviorSelect> </td>
+                  </tr>
+                  <tr v-if="contact.count > 0 && !isoutdoor">
+                    <td> What proportion of the time did you meet them in a room the size of or smaller than a small 
+                        restaurant or a Starbucks? (If you only met in a larger room, then answer “none of the time”.)
+                    </td>
+                    <td> <DictSelect :dict="SmallRoomDict" v-model="contact.smallroom" @input="updateScore()" ></DictSelect> </td>
+                  </tr>
+                  <tr v-if="contact.count > 0">
+                    <td> How frequently did you meet with them?
+                    </td>    
+                    <td> <DictSelect :dict="FrequencyDict" v-model="contact.frequency" @input="updateScore()" ></DictSelect> </td>                    
+                  </tr>
+                  <tr v-if="contact.count > 0">
+                    <td> {{isoutdoor?'Outdoor':'Indoor'}}  {{contact.index}} contact score </td>
+                    <td> <input readonly :value="contact.score()" :key="contact.score()"></input> </td>
+                  </tr>
+                  </tbody>
+                </tbody>                  
+                `,
+        data() {
+            const IndoorFrequencyDict = {
+                'Less than once a week':0.5, 
+                '1-2 times a week': 1,
+                '3 or more times a week': 1.5
+            }
+            const OutdoorFrequencyDict = {
+                'Less than once a week':0.4, 
+                '1-2 times a week': 0.6,
+                '3 or more times a week': 0.8
+            }
+
+            const SmallRoomDict = {
+                    'None of the time':1, 
+                    'Less than half of the time':1.5,
+                    'More than half of the time':2
+            }
+
+            return {           
+                //score:this.contact.score(),
+                SmallRoomDict: SmallRoomDict,
+                FrequencyDict: this.isoutdoor?OutdoorFrequencyDict:IndoorFrequencyDict,
+            }
+        },
+        methods: {
+            updateScore() { this.score = this.contact.score(); this.$emit('updatescore') },
+            checkContact() { if (this.contact.count <= 0) { this.contact.count = null;  } 
+                            this.updateScore(); }
+        },
+    })
+
+
+    
+    var infectionApp = new Vue({
+        el: '#infection',
+        data() {
+            return {
+            HouseholdSize: null,
+            HouseholdMembers: [],
+            DiscardedMembers: [],
+            HouseholdScore: 0,
+            InsideScore:0,
+            Insides: {
+                Work: new ContactScore("work"),
+                SocialActivities: new ContactScore("social activities","through social activities"),
+                School: new ContactScore("school"),
+                Other: new ContactScore("other activities","through other activities")
+            },
+            Outside: new ContactScore("outside","outside"),
+            TotalScore: 0,
+            debug:debug,
+            key:null
+        }},
+        methods: {
+            checksize: function() {
+                if (this.HouseholdSize < 0) { this.HouseholdSize = 0; this.$forceUpdate(); }
+                if (this.HouseholdSize > 10) { this.HouseholdSize = 10; this.$forceUpdate(); }
+
+                while (this.HouseholdMembers.length < this.HouseholdSize ) {
+                    if (this.DiscardedMembers.length > 0) {
+                        this.HouseholdMembers.push(this.DiscardedMembers.pop());
+                    } else {
+                        this.HouseholdMembers.push(new HouseholdMember(this.HouseholdMembers.length))
+                    }
+                }
+                while (this.HouseholdMembers.length > this.HouseholdSize ) {
+                    this.DiscardedMembers.push(this.HouseholdMembers.pop());
+                }
+                this.UpdateTotalScore()
+            },
+            UpdateTotalScore: function() {
+                this.TotalScore = 0
+
+                this.HouseholdScore = 0
+                for (member of this.HouseholdMembers) {
+                    this.HouseholdScore += member.score();
+                }
+
+                this.InsideScore = 0
+                for (key in this.Insides) {
+                    this.InsideScore += this.Insides[key].score();
+                }
+
+                this.TotalScore = this.HouseholdScore + this.InsideScore + this.Outside.score()
+            },
+            resetFields() {
+                Object.assign(this.$data, this.$options.data.call(this));
+            },
+
+            
+            load(){
+                let k = 'infection' + (this.key?this.key:"")
+                data = localStorage.getItem(k)
+                Object.assign(this.$data, JSON.parse(data))
+                let hm = new HouseholdMember()
+                for (h of this.HouseholdMembers) {
+                    h.__proto__ = hm
+                }
+
+                for (h of this.DiscardedMembers) {
+                    h.__proto__ = hm
+                }
+
+                let cs = new ContactScore()
+                for (i in this.Insides) {
+                    this.Insides[i].__proto__ = cs
+                }
+                this.Outside.__proto__ = cs
+                this.$forceUpdate()
+            },
+            save() {
+                let infection = JSON.stringify(this.$data)
+                let k = 'infection' + this.key?this.key:""
+                localStorage.setItem(k, infection )
+            },
+            flatten(dict) {
+                amend(dict,"",'HouseholdSize',this.HouseholdSize)
+                amend(dict,"",'HouseholdScore',this.HouseholdScore)
+                for (hm of this.HouseholdMembers) {
+                    hm.flatten(dict)
+                }
+                for (cs in this.Insides) {
+                    this.Insides[cs].flatten(dict)
+                }
+                amend(dict,"",'InsideScore',this.InsideScore)
+                this.Outside.flatten(dict)
+                amend(dict,"",'TotalScore',this.TotalScore)
+            }
+        }
+
+    })
+
+</script>
+
+<div style="float:right;" id="form"> 
+        <button type="button" onclick="print()" >Print</button> 
+        <button type="button" @click="share()" >Share</button> 
+</div>
+
+<script>
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbwWNvUSiJiria3hew6MHD6bd3zVP_3WvpVIx0JXhHGHhLYzbAnw/exec'
+    var formApp = new Vue({
+        el: '#form',
+        methods: {
+            share() {
+                var dict = {}
+                complicationsApp.flatten(dict)
+                infectionApp.flatten(dict)
+                var st = JSON.stringify(dict)
+                if (confirm("You are about to share this data for our research. Please confirm")) {
+                    fetch(scriptURL, {
+                        method: 'POST',
+                        body: st
+                    })
+                    .then(response => alert("Successfully shared."))
+                    .catch(error => alert('Error!' + error.message + ' Data was not shared. Please try again later.'))
+                } else {
+                    alert("Aborted. Data was not shared.")
+                }
+            }
+        }
+    })
+
+</script>
+
+
+<!--
+<script>
+    function id(e) {
+        return document.getElementsByName(e)[0]
+    }
+
+    function $(e) {
+        return id(e).value
+    }
+
+    function setval(e, val) {
+        if (isNaN(val)) {
+            id(e).value = null
+        } else {
+            id(e).value = val
+        }
+    }
+
+    function yn(e) {
+        var i = $(e)
+        return i == null ? null : (i == "yes" ? 1 : 2);
+    }
+
+    function frequencyScore(e) {
+        var i = $(e)
+        return (i === "unknown") ? 1.5 : i;
+    }
+
+    function n(i) {
+        return isNaN(i) ? 0 : i
+    }
+
+    class RiskScoreComputer {
+
+        constructor(AgeGroupId, HealthConditionId, RiskScoreId, CalculatedRiskId) {
+            this.riskScore = "N/A"
+            this.calcRisk = "N/A";
+            this.AgeGroupId = AgeGroupId;
+            this.HealthConditionId = HealthConditionId;
+            this.RiskScoreId = RiskScoreId;
+            this.CalculatedRiskId = CalculatedRiskId;
+            id(AgeGroupId).innerHTML = `
+            <option value=null></option>
+                <option value=0.5>Under 30</option>
+                <option value=1>30-49</option>
+                <option value=2>50-64</option>
+                <option value=3>over 65</option>`
+            id(HealthConditionId).innerHTML = `
+            <option value=null></option>
+                <option value=1>0</option>
+                <option value=2>1</option>
+                <option value=3>more than 1</option>`
+
+            id(RiskScoreId).readOnly = true
+            id(CalculatedRiskId).readOnly = true
+
+            var f = x => {
+                this.RefreshRiskScore();
+            };
+            id(AgeGroupId).onchange = f;
+            id(HealthConditionId).onchange = f;
+            this.RefreshRiskScore();
+        }
+
+        RefreshRiskScore() {
+            this.riskScore = $(this.AgeGroupId) * $(this.HealthConditionId);
+            this.calcRisk = this.RiskBaseOnScore(this.riskScore);
+            setval(this.RiskScoreId, this.riskScore);
+            id(this.CalculatedRiskId).value = this.calcRisk;
+        }
+
+        RiskBaseOnScore(riskScore) {
+            if (riskScore < 1) return "Very Low";
+            if (riskScore < 3) return "Low";
+            if (riskScore <= 5) return "Medium";
+            if (riskScore > 5) return "High";
+            return null
+        }
+
+        Reset() {
+            id(this.AgeGroupId).value = null;
+            id(this.HealthConditionId).value = null;
+            this.RefreshRiskScore();
+        }
+
+    }
+
+    class RiskForm {
+
+        constructor() {
+
+            var f = x => {
+                this.Refresh();
+            };
+            // set yes/no stuff
+            ["IndoorSocialDistance", "IndoorMask",
+                "OutdoorSocialDistance", "OutdoorMask"
+            ].forEach(e => {
+                this.SetYesNo(e)
+                id(e).onchange = f
+            });
+            // set frequency stuff
+            ["HouseholdFrequency", "IndoorFrequency", "OutdoorFrequency"].
+            forEach(e => {
+                this.SetFrequency(e)
+                id(e).onchange = f
+            });
+
+            ["HouseholdSize", "PeopleIndoor", "PeopleOutdoor"].forEach(e => {
+                id(e).onchange = f
+            });
+
+            // set computed stuff
+            ["HouseholdScore", "IndoorScore", "OutdoorScore", "TotalScore"].forEach(e => {
+                id(e).readOnly = true
+            });
+
+            this.Refresh()
+        }
+
+        Reset() {
+            ["IndoorSocialDistance", "IndoorMask", "IndoorSmallSpaceFrequency",
+                "OutdoorSocialDistance", "OutdoorMask",
+                "HouseholdFrequency", "IndoorFrequency", "OutdoorFrequency"
+            ].
+            forEach(e => {
+                setval(e, null);
+            });
+            ["HouseholdSize", "PeopleIndoor", "PeopleOutdoor"].forEach(e => {
+                setval(e, null);
+            });
+            this.Refresh();
+        }
+
+        Compute() {
+            this.HouseholdScore =
+                $("HouseholdSize") * frequencyScore("HouseholdFrequency") * 8
+            this.IndoorScore = $("PeopleIndoor") * yn("IndoorSocialDistance") * yn("IndoorMask") *
+                frequencyScore("IndoorSmallSpaceFrequency") * frequencyScore("IndoorFrequency")
+            this.OutdoorScore = $("PeopleOutdoor") * yn("OutdoorSocialDistance") * yn("OutdoorMask") *
+                frequencyScore("OutdoorFrequency") * 0.4
+            this.TotalScore = n(this.HouseholdScore) + n(this.IndoorScore) + n(this.OutdoorScore)
+
+        }
+
+        Refresh() {
+            this.Compute();
+
+            let householdSize = $("HouseholdSize")
+            let peopleIndoor = $("PeopleIndoor")
+            let peopleOutdoor = $("PeopleOutdoor")
+
+            id("HouseholdDiv").style.visibility = householdSize > 0 ? "visible" : "collapse";
+            id("IndoorDiv").style.visibility = peopleIndoor > 0 ? "visible" : "collapse";
+            id("OutdoorDiv").style.visibility = peopleOutdoor > 0 ? "visible" : "collapse";
+
+            setval("HouseholdScore", Math.floor(this.HouseholdScore * 10) / 10)
+            setval("IndoorScore", Math.floor(this.IndoorScore * 10) / 10)
+            setval("OutdoorScore", Math.floor(this.OutdoorScore * 10) / 10)
+            setval("TotalScore", Math.floor(this.TotalScore * 10) / 10)
+        }
+
+        SetYesNo(e) {
+            id(e).innerHTML = `
+            <option value=null></option>
+            <option value=yes>yes</option>
+            <option value=no>no</option>`
+        }
+
+        SetFrequency(e) {
+            id(e).innerHTML = `
+            <option value=null></option>
+            <option value=1>Less than once a week</option>
+            <option value=1.5>1-2 times a week </option>
+            <option value=2>3 or more times a week</option>
+            <option value=unknown>Don't know</option>`
+        }
+    }
+
+
+    var riskForm = new RiskForm;
+    var personalRiskScoreComputer = new RiskScoreComputer("AgeGroup", "HealthConditions", "RiskScore", "CalculatedRisk");
+    var othersRiskScoreComputer = new RiskScoreComputer("OthersAgeGroup", "OthersHealthConditions", "OthersRiskScore", "OthersCalculatedRisk");
+
+    function Reset() {
+        personalRiskScoreComputer.Reset();
+        othersRiskScoreComputer.Reset();
+        riskForm.Reset();
+        id("PerceivedRisk").value = null;
+    }
+</script>
+
+<script src="https://wzrd.in/standalone/formdata-polyfill"></script>
+<script src="https://wzrd.in/standalone/promise-polyfill@latest"></script>
+<script src="https://wzrd.in/standalone/whatwg-fetch@latest"></script>
+<script>
+    // Form handling
+    // https://script.google.com/macros/s/AKfycbwWNvUSiJiria3hew6MHD6bd3zVP_3WvpVIx0JXhHGHhLYzbAnw/exec
+
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbwWNvUSiJiria3hew6MHD6bd3zVP_3WvpVIx0JXhHGHhLYzbAnw/exec'
+    const form = document.forms['covid-evaluation-form']
+
+    form.addEventListener('submit', e => {
+        if (e.submitter.name != "Share") {
+            return;
+        }
+        e.preventDefault()
+        id("Timestamp").value = Date(Date.now()).toString();
+        if (confirm("You are about to share this data for our research. Please confirm")) {
+            fetch(scriptURL, {
+                    method: 'POST',
+                    body: new FormData(form)
+                })
+                .then(response => alert("Successfully shared."))
+                .catch(error => alert('Error!' + error.message + ' Data was not shared. Please try again later.'))
+        } else {
+            alert("Aborted. Data was not shared.")
+        }
+    })
+</script>
+
+<form name=covid-evaluation-form>
+
+    <table>
+        <thead>
+            <tr>
+                <th colspan="2">UNDERSTANDING A PERSON&apos;S RISK OF BEING INFECTED WITH COVID-19 </householdmember>
+            </tr>
+        </thead>
+        <tr>
+            <td colspan="2">During the COVID-19 pandemic, a person&apos;s risk of being infected with COVID-19 is to a large degree determined by his/her close contact to other people. The assessment below provides a contact score for each person to assess his/her risk.
+                The higher the score, the greater the risk of being infected. Participants in a group meeting may choose to meet with others who have similar risk scores.
+                <p> Important: The questions below refer only to <em>close contacts</em> that you or others had during the <b>past 14 days</b>. Close contact is defined as being with a person for at least <b>15 minutes and within 10 feet or 3 meters</b>.
+            </td>
+        </tr>
+        <tr>
+        </tr>
+        <tr>
+            <td colspan="2" class=bold>People who I had close contact with over the last 14 days </td>
+        </tr>
+        <tr>
+            <td>Number of persons I live with who had close contact with at least one person outside the home during the last 14 days?</td>
+            <td><input name=HouseholdSize type="number"></input>
+            </td>
+        </tr>
+        <tbody name="HouseholdDiv" style="visibility: collapse;">
+            <tr>
+                <td colspan="2" class=bold>For the persons I live with who had close contact with at least one person outside the home during the last 14 days</td>
+            </tr>
+            <tr>
+                <td> On average, how frequently did they meet with close contacts?</td>
+                <td><select name=HouseholdFrequency></select></td>
+            </tr>
+            <tr>
+                <td>Household Contact Score</td>
+                <td><input name=HouseholdScore> </td>
+            </tr>
+        </tbody>
+        <tr>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Number of close contacts I don't live with whom I met indoor</td>
+            <td><input name=PeopleIndoor type="number"></td>
+        </tr>
+        <tbody name="IndoorDiv" style="visibility: collapse;">
+            <tr>
+                <td colspan="2" class=bold>For close contacts I don't live with whom I met indoor</td>
+            </tr>
+            <tr>
+                <td>When I met with them indoor, I maintained social distance from them (at least 6 feet)?</td>
+                <td><select name=IndoorSocialDistance></select> </td>
+            </tr>
+            <tr>
+                <td>When I met with them indoor, we used face mask?</td>
+                <td><select name=IndoorMask></select> </td>
+            </tr>
+            <tr>
+                <td>Did I meet them in a room the size of a small restaurant or a Starbucks?</td>
+                <td><select name=IndoorSmallSpaceFrequency>
+            <option value=null></option>
+            <option value=1>None of the time</option>
+            <option value=1.5>Less than half the time </option>
+            <option value=2>More than half the week</option>
+            <option value=unknown>Don't know</option>
+        </select></td>
+            </tr>
+            <tr>
+                <td>On average, how frequently did your close contacts meet with other people?</td>
+                <td><select name=IndoorFrequency></select></td>
+            </tr>
+            <tr>
+                <td>Indoor contact score</td>
+                <td><input name=IndoorScore></input>
+                </td>
+            </tr>
+            <tr>
+            </tr>
+        </tbody>
+        <tr></tr>
+        <tr>
+            <td>Number of close contacts I don't live with whom I met outdoor</td>
+            <td><input name=PeopleOutdoor type="number"></td>
+        </tr>
+        <tr>
+            <td></td>
+        </tr>
+        <tbody name="OutdoorDiv" style="visibility: collapse;">
+            <tr>
+                <td colspan="2" class="bold">For contacts I don't live with whom I met outdoor</td>
+            </tr>
+            <tr>
+                <td>When I met with them outdoor, I maintained social distance from them (at least 6 feet)?</td>
+                <td><select name=OutdoorSocialDistance></select> </td>
+            </tr>
+            <tr>
+                <td>When I met with them outdoor, we used face mask? </td>
+                <td><select name=OutdoorMask></select> </td>
+            </tr>
+            <tr>
+                <td>On average, how frequently did your close contacts meet with other people? </td>
+                <td><select name=OutdoorFrequency></select></td>
+            </tr>
+            <tr>
+                <td>Outdoor Contact Score</td>
+                <td><input name=OutdoorScore></input>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+            </tr>
+        </tbody>
+        <tr>
+            <td style="font-size: 110%;">Total Contact Score</td>
+            <td style="font-size: 110%;"><input name=TotalScore></input>
+            </td>
+        </tr>
+
+        </tbody>
+    </table>
+    <input type="hidden" name=Timestamp></input>
+    <div style="text-align: right;">
+        <button onclick="Reset()" name=Reset>Reset</button>
+        <button type="submit" name=Share>Share Data</button>
+    </div>
+</form>
+
+-->

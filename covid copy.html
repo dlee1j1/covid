@@ -1,0 +1,575 @@
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+table html body {
+    max-height: 999999px;
+    font-family: serif;
+    font-size: calc(1rem + 1vw);
+}
+
+div.footnote {
+    max-height: 999999px;
+    font-size: 80%
+}
+
+@media(min-width:30em) {
+    html {
+        font-size: 90%
+    }
+    div.footnote {
+        font-size: 90%
+    }
+}
+
+table {
+    border: 1px solid #1C6EA4;
+    background-color: #EEEEEE;
+    width: 100%;
+    text-align: left;
+    border-collapse: collapse;
+}
+
+table td,
+table th {
+    border: 1px solid #AAAAAA;
+    padding: 2px 3px;
+    padding-left: 5px;
+    vertical-align: top;
+}
+
+table tbody td {
+    max-height: 999999px;
+}
+
+table tbody td.bold {
+    font-style: italic;
+}
+
+table tbody td input:read-only {
+    border: 0px;
+    background-color: yellow;
+}
+
+table tbody td input {
+    width: 20vw;
+    max-width: 20vw;
+    height: 110%;
+    text-align: right;
+    font-size: 1rem;
+}
+
+table tbody td select {
+    width: 20vw;
+    height: 110%;
+    max-width: 20vw;
+    font-size: 1rem;
+}
+
+table tr:nth-child(even) {
+    background: #D0E4F5;
+}
+
+table thead {
+    background: #1C6EA4;
+    background: -moz-linear-gradient(top, #5592bb 0%, #327cad 66%, #1C6EA4 100%);
+    background: -webkit-linear-gradient(top, #5592bb 0%, #327cad 66%, #1C6EA4 100%);
+    background: linear-gradient(to bottom, #5592bb 0%, #327cad 66%, #1C6EA4 100%);
+    border-bottom: 2px solid #444444;
+}
+
+table thead th {
+    font-size: 0.9em;
+    font-weight: bold;
+    text-align: center;
+    color: #FFFFFF;
+    border-left: 2px solid #D0E4F5;
+}
+
+table thead th:first-child {
+    border-left: none;
+}
+
+table.purpleTable tr:nth-child(even) {
+    background: #F3D4F5;
+}
+
+table.purpleTable thead {
+    background: #A220A4;
+    background: -moz-linear-gradient(top, #b958bb 0%, #ab36ad 66%, #A220A4 100%);
+    background: -webkit-linear-gradient(top, #b958bb 0%, #ab36ad 66%, #A220A4 100%);
+    background: linear-gradient(to bottom, #b958bb 0%, #ab36ad 66%, #A220A4 100%);
+}
+</style>
+
+<script type="module">
+    import {
+        h,
+        Component,
+        html,
+        render
+    } from 'https://unpkg.com/htm/preact/index.mjs?module'
+
+    //  const html = htm.bind(h);
+
+    function App(props) {
+        return html `<h1>Hello ${props.name}!</h1>`;
+    }
+
+    console.log(body())
+    render(body(), document.body);
+
+    function body() {
+        return html `<form name=covid-evaluation-form>
+          <table class="purpleTable">
+        <thead>
+            <tr>
+                <th colspan="2">UNDERSTANDING YOUR RISK FOR COVID-19 COMPLICATIONS</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td colspan="2">Understanding your risk for serious COVID-19 complications can help you decide whether
+                    to meet with others face-to-face. Older ages and having certain health conditions (see Note) are the
+                    main risk factors for COVID-19 complications. However,
+                    other personal considerations could factor into your <em>perceived risk</em> for COVID
+                    complications.
+                    <p>In addition, you should consider the risk of serious complications among those living with you
+                        because if you get infected, you may infect them and put them at risk for COVID-19
+                        complications. Together, these considerations help to
+                        determine your <em>final risk</em> for COVID-19 complications. </p> </td>
+            </tr>
+            <tr>
+                <td>What age group are you in?</td>
+                <td> <select name=AgeGroup>
+                    </select> </td>
+            </tr>
+            <tr>
+                <td>How many health conditions do you have that put you at increased risk of COVID-19 complications?
+                </td>
+                <td> <select name=HealthConditions>
+                    </select></td>
+            </tr>
+            <tr>
+                <td colspan="2" style="font-size:85%; padding-left: 5px;">
+                    The most common health conditions associated with serious COVID-19 complications include: obesity,
+                    cardiovascular diseases, chronic respiratory diseases, chronic kidney diseases, diabetes,
+                    hypertension, cancer, immunosuppressive drugs. A full list can
+                    be found on CDC website.
+                </td>
+            </tr>
+            <tr>
+                <td>Risk Score</td>
+                <td><input name=RiskScore></input>
+                </td>
+            </tr>
+            <tr>
+                <td>Calculated Risk</td>
+                <td><input name=CalculatedRisk></input>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td colspan="2" class=bold>Among those living with you</td>
+            </tr>
+            <tr>
+                <td>What is the age group of the oldest person you are living with?</td>
+                <td><select name="OthersAgeGroup"></select> </td>
+            </tr>
+            <tr>
+                <td>Among those living with you, think about the person with the highest number of health conditions
+                    that put him/her at increased risk of COVID-19 complications. How many health conditions does that
+                    person have?</td>
+                <td><select name="OthersHealthConditions"></select></td>
+            </tr>
+            <tr>
+                <td>Risk score for others you live with </td>
+                <td><input name="OthersRiskScore"></label>
+                </td>
+            </tr>
+            <tr>
+                <td>Risk of those living with you</td>
+                <td><input name="OthersCalculatedRisk"></label>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    Compare your perceived risk to the risk of those living with you, if the risk for others is higher
+                    than the risk for your, consider whether to increase your preferred risk tolerance when determining
+                    your final risk tolerance.</td>
+            </tr>
+            <tr>
+                <td>Consider whether you would like to change your risk based on other considerations you might have.
+                    This is your Perceived Risk</td>
+                <td> <select name=PerceivedRisk>
+                        <option></option>
+                        <option value="Very Low">Very Low</option>
+                        <option value="Low">Low</option>
+                        <option value="Medium">Medium</option>
+                        <option value="High">Medium</option>
+                    </select></td>
+            </tr>
+        </tbody>
+        </table>
+        <br />
+        <br />
+        <table>
+        <thead>
+            <tr>
+                <th colspan="2">UNDERSTANDING A PERSON'S RISK OF BEING INFECTED WITH COVID-19 </td>
+            </tr>
+        </thead>
+        <tr>
+            <td colspan="2">During the COVID-19 pandemic, a person's risk of being infected with COVID-19 is to a
+                large degree determined by his/her close contact to other people. The assessment below provides a
+                contact score for each person to assess his/her risk.
+                The higher the score, the greater the risk of being infected. Participants in a group meeting may choose
+                to meet with others who have similar risk scores.
+                <br/> Important: The questions below refer only to <em>close contacts</em> that you or others had during
+                    the <b>past 14 days</b>. Close contact is defined as being with a person for at least <b>15 minutes
+                        and within 10 feet or 3 meters</b>.
+            </td>
+        </tr>
+        <tr>
+        </tr>
+        <tr>
+            <td colspan="2" class="bold">People who I had close contact with over the last 14 days </td>
+        </tr>
+        <tr>
+            <td>Number of persons I live with who had close contact with at least one person outside the home during the
+                last 14 days?</td>
+            <td><input name=HouseholdSize type="number"></input>
+            </td>
+        </tr>
+
+        <tbody name="HouseholdDiv" style="visibility:collapse;">
+            <tr>
+                <td colspan="2" class="bold">For the persons I live with who had close contact with at least one person
+                    outside the home during the last 14 days</td>
+            </tr>
+            <tr>
+                <td> On average, how frequently did they meet with close contacts?</td>
+                <td><select name=HouseholdFrequency></select></td>
+            </tr>
+            <tr>
+                <td>Household Contact Score</td>
+                <td><input name=HouseholdScore/> </td>
+            </tr>
+        </tbody>
+
+        <tr>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Number of close contacts I don't live with whom I met indoor</td>
+            <td><input name=PeopleIndoor type="number"></td></td>
+        </tr>
+        <tbody name="IndoorDiv" style="visibility:collapse;">
+            <tr>
+                <td colspan="2" class=bold>For close contacts I don't live with whom I met indoor</td>
+            </tr>
+            <tr>
+                <td>When I met with them indoor, I maintained social distance from them (at least 6 feet)?</td>
+                <td><select name=IndoorSocialDistance></select> </td>
+            </tr>
+            <tr>
+                <td>When I met with them indoor, we used face mask?</td>
+                <td><select name=IndoorMask></select> </td>
+            </tr>
+            <tr>
+                <td>Did I meet them in a room the size of a small restaurant or a Starbucks?</td>
+                <td><select name=IndoorSmallSpaceFrequency>
+                        <option value=null></option>
+                        <option value=1>None of the time</option>
+                        <option value=1.5>Less than half the time </option>
+                        <option value=2>More than half the week</option>
+                        <option value=unknown>Don't know</option>
+                    </select></td>
+            </tr>
+            <tr>
+                <td>On average, how frequently did your close contacts meet with other people?</td>
+                <td><select name=IndoorFrequency></select></td>
+            </tr>
+            <tr>
+                <td>Indoor contact score</td>
+                <td><input name=IndoorScore></input>
+                </td>
+            </tr>
+            <tr>
+            </tr>
+        </tbody>
+        <tr></tr>
+        <tr>
+            <td>Number of close contacts I don't live with whom I met outdoor</td>
+            <td><input name=PeopleOutdoor type="number"/></td>
+        </tr>
+        <tr>
+            <td></td>
+        </tr>
+        <tbody name="OutdoorDiv" style="visibility:collapse;">
+            <tr>
+                <td colspan="2" class="bold">For contacts I don't live with whom I met outdoor</td>
+            </tr>
+            <tr>
+                <td>When I met with them outdoor, I maintained social distance from them (at least 6 feet)?</td>
+                <td><select name=OutdoorSocialDistance></select> </td>
+            </tr>
+            <tr>
+                <td>When I met with them outdoor, we used face mask? </td>
+                <td><select name=OutdoorMask></select> </td>
+            </tr>
+            <tr>
+                <td>On average, how frequently did your close contacts meet with other people? </td>
+                <td><select name=OutdoorFrequency></select></td>
+            </tr>
+            <tr>
+                <td>Outdoor Contact Score</td>
+                <td><input name=OutdoorScore></input>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+            </tr>
+        </tbody>
+        <tr>
+            <td style="font-size: 110%;">Total Contact Score</td>
+            <td style="font-size: 110%;"><input name=TotalScore></input>
+            </td>
+        </tr>
+
+        </table>
+        <input type="hidden" name=Timestamp></input>
+        <div style="text-align: right;">
+            <button onclick="Reset()" name=Reset>Reset</button>
+            <button type="submit" name=Share>Share Data</button>
+        </div>
+        </form>`
+    }
+
+</script>
+
+
+<script>
+    function id(e) {
+        return document.getElementsByName(e)[0]
+    }
+
+    function val(e) {
+        return id(e).value
+    }
+
+    function setval(e, val) {
+        if (isNaN(val)) {
+            id(e).value = null
+        } else {
+            id(e).value = val
+        }
+    }
+
+    function yn(e) {
+        var i = val(e)
+        return i ? 1 : 2;
+    }
+
+    function frequencyScore(e) {
+        var i = val(e)
+        return (i === "unknown") ? 1.5 : i;
+    }
+
+    function n(i) {
+        return isNaN(i) ? 0 : i
+    }
+
+    class RiskScoreComputer {
+
+        constructor(AgeGroupId, HealthConditionId, RiskScoreId, CalculatedRiskId) {
+            this.riskScore = "N/A"
+            this.calcRisk = "N/A";
+            this.AgeGroupId = AgeGroupId;
+            this.HealthConditionId = HealthConditionId;
+            this.RiskScoreId = RiskScoreId;
+            this.CalculatedRiskId = CalculatedRiskId;
+            id(AgeGroupId).innerHTML = `
+            <option value=null></option>
+                <option value=0.5>Under 30</option>
+                <option value=1>30-49</option>
+                <option value=2>50-64</option>
+                <option value=3>over 65</option>`
+            id(HealthConditionId).innerHTML = `
+            <option value=null></option>
+                <option value=1>0</option>
+                <option value=2>1</option>
+                <option value=3>more than 1</option>`
+
+            id(RiskScoreId).readOnly = true
+            id(CalculatedRiskId).readOnly = true
+
+            var f = x => {
+                this.RefreshRiskScore();
+            };
+            id(AgeGroupId).onchange = f;
+            id(HealthConditionId).onchange = f;
+            this.RefreshRiskScore();
+        }
+
+        RefreshRiskScore() {
+            this.riskScore = val(this.AgeGroupId) * val(this.HealthConditionId);
+            this.calcRisk = this.RiskBaseOnScore(this.riskScore);
+            setval(this.RiskScoreId, this.riskScore);
+            id(this.CalculatedRiskId).value = this.calcRisk;
+        }
+
+        RiskBaseOnScore(riskScore) {
+            if (riskScore < 1) return "Very Low";
+            if (riskScore < 3) return "Low";
+            if (riskScore <= 5) return "Medium";
+            if (riskScore > 5) return "High";
+            return null
+        }
+
+        Reset() {
+            id(this.AgeGroupId).value = null;
+            id(this.HealthConditionId).value = null;
+            this.RefreshRiskScore();
+        }
+
+    }
+
+    class RiskForm {
+
+        constructor() {
+
+            var f = x => {
+                this.Refresh();
+            };
+            // set yes/no stuff
+            ["IndoorSocialDistance", "IndoorMask",
+                "OutdoorSocialDistance", "OutdoorMask"
+            ].forEach(e => {
+                this.SetYesNo(e)
+                id(e).onchange = f
+            });
+            // set frequency stuff
+            ["HouseholdFrequency", "IndoorFrequency", "OutdoorFrequency"].
+            forEach(e => {
+                this.SetFrequency(e)
+                id(e).onchange = f
+            });
+
+            ["HouseholdSize", "PeopleIndoor", "PeopleOutdoor"].forEach(e => {
+                id(e).onchange = f
+            });
+
+            // set computed stuff
+            ["HouseholdScore", "IndoorScore", "OutdoorScore", "TotalScore"].forEach(e => {
+                id(e).readOnly = true
+            });
+
+            this.Refresh()
+        }
+
+        Reset() {
+            ["IndoorSocialDistance", "IndoorMask", "IndoorSmallSpaceFrequency",
+                "OutdoorSocialDistance", "OutdoorMask",
+                "HouseholdFrequency", "IndoorFrequency", "OutdoorFrequency"
+            ].
+            forEach(e => {
+                setval(e, null);
+            });
+            ["HouseholdSize", "PeopleIndoor", "PeopleOutdoor"].forEach(e => {
+                setval(e, null);
+            });
+            this.Refresh();
+        }
+
+        Compute() {
+            this.HouseholdScore =
+                val("HouseholdSize") * frequencyScore("HouseholdFrequency")
+            this.IndoorScore = val("PeopleIndoor") * yn("IndoorSocialDistance") * yn("IndoorMask") *
+                frequencyScore("IndoorSmallSpaceFrequency") * frequencyScore("IndoorFrequency")
+            this.OutdoorScore = val("PeopleOutdoor") * yn("OutdoorSocialDistance") * yn("OutdoorMask") *
+                frequencyScore("OutdoorFrequency") * 0.4
+            this.TotalScore = n(this.HouseholdScore) + n(this.IndoorScore) + n(this.OutdoorScore)
+
+        }
+
+        Refresh() {
+            this.Compute();
+
+            var householdSize = val("HouseholdSize")
+            var peopleIndoor = val("PeopleIndoor")
+            var peopleOutdoor = val("PeopleOutdoor")
+
+            id("HouseholdDiv").style.visibility = householdSize > 0 ? "visible" : "collapse";
+            id("IndoorDiv").style.visibility = peopleIndoor > 0 ? "visible" : "collapse";
+            id("OutdoorDiv").style.visibility = peopleOutdoor > 0 ? "visible" : "collapse";
+
+            setval("HouseholdScore", Math.floor(this.HouseholdScore * 10) / 10)
+            setval("IndoorScore", Math.floor(this.IndoorScore * 10) / 10)
+            setval("OutdoorScore", Math.floor(this.OutdoorScore * 10) / 10)
+            setval("TotalScore", Math.floor(this.TotalScore * 10) / 10)
+        }
+
+        SetYesNo(e) {
+            id(e).innerHTML = `
+            <option value=null></option>
+            <option value=true>yes</option>
+            <option value=false>no</option>`
+        }
+
+        SetFrequency(e) {
+            id(e).innerHTML = `
+            <option value=null></option>
+            <option value=1>Less than once a week</option>
+            <option value=1.5>1-2 times a week </option>
+            <option value=2>3 or more times a week</option>
+            <option value=unknown>Don't know</option>`
+        }
+    }
+
+
+    var riskForm = new RiskForm;
+    var personalRiskScoreComputer = new RiskScoreComputer("AgeGroup", "HealthConditions", "RiskScore",
+    "CalculatedRisk");
+    var othersRiskScoreComputer = new RiskScoreComputer("OthersAgeGroup", "OthersHealthConditions", "OthersRiskScore",
+        "OthersCalculatedRisk");
+
+    function Reset() {
+        personalRiskScoreComputer.Reset();
+        othersRiskScoreComputer.Reset();
+        riskForm.Reset();
+        id("PerceivedRisk").value = null;
+    }
+</script>
+
+<script src="https://wzrd.in/standalone/formdata-polyfill"></script>
+<script src="https://wzrd.in/standalone/promise-polyfill@latest"></script>
+<script src="https://wzrd.in/standalone/whatwg-fetch@latest"></script>
+<script>
+    // Form handling
+    // https://script.google.com/macros/s/AKfycbwWNvUSiJiria3hew6MHD6bd3zVP_3WvpVIx0JXhHGHhLYzbAnw/exec
+
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbwWNvUSiJiria3hew6MHD6bd3zVP_3WvpVIx0JXhHGHhLYzbAnw/exec'
+    const form = document.forms['covid-evaluation-form']
+
+    form.addEventListener('submit', e => {
+        if (e.submitter.name != "Share") {
+            return;
+        }
+        e.preventDefault()
+        id("Timestamp").value = Date(Date.now()).toString();
+        if (confirm("You are about to share this data for our research. Please confirm")) {
+            fetch(scriptURL, {
+                    method: 'POST',
+                    body: new FormData(form)
+                })
+                .then(response => alert("Successfully shared."))
+                .catch(error => alert('Error!' + error.message +
+                    ' Data was not shared. Please try again later.'))
+        } else {
+            alert("Aborted. Data was not shared.")
+        }
+    })
+</script>
