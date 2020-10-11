@@ -107,6 +107,16 @@
         font-style: italic;
     }
 
+    @media print {
+        button {
+            display: none;
+        }
+
+        :placeholder-shown { 
+            display: none;
+        }
+    }
+
     /* Tooltip container */
 .tooltip {
   position: relative;
