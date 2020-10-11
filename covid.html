@@ -502,11 +502,11 @@
                    </tr>
                    <tr>
                     <td> When meeting with other people indoor, does he/she maintain social distance (at least 6 feet)? </td>
-                    <td> <BehaviorSelect v-model="mem.socialdistance" :hasunknown=true  @input="updateScore()" ></BehaviorSelect> </td>
+                    <td> <BehaviorSelect v-model="mem.socialdistance" :hasunknown=true  @input="updateScore()" :key="mem.socialdistance[0]" ></BehaviorSelect> </td>
                    </tr>
                    <tr>
                     <td> When meeting with other people indoor, does he/she use a face mask? </td>
-                    <td> <BehaviorSelect v-model="mem.mask" :hasunknown=true @input="updateScore()" ></BehaviorSelect> </td>
+                    <td> <BehaviorSelect v-model="mem.mask" :hasunknown=true @input="updateScore()" :key="mem.mask[0]"></BehaviorSelect> </td>
                   </tr>
                   <tr v-if="memberscount > 1">
                     <td> Household member {{identifier()}} score </td>
@@ -579,30 +579,31 @@
                     <td> Number of {{isoutdoor?'outdoor':'indoor'}} close contacts you met with <b>{{contact.prompt}}</b>? </td>
                     <td> <input  type="number" v-model="contact.count" :placeholder="contact.index" @input="checkContact()" ></input> </td>
                   </tr>
-                   <tr v-if="contact.count > 0">
+                  <template v-if="contact.count > 0">
+                  <tr>
                     <td> When you met with them, did you maintain social distance from them (at least 6 feet)? </td>
-                    <td> <BehaviorSelect v-model="contact.socialdistance"  @input="updateScore()" ></BehaviorSelect> </td>
+                    <td> <BehaviorSelect v-model="contact.socialdistance"  @input="updateScore()" :key="contact.socialdistance[0]" ></BehaviorSelect> </td>
                    </tr>
-                   <tr v-if="contact.count > 0">
+                   <tr>
                     <td> When you met with them, did you use a face mask? </td>
-                    <td> <BehaviorSelect v-model="contact.mask" @input="updateScore()" ></BehaviorSelect> </td>
+                    <td> <BehaviorSelect v-model="contact.mask" @input="updateScore()" :key="contact.mask[0]"></BehaviorSelect> </td>
                   </tr>
-                  <tr v-if="contact.count > 0 && !isoutdoor">
+                  <tr>
                     <td> What proportion of the time did you meet them in a room the size of or smaller than a small 
                         restaurant or a Starbucks? (If you only met in a larger room, then answer “none of the time”.)
                     </td>
-                    <td> <DictSelect :dict="SmallRoomDict" v-model="contact.smallroom" @input="updateScore()" ></DictSelect> </td>
+                    <td> <DictSelect :dict="SmallRoomDict" v-model="contact.smallroom" @input="updateScore()" :key="contact.smallroom[0]" ></DictSelect> </td>
                   </tr>
-                  <tr v-if="contact.count > 0">
+                  <tr>
                     <td> How frequently did you meet with them?
                     </td>    
-                    <td> <DictSelect :dict="FrequencyDict" v-model="contact.frequency" @input="updateScore()" ></DictSelect> </td>                    
+                    <td> <DictSelect :dict="FrequencyDict" v-model="contact.frequency" @input="updateScore()" :key="contact.frequency[0]"></DictSelect> </td>                    
                   </tr>
-                  <tr v-if="contact.count > 0">
+                  <tr>
                     <td> {{isoutdoor?'Outdoor':'Indoor'}}  {{contact.index}} contact score </td>
                     <td> <input readonly :value="contact.score() | decimal" :key="contact.score()"></input> </td>
                   </tr>
-                  </tbody>
+                  </template>
                 </tbody>                  
                 `,
         data() {
