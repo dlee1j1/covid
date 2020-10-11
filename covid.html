@@ -236,7 +236,8 @@
     </tbody>
 </table>
 <div> 
-    <span v-if="debug" class="debug"> <input v-model="key"><button @click="load()">Load</button> <button @click="save()">Save</button> </span>   
+    <span v-if="debug" class="debug"> <input placeholder="key for local storage (optional)" v-model="key">
+        <button @click="load()">Load</button> <button @click="save()">Save</button> </span>   
     <button type="button" @click="resetFields()" >Reset</button> 
 </div>
 
@@ -432,7 +433,8 @@
 
     </table>
     <div style="float:left;">
-        <span v-if="debug" class="debug"> <input v-model="key"><button @click="load()">Load</button> <button @click="save()">Save</button> </span>    
+        <span v-if="debug" class="debug"> <input placeholder="key for local storage (optional)" v-model="key">
+            <button @click="load()">Load</button> <button @click="save()">Save</button> </span>    
         <button type="button" @click="resetFields()" >Reset</button> 
     </div>
 </div>
