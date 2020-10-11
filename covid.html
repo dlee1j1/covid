@@ -175,7 +175,7 @@
         </tr>
         <tr>
             <td>Risk Score</td>
-            <td><input readonly=true :value="Self.score()" :key="Self.score()"></input>
+            <td><input readonly=true :value="Self.score() | decimal" :key="Self.score()"></input>
             </td>
         </tr>
         <tr>
@@ -203,7 +203,7 @@
         </tr>
         <tr>
             <td>Risk score for others you live with </td>
-            <td><input readonly=true :value="Others.score()" :key="Others.score()"></input>
+            <td><input readonly=true :value="Others.score() | decimal" :key="Others.score()"></input>
             </td>
         </tr>
         <tr>
@@ -258,6 +258,12 @@
         }
     }
 
+    Vue.filter('decimal',
+        function(val) { 
+            if (!val) return val
+            return Math.round(val*1000)/1000 
+         })
+    
     Vue.component('DictSelect', {
         props: ['value','dict'],
         template: `<select  @input="$emit('input',[$event.target.value,dict[$event.target.value]])" :value="value?value[0]:null">
@@ -383,7 +389,7 @@
                 @updatescore="UpdateTotalScore()"></tbody>     
         <tr v-if="HouseholdSize > 0">
             <td> Total Household Contact Score </td>
-            <td> <input readonly :value=HouseholdScore :key=HouseholdScore ></input> </td>
+            <td> <input readonly :value="HouseholdScore | decimal" :key=HouseholdScore ></input> </td>
         </tr>
 
         <tr> <td colspan="2" class="category" >Close indoor contacts</td></tr>
@@ -397,7 +403,7 @@
         <tbody v-for="insidetype in Insides" is="ContactScore" :contact="insidetype" :key="insidetype.index" @updatescore="UpdateTotalScore()"></tbody>
         <tr v-if="InsideScore > 0">
             <td> Total Indoor Contact Score </td>
-            <td> <input readonly :value=InsideScore :key=InsideScore ></input> </td>
+            <td> <input readonly :value="InsideScore | decimal" :key=InsideScore ></input> </td>
         </tr>
 
         <tr> <td colspan="2" class="category" >Close outdoor contacts</td></tr>
@@ -409,7 +415,7 @@
 
         <tr style="font-size:large;font-weight:bold;">
             <td> Overall Contact Score </td>
-            <td> <input readonly :value=TotalScore :key=TotalScore ></input> </td>
+            <td> <input readonly :value="TotalScore | decimal" :key=TotalScore ></input> </td>
         </tr>
 
 
@@ -504,7 +510,7 @@
                   </tr>
                   <tr v-if="memberscount > 1">
                     <td> Household member {{identifier()}} score </td>
-                    <td> <input readonly :value="mem.score()" :key="mem.score()"></input> </td>
+                    <td> <input readonly :value="mem.score() | decimal" :key="mem.score()"></input> </td>
                   </tr>
                   </tbody>
                 `,
@@ -594,7 +600,7 @@
                   </tr>
                   <tr v-if="contact.count > 0">
                     <td> {{isoutdoor?'Outdoor':'Indoor'}}  {{contact.index}} contact score </td>
-                    <td> <input readonly :value="contact.score()" :key="contact.score()"></input> </td>
+                    <td> <input readonly :value="contact.score() | decimal" :key="contact.score()"></input> </td>
                   </tr>
                   </tbody>
                 </tbody>                  
@@ -747,11 +753,16 @@
                 var dict = {}
                 complicationsApp.flatten(dict)
                 infectionApp.flatten(dict)
+                let data = new FormData()
+                for ( key in dict) {
+                    data.append(key,dict[key]);
+                }
                 var st = JSON.stringify(dict)
+                console.log(st)
                 if (confirm("You are about to share this data for our research. Please confirm")) {
                     fetch(scriptURL, {
                         method: 'POST',
-                        body: st
+                        body: data
                     })
                     .then(response => alert("Successfully shared."))
                     .catch(error => alert('Error!' + error.message + ' Data was not shared. Please try again later.'))
