@@ -601,7 +601,7 @@
                     <td> When you met with them, did you use a face mask? </td>
                     <td> <BehaviorSelect v-model="contact.mask" @input="updateScore()" :key="contact.mask | keycheck"></BehaviorSelect> </td>
                   </tr>
-                  <tr>
+                  <tr v-if="!isoutdoor">
                     <td> What proportion of the time did you meet them in a room the size of or smaller than a small 
                         restaurant or a Starbucks? (If you only met in a larger room, then answer “none of the time”.)
                     </td>
