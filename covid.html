@@ -41,7 +41,7 @@
     }
     
     table tbody td.bold {
-        font-style: italic;
+        font-weight: bold;
     }
     
     table tbody td input:read-only {
@@ -108,9 +108,23 @@
     }
 
     @media print {
-        button, :placeholder-shown, .debug {
+        button, :placeholder-shown, .debug, .more {
             display: none;
         }
+    }
+
+    a.more {
+        color:red;
+        text-decoration: underline;
+        font-style: italic;
+        font-size:smaller ;
+        cursor: pointer;
+    }
+
+    .more-text {
+        font-style: italic;
+        font-size:smaller ;
+        cursor: pointer;
     }
 
     /* Tooltip container */
@@ -140,10 +154,34 @@
 }
 </style>
 
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 <!--
 <script src="vue.js"></script>
 -->
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js">
+</script>
+<script>
+   var more = Vue.component('more', {
+        props: ['teaser'],
+        template: `
+            <span :key="show" @click="toggle">
+                <span v-show="show" class="more-text"> <slot> </slot> </span>
+                <a v-if="!show" class="more"> {{morelink}}</a>
+            </span>
+        `,
+        data() {
+            return { 
+                show:false,
+                morelink: this.teaser || 'Learn more...'
+            }
+        },
+       methods: {
+            toggle(){ this.show = !this.show},
+            toggleTop(){ if (!this.skipclick) {this.toggle()} }
+        }
+    })
+</script>
+
 
 <div id="complications">
 <table class="purpleTable">
@@ -154,38 +192,54 @@
     </thead>
     <tbody>
         <tr>
-            <td colspan="2">Understanding your risk for serious COVID-19 complications can help you decide whether to meet with others face-to-face. Older ages and having certain health conditions (see Note) are the main risk factors for COVID-19 complications. However,
+            <td colspan="2">Understanding your risk for serious COVID-19 complications can help you decide whether to meet with others face-to-face. 
+                Older ages and having certain health conditions are the main risk factors for COVID-19 complications. However,
                 other personal considerations could factor into your <em>perceived risk</em> for COVID complications.
             </td>
         </tr>
         <tr>
-            <td class="tooltip">What age group are you in?
-                <span class="tooltiptext"> Older people have substantially greater risk for
+            <td>What age group are you in?
+                <more teaser='How does age impact your risk?'> Older people have substantially greater risk for
                     COVID-19 complications, hospitalizations, ICU care, and
                     deaths. Those in older age groups are assigned a higher risk
                     score: &lt;30, 30-49, 50-64, and &ge;65 has a risk score of 0.5, 1, 2,
-                    and 3, respectively </span>
+                    and 3, respectively </more>
             </td>
-            <td> <select is="DictSelect" v-model="Self.age" :dict=AgeDict></select> </td>
+            <td> <DictSelect v-model="Self.age" :dict=AgeDict></DictSelect> </td>
         </tr>
         <tr>
             <td>How many health conditions do you have that put you at increased risk of COVID-19 complications?
+                <more> Those with one or more pre-existing health
+                    conditions are more likely to develop serious complications
+                    when infected with COVID-19. Those with more pre-existing
+                    health conditions are assigned a higher risk score: Zero, one,
+                    or more than one health conditions has a risk score of 1, 2,
+                    and 3, respectively. The most common health conditions associated with serious COVID-19 
+                    complications include: obesity, cardiovascular diseases, chronic respiratory diseases, chronic
+                    kidney diseases, diabetes, hypertension, cancer, immunosuppressive drugs. A full list can
+                be found on the <a href="https://www.cdc.gov/coronavirus/2019-ncov/need-extra-precautions/people-with-medical-conditions.html">CDC website</a>.</more>
             </td>
-            <td> <select is="DictSelect" v-model="Self.health" :dict="HealthDict"></select></td>
+            <td> <DictSelect  v-model="Self.health" :dict="HealthDict"></DictSelect></td>
         </tr>
         <tr>
-            <td colspan="2" style="font-size:85%; padding-left: 5px;">
-                The most common health conditions associated with serious COVID-19 complications include: obesity, cardiovascular diseases, chronic respiratory diseases, chronic kidney diseases, diabetes, hypertension, cancer, immunosuppressive drugs. A full list can
-                be found on CDC website.
+            <td>Complication Risk Score
+                <more teaser="How is Risk Score calculated?"> Being older and having pre-existing health conditions puts 
+                    you at much greater risk for serious COVID-19 complications
+                     than if you only have one but not the other.  
+                     Your calculated risk score is determined by multiplying the risk score for your age with the risk score for
+                    your number of pre-existing health conditions. This risk score ranges between 0.5 to 9.
+                </more>
+            </td>
+            <td><input readonly=true :value="Self.score() | decimal" :key="Self.score()">  </input>
             </td>
         </tr>
         <tr>
-            <td>Risk Score</td>
-            <td><input readonly=true :value="Self.score() | decimal" :key="Self.score()"></input>
+            <td>Calculated Risk
+                <more>  
+                    Calculated Risk provides a qualitative estimate of your risk using your calculated risk score. 
+                    Your risk is very low if the risk score is &lt;1, low if 1-2, medium if 3-5, high if &gt;5   
+                </more>
             </td>
-        </tr>
-        <tr>
-            <td>Calculated Risk</td>
             <td><input readonly=true :value="Self.risk()" :key="Self.risk()"></input>
             </td>
         </tr>
@@ -197,44 +251,84 @@
             <td colspan="2" class=bold>Among those living with you</td>
         </tr>
         <td colspan="2">
-        <p>You should consider the risk of serious complications among those living with you because if you get infected, you may infect them and put them at risk for COVID-19 complications. Together, these considerations help to
-            determine your <em>final risk</em> for COVID-19 complications. </td>
+        <p>You should consider the risk of serious complications among those living with you. 
+            If you get infected, you may infect them and put them at risk for COVID-19 complications. 
+            Together, these considerations help to
+            determine your <em>Overall Risk</em> for COVID-19 complications. </td>
         <tr>
-            <td>What is the age group of the oldest person you are living with?</td>
-            <td> <select is="DictSelect" v-model="Others.age" :dict=AgeDict></select> </td>
+            <td>What is the age group of the oldest person you are living with?
+                <more teaser='How does age impact risk?'> Older people have substantially greater risk for
+                    COVID-19 complications, hospitalizations, ICU care, and
+                    deaths. Those in older age groups are assigned a higher risk
+                    score: &lt;30, 30-49, 50-64, and &ge;65 has a risk score of 0.5, 1, 2,
+                    and 3, respectively. Those living alone are assigned a risk score of zero.
+                 </more>
+                </td>
+            </td>
+            <td> <DictSelect v-model="Others.age" :dict=OthersAgeDict></DictSelect> </td>
+        </tr>
+        <template v-if="Others.age && Others.age[1] > 0">
+        <tr>
+            <td>Among those living with you, think about the person with the highest number of health conditions 
+                that put him/her at increased risk of COVID-19 complications. How many health conditions does that person have?
+                <more> Those with one or more pre-existing health
+                    conditions are more likely to develop serious complications
+                    when infected with COVID-19. Those with more pre-existing
+                    health conditions are assigned a higher risk score: Zero, one,
+                    or more than one health conditions has a risk score of 1, 2,
+                    and 3, respectively.</more>
+                </td>
+            <td> <DictSelect is="DictSelect" v-model="Others.health" :dict="HealthDict"></DictSelect></td>
         </tr>
         <tr>
-            <td>Among those living with you, think about the person with the highest number of health conditions that put him/her at increased risk of COVID-19 complications. How many health conditions does that person have?</td>
-            <td> <select is="DictSelect" v-model="Others.health" :dict="HealthDict"></select></td>
-        </tr>
-        <tr>
-            <td>Risk score for others you live with </td>
+            <td>Risk score for others you live with 
+                <more teaser="How is Risk Score calculated?"> Being older and having pre-existing health conditions puts 
+                    you at much greater risk for serious COVID-19 complications
+                     than if you only have one but not the other.  
+                     Your calculated risk score is determined by multiplying the risk score for your age with the risk score for
+                    your number of pre-existing health conditions. This risk score ranges between 0.5 to 9.
+                    For simplicity, we are using the same calculation for this score even if the 
+                    previous answer refer to two different person.
+                </more>
+            </td>
             <td><input readonly=true :value="Others.score() | decimal" :key="Others.score()"></input>
             </td>
         </tr>
         <tr>
-            <td>Risk of those living with you</td>
+            <td>Risk of those living with you
+                <more>  
+                    Calculated Risk provides a qualitative estimate of the risk for those living with you. 
+                    Their risk is very low if the risk score is &lt;1, low if 1-2, medium if 3-5, high if &gt;5   
+                </more>
+            </td>
             <td><input readonly=true :value="Others.risk()" :key="Others.risk()"></input>
             </td>
         </tr>
-        <tr v-if="Others.score() && Self.score() && Others.score() > Self.score() &&  Self.risk() != Others.risk() ">
-            <td colspan="2">
-                Compare your risk ({{Self.risk()}}) to the risk of those living with you ({{Others.risk()}}). 
-                Consider whether to increase your preferred risk tolerance when determining your final risk tolerance. </span>
+        </template>
+        <tr> 
+            <td> Your Overall Risk for Covid-19 Complications 
+            <more v-if="Others.age && Others.age[1] > 0">
+            Comparing your estimated risk for COVID-19 complications to the risk of those living with you. Your overall risk is the higher of the two. 
+            This is because you have to consider the impact on others if you should become infected and then transmit COVID-19 to others who live with you. 
+            Their risk of developing serious complications is part of your overall risk.            
+            </more>
             </td>
+            <td><input readonly=true :value="overallRisk()" :key="overallRisk()"></input>
         </tr>
-        <tr v-if="Self.score()">
-            <td>Consider whether you would like to change your risk based on other considerations you might have. This is your Perceived Risk</td>
-            <td> <select v-model="PerceivedRisk">
-            <option></option>
-            <option>Very Low</option>
-            <option>Low</option>
-            <option>Medium</option>
-            <option>High</option>
-        </select></td>
+        <tr v-if="overallRisk()">
+            <td colspan="2">
+            <more teaser="Advice for people with your overall complication risk"> Since you have {{overallRisk()}} overall complication risk, {{riskAdvice[overallRisk()]}} </more>
+            </td>
         </tr>
     </tbody>
 </table>
+<more teaser="Advice for people with different complicaiton risk levels">
+    <ul>
+    <li v-for="(advice,risk) in riskAdvice">
+        If you have <b> {{risk}} </b> complication risk, {{advice}} 
+    </li>    
+    </ul>
+</more>
 <div> 
     <span v-if="debug" class="debug"> <input placeholder="key for local storage (optional)" v-model="key">
         <button @click="load()">Load</button> <button @click="save()">Save</button> </span>   
@@ -278,6 +372,7 @@
             return tuple ? tuple[0] : null
         })
     
+    var DictSelect = 
     Vue.component('DictSelect', {
         props: ['value','dict'],
         template: `<select  @input="$emit('input',[$event.target.value,dict[$event.target.value]])" :value="value?value[0]:null">
@@ -294,10 +389,39 @@
         "over 65":3
     }
 
+    const OthersAgeDict = {
+        "Under 30":0.5,
+        "30-49":1,
+        "50-64":2,
+        "over 65":3,
+        "I live alone":0
+    }
+
+
     const HealthDict = {
         0:1,
         1:2,
         "more than 1":3
+    }
+
+    const riskAdvice = {
+        'High': `you should consider only meeting others in person when the level of COVID-19 infection in the community is low or very low. 
+                If you decide to meet with others, protect yourself by meeting them outdoor or in a larger room with good ventilation. 
+                Always use facemask and maintain social distance of at least 6 feet. 
+                When forming a group bubble with others, consider only meeting with individuals who have a very low risk of having COVID-19 infection.`,
+        'Medium':`you should consider meeting with others in person when the level of COVID-19 infection in the community is at a medium level or lower.
+                If you decide to meet with others, protect yourself by meeting them outdoor or in a larger room with good ventilation. 
+                Always use facemask and maintain social distance of at least 6 feet. 
+                When forming a group bubble with others, consider meeting with individuals who have a low or very low risk of having COVID-19 infection.`,
+        'Low':`you can meet with others in person when the level of COVID-19 infection in the community is at a medium level or lower. 
+            If you decide to meet with others, consider meeting them outdoor or in a room with good ventilation. 
+            Always use facemask and maintain social distance of at least 6 feet. When forming a bubble with others, 
+            meet with individuals who have a medium or lower risk of having COVID-19 infection.`,
+        'Very Low': `you can meet with others in person as long as your local public health department allows it. 
+            If you decide to meet with others, consider meeting them outdoor or in a room with good ventilation. 
+            Always use facemask and maintain social distance of at least 6 feet unless the level of COVID-19 
+            infection in the community is very low. 
+            When forming a group bubble, you can meet with individuals with a broad range of risk of having COVID-19 infection.`
     }
 
     class ComplicationRisk {
@@ -331,6 +455,8 @@
             amend(dict,prefix,'score',this.score())
             amend(dict,prefix,'risk',this.risk())
         }
+
+
     }
 
     var complicationsApp = new Vue({
@@ -340,6 +466,8 @@
                 {
                     AgeDict: AgeDict,
                     HealthDict: HealthDict,
+                    OthersAgeDict: OthersAgeDict,
+                    riskAdvice:riskAdvice,
                     Self: new ComplicationRisk("self"),
                     Others: new ComplicationRisk("others"),
                     PerceivedRisk: null,
@@ -350,7 +478,20 @@
         created () {
             eventBus.$on('toggleDebug',this.toggleDebug)
         },
+        components : {
+            more: more,
+            dictselect: DictSelect
+        },
         methods: {
+            overallRisk() {
+
+                let risk = this.Self.risk();
+                if (risk && (this.Others.score() > this.Self.score())) {
+                    risk = this.Others.risk()
+                }
+                return risk
+            },
+            
             resetFields() {
                 Object.assign(this.$data, this.$options.data.call(this));
             },
@@ -376,6 +517,7 @@
             toggleDebug() {
                 this.debug = !this.debug; this.$forceUpdate()
             }
+
         }
     })
 
@@ -458,7 +600,7 @@
             </DictSelect>
         `,
         data() {
-            var BehaviorDict = {
+            let BehaviorDict = {
                 'All of the time':0.5,
                 'Half of the time or more':0.75,
                 'Less than half of the time': 1,
