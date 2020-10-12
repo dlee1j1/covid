@@ -162,11 +162,12 @@
 </script>
 <script>
    var more = Vue.component('more', {
-        props: ['teaser'],
+        props: ['teaser','skipclick'],
         template: `
-            <span :key="show" @click="toggle">
+            <span :key="show" @click="toggleTop">
                 <span v-show="show" class="more-text"> <slot> </slot> </span>
-                <a v-if="!show" class="more"> {{morelink}}</a>
+                <a v-if="!show" class="more" @click="toggleIn"> {{morelink}}</a>
+                <a v-if="show && skipclick" class="more" @click="toggleIn"> [Hide]</a>
             </span>
         `,
         data() {
@@ -177,6 +178,7 @@
         },
        methods: {
             toggle(){ this.show = !this.show},
+            toggleIn() { if (this.skipclick) {this.toggle()}  },
             toggleTop(){ if (!this.skipclick) {this.toggle()} }
         }
     })
@@ -283,12 +285,12 @@
         <tr>
             <td>Risk score for others you live with 
                 <more teaser="How is Risk Score calculated?"> Being older and having pre-existing health conditions puts 
-                    you at much greater risk for serious COVID-19 complications
-                     than if you only have one but not the other.  
-                     Your calculated risk score is determined by multiplying the risk score for your age with the risk score for
-                    your number of pre-existing health conditions. This risk score ranges between 0.5 to 9.
+                    a person at much greater risk for serious COVID-19 complications
+                     than if they only have one but not the other.  
+                     The calculated risk score is determined by multiplying the risk score for oldest person you are living with
+                      and the risk score for the person with the highest number of pre-existing health conditions. 
                     For simplicity, we are using the same calculation for this score even if the 
-                    previous answer refer to two different person.
+                    previous answers refer to two different person.
                 </more>
             </td>
             <td><input readonly=true :value="Others.score() | decimal" :key="Others.score()"></input>
@@ -317,15 +319,16 @@
         </tr>
         <tr v-if="overallRisk()">
             <td colspan="2">
-            <more teaser="Advice for people with your overall complication risk"> Since you have {{overallRisk()}} overall complication risk, {{riskAdvice[overallRisk()]}} </more>
+            <b>How to use your risk assessment result.</b> Since you have <b>{{overallRisk()}}</b> overall complication risk, {{riskAdvice[overallRisk()]}} </more>
             </td>
         </tr>
     </tbody>
 </table>
-<more teaser="Advice for people with different complicaiton risk levels">
+ 
+<more teaser="Recommendation for people with different complication risk levels..." skipclick=true style="font-size:larger;">
     <ul>
     <li v-for="(advice,risk) in riskAdvice">
-        If you have <b> {{risk}} </b> complication risk, {{advice}} 
+        If you have <b> {{risk}} </b> complication risk, <more>{{advice}}</more>  
     </li>    
     </ul>
 </more>
@@ -535,22 +538,39 @@
                 <th colspan="2">UNDERSTANDING A PERSON&apos;S RISK OF BEING INFECTED WITH COVID-19 </householdmember>
             </tr>
         </thead>
+        <tr>
+            <td colspan="2">
+                Your risk of getting COVID-19 is related to how much close contact you have with other people and the chance that they are infected with COVID-19. 
+                To assess your risk, this assessment generates a contact score for you. The higher the score, the greater your risk of being infected through your contacts.
+                 You may choose to meet with others who have a certain risk of being infected with COVID-19.
+                 <p></p>
+                <u>Important:</u> The questions below refer only to close contacts during the past 14 days. 
+                Close contact is defined here as being together within 10 feet or 3 meters for at least 15 minutes
+            </td>
+        </tr>
         <tr> <td colspan="2" class="category" >Contacts of those living with you</td></tr>
         <tr>
-            <td>Consider the people you live with, how many of them met with other people indoor over the past 2
-                weeks?</td>
+            <td>Consider the people you live with, how many of them met with other people <b>indoor</b> over the past 2
+                weeks? 
+                <more teaser="What about those who do not go out?">  
+                    Do not include anyone living with you who did not meet with anyone outside your home, 
+                    e.g. a toddler, stay-at-home spouse </more>
+            </td>
             <td><input  type="number" v-model="HouseholdSize" placeholder="household" @input="checksize()" @keyup="checkkey($event)">   </input> 
             </td>
         </tr>
 
         <tr v-if="HouseholdMembers.length > 0">
             <td colspan="2"> 
-            List each of these individuals and their relationship with you: spouse or significant other, child, sibling, other relative, or other. 
+            List each of these individuals and their relationship with you: spouse or significant other, child, parent, sibling, other relative, or other. 
             </td></tr>
         <tbody v-for="member in HouseholdMembers" is="HouseholdMember" :key="member.index" :mem="member" :memberscount="HouseholdSize" 
                 @updatescore="UpdateTotalScore()"></tbody>     
         <tr v-if="HouseholdSize > 0">
-            <td> Total Household Contact Score </td>
+            <td> Total Household Contact Score 
+                <more> We added up each of your household member's infection risk score to come up with your household contact score.
+                </more>
+            </td>
             <td> <input readonly :value="HouseholdScore | decimal" :key=HouseholdScore ></input> </td>
         </tr>
 
@@ -576,7 +596,12 @@
         <tbody  is="ContactScore" :contact="Outside" :isoutdoor="true" @updatescore="UpdateTotalScore()"></tbody>
 
         <tr style="font-size:large;font-weight:bold;">
-            <td> Overall Contact Score </td>
+            <td> Overall Contact Score 
+                <more>
+                    Your total contact risk score is the sum of your risk from those you live with and your risk from being in close 
+                    contact with other indoor and outdoor. 
+                </more>
+            </td>
             <td> <input readonly :value="TotalScore | decimal" :key=TotalScore ></input> </td>
         </tr>
 
@@ -665,15 +690,35 @@
                     </td>
                    </tr>
                    <tr>
-                    <td> When meeting with other people indoor, does he/she maintain social distance (at least 6 feet)? </td>
+                    <td> When meeting with other people indoor, does he/she maintain social distance (at least 6 feet)?
+                        <more> Maintaining social distance reduces the risk of COVID-19 transmission. 
+                            We assigned a score of 0.5 when social distance was always maintained, a score of 0.75 
+                            when it was mostly maintained, and a score of 1 if it was not consistent. If you do not know, we assume 
+                            that social distance was not consistently maintained and assign a score of 1.
+                        </more>
+                        </td>
                     <td> <BehaviorSelect v-model="mem.socialdistance" :hasunknown=true  @input="updateScore()" :key="mem.socialdistance | keycheck" ></BehaviorSelect> </td>
                    </tr>
                    <tr>
-                    <td> When meeting with other people indoor, does he/she use a face mask? </td>
+                    <td> When meeting with other people indoor, does he/she use a face mask? 
+                        <more>
+                        Use of a face mask reduces the risk of COVID-19 transmission. 
+                        We assigned a score of 0.5 when face masks were always used, a score of 0.75 
+                            when face masks were mostly used, and a score of 1 if it was not consistent. If you do not know, we assume 
+                            that face masks was not consistently used and assign a score of 1.
+                        </more>
+                    </td>
                     <td> <BehaviorSelect v-model="mem.mask" :hasunknown=true @input="updateScore()" :key="mem.mask | keycheck"></BehaviorSelect> </td>
                   </tr>
-                  <tr v-if="memberscount > 1">
-                    <td> Household member {{identifier()}} score </td>
+                  <tr>
+                    <td style="text-transform:capitalize"> {{identifier()}} infection risk score 
+                        <more teaser="How did we calculate this score?">
+                            We estimated your risk of getting infected wtih COVID-19 from {{identifier()}} by multiplying 
+                            the impact of mask wearing and social distance adherence.
+                            Since the risk of transmission among those who live together is over 10 times greater than among those not living together so
+                            we further multiplied this by a factor of 12.
+                        </more>
+                    </td>
                     <td> <input readonly :value="mem.score() | decimal" :key="mem.score()"></input> </td>
                   </tr>
                   </tbody>
@@ -683,10 +728,16 @@
             updateScore() { this.score = this.mem.score(); this.$emit('updatescore') },
             identifier() {
                 if (this.mem.name) {return this.mem.name}
-                if (this.mem.relationship) {return this.mem.relationship}
-                return `${this.mem.index + 1} of ${this.memberscount}`   
+                let rel = this.mem.relationship
+                if (rel && rel != "other") {
+                    return `your ${rel}`
+                }
+                return `housemate ${this.mem.index + 1} of ${this.memberscount}`   
             }
         },
+        components: {
+            more: more
+        }
     })
 
     
@@ -745,26 +796,61 @@
                   </tr>
                   <template v-if="contact.count > 0">
                   <tr>
-                    <td> When you met with them, did you maintain social distance from them (at least 6 feet)? </td>
+                    <td> When you met with them, did you maintain social distance from them (at least 6 feet)? 
+                        <more>
+                            Maintaining social distance reduces the risk of COVID-19 transmission. 
+                            We assigned a score of 0.5 when social distance is always maintained, a score of 0.75 
+                            when it is mostly maintained, and a score of 1 if it is not consistent. 
+                        </more>
+                    </td>
                     <td> <BehaviorSelect v-model="contact.socialdistance"  @input="updateScore()" :key="contact.socialdistance | keycheck" ></BehaviorSelect> </td>
                    </tr>
                    <tr>
-                    <td> When you met with them, did you use a face mask? </td>
+                    <td> When you met with them, did you use a face mask? 
+                    <more>
+                        Use of a face mask reduces the risk of COVID-19 transmission. 
+                        We assigned a score of 0.5 when face masks were always used, a score of 0.75 
+                            when face masks were mostly used, and a score of 1 if it was not consistent. 
+                    </more>
+                    </td>
                     <td> <BehaviorSelect v-model="contact.mask" @input="updateScore()" :key="contact.mask | keycheck"></BehaviorSelect> </td>
                   </tr>
                   <tr v-if="!isoutdoor">
                     <td> What proportion of the time did you meet them in a room the size of or smaller than a small 
                         restaurant or a Starbucks? (If you only met in a larger room, then answer “none of the time”.)
+                        <more>  Transmission increases in smaller rooms. 
+                            Those who did not meet in small rooms get a score of 1. 
+                            Less than half the time the score is 1.5. If ofen then the score is 2. 
+                        </more>
                     </td>
                     <td> <DictSelect :dict="SmallRoomDict" v-model="contact.smallroom" @input="updateScore()" :key="contact.smallroom | keycheck" ></DictSelect> </td>
                   </tr>
                   <tr>
                     <td> How frequently did you meet with them?
-                    </td>    
+                    <more>
+                        Your chances of getting infected increases the more often you are in close contact with people. 
+                        Hence your frequency score increases with frequency of meetings. 
+                        <span v-if="contact.index='outside'"> 
+                            Those who meet less than once a week are assigned a frequency score of 0.4; 
+                            those meeting 1-2 times a week have a score of 0.6, and those meeting 3 or more times a week have a score of 0.8.
+                        </span>
+                        <span v-else>
+                            Those who meet less than once a week are assigned a frequency score of 0.5; 
+                            those meeting 1-2 times a week have a score of 1, and those meeting 3 or more times a week have a score of 1.5.
+                        </span>  
+                    </more>
+                    </td>  
                     <td> <DictSelect :dict="FrequencyDict" v-model="contact.frequency" @input="updateScore()" :key="contact.frequency | keycheck"></DictSelect> </td>                    
                   </tr>
                   <tr>
-                    <td> {{isoutdoor?'Outdoor':'Indoor'}}  {{contact.index}} contact score </td>
+                    <td> {{isoutdoor?'Outdoor':'Indoor'}}  {{contact.index}} contact score 
+                    <more>
+                        We estimate your risk of getting COVID-19 when you are with close contact {{contact.prompt}} 
+                        by multiplying the number of these close contacts with whether you maintained social distancing, 
+                         {{isoutdoor?"":"met in smaller rooms,"}}
+                           and used face mask, along with the frequency of your meeting your contacts.
+                    </more>
+                    </td>
                     <td> <input readonly :value="contact.score() | decimal" :key="contact.score()"></input> </td>
                   </tr>
                   </template>
@@ -799,6 +885,9 @@
             checkContact() { if (this.contact.count < 0) { this.contact.count = null;  } 
                             this.updateScore(); }
         },
+        components: {
+            more: more,
+        }
     })
 
 
@@ -901,6 +990,9 @@
                 this.Outside.flatten(dict)
                 amend(dict,"",'TotalScore',this.TotalScore)
             }
+        },
+        components: {
+            more:more
         }
 
     })
