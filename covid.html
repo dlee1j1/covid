@@ -162,12 +162,12 @@
 </script>
 <script>
    var more = Vue.component('more', {
-        props: ['teaser','skipclick'],
+        props: ['teaser','retain'],
         template: `
-            <span :key="show" @click="toggleTop">
+            <span :key="show" @click.stop="toggle">
+                <a v-if="!show" class="more" v-html="morelink"></a>
+                <a v-else-if="retain" class="more-text" v-html="morelink"></a>
                 <span v-show="show" class="more-text"> <slot> </slot> </span>
-                <a v-if="!show" class="more" @click="toggleIn"> {{morelink}}</a>
-                <a v-if="show && skipclick" class="more" @click="toggleIn"> [Hide]</a>
             </span>
         `,
         data() {
@@ -178,8 +178,6 @@
         },
        methods: {
             toggle(){ this.show = !this.show},
-            toggleIn() { if (this.skipclick) {this.toggle()}  },
-            toggleTop(){ if (!this.skipclick) {this.toggle()} }
         }
     })
 </script>
@@ -325,13 +323,15 @@
     </tbody>
 </table>
  
-<more teaser="Recommendation for people with different complication risk levels..." skipclick=true style="font-size:larger;">
+    <more teaser="Recommendations for different complication risk levels..." retain=true style="font-size:larger;">
     <ul>
-    <li v-for="(advice,risk) in riskAdvice">
-        If you have <b> {{risk}} </b> complication risk, <more>{{advice}}</more>  
+        <li v-for="(advice,risk) in riskAdvice">
+        <more :teaser="'If you have <b>' + risk + '</b> complication risk...'" retain=true>
+           {{advice}}
+        </more>  
     </li>    
     </ul>
-</more>
+    </more>
 <div> 
     <span v-if="debug" class="debug"> <input placeholder="key for local storage (optional)" v-model="key">
         <button @click="load()">Load</button> <button @click="save()">Save</button> </span>   
@@ -592,7 +592,7 @@
             Consider the close contacts whom you don&apos;t live with but met with outdoor over the past 2 weeks.        
         </td></tr>
 
-        <tbody  is="ContactScore" :contact="Outside" :isoutdoor="true" @updatescore="UpdateTotalScore()"></tbody>
+        <tbody  is="ContactScore" :contact="Outside" :isoutdoor=true @updatescore="UpdateTotalScore()"></tbody>
 
         <tr style="font-size:large;font-weight:bold;">
             <td> Overall Contact Score 
@@ -829,7 +829,7 @@
                     <more>
                         Your chances of getting infected increases the more often you are in close contact with people. 
                         Hence your frequency score increases with frequency of meetings. 
-                        <span v-if="contact.index='outside'"> 
+                        <span v-if="contact.index=='outside'"> 
                             Those who meet less than once a week are assigned a frequency score of 0.4; 
                             those meeting 1-2 times a week have a score of 0.6, and those meeting 3 or more times a week have a score of 0.8.
                         </span>
@@ -842,7 +842,7 @@
                     <td> <DictSelect :dict="FrequencyDict" v-model="contact.frequency" @input="updateScore()" :key="contact.frequency | keycheck"></DictSelect> </td>                    
                   </tr>
                   <tr>
-                    <td> {{isoutdoor?'Outdoor':'Indoor'}}  {{contact.index}} contact score 
+                    <td> {{isoutdoor?'Outdoor':('Indoor ' + contact.index)}}  contact score 
                     <more>
                         We estimate your risk of getting COVID-19 when you are with close contact {{contact.prompt}} 
                         by multiplying the number of these close contacts with whether you maintained social distancing, 
