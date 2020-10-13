@@ -857,7 +857,7 @@
                   </template>
                 </tbody>                  
                 `,
-        data() {
+        created() {
             const IndoorFrequencyDict = {
                 'Less than once a week':0.5, 
                 '1-2 times a week': 1,
@@ -875,11 +875,8 @@
                     'More than half of the time':2
             }
 
-            return {           
-                //score:this.contact.score(),
-                SmallRoomDict: SmallRoomDict,
-                FrequencyDict: this.isoutdoor?OutdoorFrequencyDict:IndoorFrequencyDict,
-            }
+            this.SmallRoomDict =  SmallRoomDict
+            this.FrequencyDict = this.isoutdoor?OutdoorFrequencyDict:IndoorFrequencyDict
         },
         methods: {
             updateScore() { this.score = this.contact.score(); this.$emit('updatescore') },
