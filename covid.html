@@ -467,10 +467,6 @@
         data() { 
             return(                 
                 {
-                    AgeDict: AgeDict,
-                    HealthDict: HealthDict,
-                    OthersAgeDict: OthersAgeDict,
-                    riskAdvice:riskAdvice,
                     Self: new ComplicationRisk("self"),
                     Others: new ComplicationRisk("others"),
                     PerceivedRisk: null,
@@ -480,6 +476,10 @@
         },
         created () {
             eventBus.$on('toggleDebug',this.toggleDebug)
+            this.AgeDict = AgeDict
+            this.HealthDict = HealthDict
+            this.OthersAgeDict = OthersAgeDict
+            this.riskAdvice = riskAdvice
         },
         components : {
             more: more,
@@ -535,7 +535,7 @@
     <table>
         <thead>
             <tr>
-                <th colspan="2">UNDERSTANDING A PERSON&apos;S RISK OF BEING INFECTED WITH COVID-19 </householdmember>
+                <th colspan="2">UNDERSTANDING YOUR RISK OF BEING INFECTED WITH COVID-19 </householdmember>
             </tr>
         </thead>
         <tr>
@@ -623,15 +623,17 @@
                 :dict=BehaviorDict :value="value">
             </DictSelect>
         `,
-        data() {
+        created() {
             let BehaviorDict = {
                 'All of the time':0.5,
                 'Half of the time or more':0.75,
                 'Less than half of the time': 1,
             } 
             if (this.hasunknown) {  Object.assign(BehaviorDict, {'Do not know':1 }) }
-
-            return { BehaviorDict:BehaviorDict, selectedOption: this.value}
+            this.BehaviorDict = BehaviorDict
+        },
+        data() {
+            return { selectedOption: this.value}
         },
     })
 
