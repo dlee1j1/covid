@@ -16,11 +16,17 @@ import InfectionRisk from "./components/InfectionRisk.vue";
 const scriptURL =
   "https://script.google.com/macros/s/AKfycbwWNvUSiJiria3hew6MHD6bd3zVP_3WvpVIx0JXhHGHhLYzbAnw/exec";
 
+let u = new URLSearchParams(window.location.search)
+let debug = u.get("debug") != null;
+console.log(`Debug = ${debug}`)
+
 export default {
   name: "App",
-  props: ["debug"],
   data() {
-      return {hasmount:null}
+      return {
+        hasmount:null,
+        debug: debug
+      }
   },
   methods: {
     toggleDebug: function () {
@@ -64,7 +70,7 @@ export default {
     },
   },
   mounted() {   
-         this.$refs.ComplicationRisk.load("auto")
+        this.$refs.ComplicationRisk.load("auto")
         this.$refs.InfectionRisk.load("auto")
         this.hasmount = true
    },
@@ -181,13 +187,6 @@ table.purpleTable thead {
   background: linear-gradient(to bottom, #b958bb 0%, #ab36ad 66%, #a220a4 100%);
 }
 
-.category {
-  font-weight: bold;
-}
-
-.subcategory {
-  font-style: italic;
-}
 
 @media print {
   button,

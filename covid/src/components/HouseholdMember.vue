@@ -2,8 +2,8 @@
   <tbody>
     <tr></tr>
     <tr>
-      <td colspan="2" style="padding-left: 1rem">
-        Housemate {{ mem.index + 1 }} of {{ memberscount }}
+      <td colspan="2" style="padding-left: 1rem" >
+        <span class="subcategory"> Housemate {{ mem.index + 1 }} of {{ memberscount }} </span>
         <span style="float: right; margin-right: 1rem">
           <input placeholder="Firstname or Nickname (optional)" v-model="mem.name" />
           <span style="margin-left: 1rem"></span>
@@ -62,7 +62,7 @@
     </tr>
     <tr>
       <td style="text-transform: capitalize">
-        Infection risk score ({{ identifier() }} )
+        Infection risk score ({{ identifier() }})
         <more teaser="How did we calculate this score?">
           We multiplied the scores from mask-wearing and social distancing, and then by a factor of 12. 
           This factor takes into account a much higher risk of transmission among those who live together 

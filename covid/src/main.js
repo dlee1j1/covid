@@ -1,9 +1,6 @@
 import Vue from 'vue'
 import App from './App.vue'
 
-let u = new URLSearchParams(window.location.search)
-let debug = u.get("debug") != null;
-
 
 
 Vue.filter('decimal',
@@ -19,5 +16,4 @@ function(tuple) {
 
 new Vue({
   render: h => h(App),
-  data: { debug: debug}
 }).$mount('#app')

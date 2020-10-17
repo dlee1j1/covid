@@ -297,3 +297,15 @@ export default Vue.extend({
   },
 });
 </script>
+
+<style scoped>
+::v-deep .category {
+  font-weight: bold;
+  text-align: center;
+}
+
+::v-deep .subcategory {
+  font-style: italic;
+}
+
+</style>
