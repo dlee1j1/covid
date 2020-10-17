@@ -104,7 +104,7 @@
       </tr>
       <tr>
         <td>
-          {{ isoutdoor ? "Outdoor" : "Indoor " + contact.index }} contact score
+          {{ isoutdoor ? "Total Outdoor" : "Indoor " + contact.index }} contact score
           <more>
             We estimate your risk of getting COVID-19 when you are with close
             contact {{ contact.prompt }}

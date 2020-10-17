@@ -20,20 +20,20 @@
           <u>Important:</u> The questions below refer only to close contacts
           during the past 14 days. Close contact is defined as being together
           within <b> 6 feet or 2 meters for at least 15 minutes</b>. Multiple
-          short contacts over the past 2 weeks adding up to 15 minutes meets
+          short contacts over the past 2 weeks with the same person adding up to 15 minutes meets
           this definition.
         </td>
       </tr>
       <tr>
-        <td colspan="2" class="category">Contacts of those living with you</td>
+        <td colspan="2" class="category">Contacts of people living with you</td>
       </tr>
       <tr>
         <td>
           Consider the people you live with, how many of them met with other
           people <b>indoor</b> over the past 2 weeks?
-          <more teaser="What about those who do not go out?">
+          <more teaser="What about those who do not go out or you live alone?">
             Do not include anyone living with you who did not meet with anyone
-            outside your home, e.g. a toddler, stay-at-home spouse
+            outside your home, e.g. a toddler, stay-at-home spouse. If you live alone, enter zero.
           </more>
         </td>
         <td>
@@ -97,7 +97,7 @@
         :key="insidetype.index"
         @updatescore="UpdateTotalScore()"
       ></tbody>
-      <tr v-if="InsideScore > 0">
+      <tr>
         <td>Total Indoor Contact Score</td>
         <td>
           <input readonly :value="InsideScore | decimal" :key="InsideScore" />
@@ -123,10 +123,10 @@
 
       <tr style="font-size: large; font-weight: bold">
         <td>
-          Overall Contact Score
+          Total Overall Contact Score
           <more>
-            Your total contact risk score is the sum of your risk from those you
-            live with and your risk from being in close contact with other
+            Your total overall contact risk score is the sum of your risk from those you
+            live with and your risk from being in close contact with others
             indoor and outdoor.
           </more>
         </td>
@@ -134,6 +134,19 @@
           <input readonly :value="TotalScore | decimal" :key="TotalScore" />
         </td>
       </tr>
+
+      <tr style="font-size: large; font-weight: bold">
+        <td>
+          Estimated Overall Contact Risk
+          <more>
+            Your risk is....
+          </more>
+        </td>
+        <td>
+          <input readonly  />
+        </td>
+      </tr>
+
     </table>
     <div style="float: left">
       <span v-if="debug" class="debug" :key="debug">
@@ -253,7 +266,7 @@ export default Vue.extend({
         h.__proto__ = hm;
       }
 
-      let cs = new ContactScore();
+      let cs = new ContactScoreData();
       let i;
       for (i in this.Insides) {
         this.Insides[i].__proto__ = cs;
@@ -263,7 +276,7 @@ export default Vue.extend({
     },
     save(key) {
       let infection = JSON.stringify(this.$data);
-      let k = "infection" + key || (this.key ? this.key : "");
+      let k = "infection" + (key || (this.key ? this.key : ""));
       localStorage.setItem(k, infection);
     },
     flatten(dict) {

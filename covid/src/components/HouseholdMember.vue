@@ -2,10 +2,10 @@
   <tbody>
     <tr></tr>
     <tr>
-      <td colspan="2" style="padding-left: 2rem">
-        {{ mem.index + 1 }} of {{ memberscount }}
+      <td colspan="2" style="padding-left: 1rem">
+        Housemate {{ mem.index + 1 }} of {{ memberscount }}
         <span style="float: right; margin-right: 1rem">
-          <input placeholder="Nickname (optional)" v-model="mem.name" />
+          <input placeholder="Firstname or Nickname (optional)" v-model="mem.name" />
           <span style="margin-left: 1rem"></span>
           <select v-model="mem.relationship">
             <option :value="null" disabled="true">Relation to you</option>
@@ -62,13 +62,11 @@
     </tr>
     <tr>
       <td style="text-transform: capitalize">
-        {{ identifier() }} infection risk score
+        Infection risk score ({{ identifier() }} )
         <more teaser="How did we calculate this score?">
-          We estimated your risk of getting infected wtih COVID-19 from
-          {{ identifier() }} by multiplying the impact of mask wearing and
-          social distance adherence. Since the risk of transmission among those
-          who live together is over 10 times greater than among those not living
-          together so we further multiplied this by a factor of 12.
+          We multiplied the scores from mask-wearing and social distancing, and then by a factor of 12. 
+          This factor takes into account a much higher risk of transmission among those who live together 
+          due to several contributing causes including small indoor environment and high frequency of contact.
         </more>
       </td>
       <td>

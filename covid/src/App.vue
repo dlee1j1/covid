@@ -59,16 +59,15 @@ export default {
       }
     },
     updated(component) {
-        if (this.hasmount) component.save("auto");
+         if (this.hasmount) component.save("auto");
+
     },
   },
   mounted() {   
-    this.$nextTick(function () {   
-        this.$refs.ComplicationRisk.load("auto")
+         this.$refs.ComplicationRisk.load("auto")
         this.$refs.InfectionRisk.load("auto")
         this.hasmount = true
-    })
-    },
+   },
   components: {
     ComplicationRisk,
     InfectionRisk,

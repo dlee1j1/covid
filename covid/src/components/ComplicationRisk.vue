@@ -85,7 +85,7 @@
         </tr>
         <template v-if="Others.age && Others.age[1] > 0">
         <tr>
-            <td>Among those living with you, think about the person with the highest number of health conditions 
+            <td>Among those living with you, think about the person with the highest number of pre-existing health conditions 
                 that put him/her at increased risk of COVID-19 complications. How many health conditions does that person have?
                 <more teaser="Learn more about health conditions that increase risk"> Those with one or more pre-existing health
                     conditions are more likely to develop serious complications
@@ -98,11 +98,11 @@
         </tr>
         <tr>
             <td>Risk score for others you live with 
-                <more teaser="How is Risk Score calculated?"> Being older and having pre-existing health conditions puts 
+                <more teaser="How is Risk Score calculated?"> Being older <b>and</b> having pre-existing health conditions puts 
                     a person at much greater risk for serious COVID-19 complications
                      than if they only have one but not the other.  
-                     The calculated risk score is determined by multiplying the risk score for oldest person you are living with
-                      and the risk score for the person with the highest number of pre-existing health conditions. 
+                     Therefore, the calculated risk score is determined by multiplying the risk score for oldest person you are living with
+                       the risk score for the person with the highest number of pre-existing health conditions. 
                     For simplicity, we are using the same calculation for this score even if the 
                     previous answers refer to two different person.
                 </more>
@@ -187,23 +187,27 @@
     }
 
     const riskAdvice = {
-        'High': `you should consider only meeting others in person when the level of COVID-19 infection in the community is low or very low. 
+        'High': `consider only meeting others in person when the level of COVID-19 infection in the community is low or very low. 
                 If you decide to meet with others, protect yourself by meeting them outdoor or in a larger room with good ventilation. 
                 Always use facemask and maintain social distance of at least 6 feet. 
-                When forming a group bubble with others, consider only meeting with individuals who have a very low risk of having COVID-19 infection.`,
-        'Medium':`you should consider meeting with others in person when the level of COVID-19 infection in the community is at a medium level or lower.
+                When forming a group bubble with others, consider only meeting with individuals who have a very low risk of having COVID-19 infection.
+                Have your group members assess their risk of having COVID-19 using this assessment tool.`,
+        'Medium':`consider meeting with others in person when the level of COVID-19 infection in the community is at a medium level or lower.
                 If you decide to meet with others, protect yourself by meeting them outdoor or in a larger room with good ventilation. 
                 Always use facemask and maintain social distance of at least 6 feet. 
-                When forming a group bubble with others, consider meeting with individuals who have a low or very low risk of having COVID-19 infection.`,
+                When forming a group bubble with others, consider meeting with individuals who have a low or very low risk of having COVID-19 infection.
+                Have your group members assess their risk of having COVID-19 using this assessment tool.`,
         'Low':`you can meet with others in person when the level of COVID-19 infection in the community is at a medium level or lower. 
             If you decide to meet with others, consider meeting them outdoor or in a room with good ventilation. 
             Always use facemask and maintain social distance of at least 6 feet. When forming a bubble with others, 
-            meet with individuals who have a medium or lower risk of having COVID-19 infection.`,
+            meet with individuals who have a medium or lower risk of having COVID-19 infection.
+            Have your group members assess their risk of having COVID-19 using this assessment tool.`,
         'Very Low': `you can meet with others in person as long as your local public health department allows it. 
             If you decide to meet with others, consider meeting them outdoor or in a room with good ventilation. 
-            Always use facemask and maintain social distance of at least 6 feet unless the level of COVID-19 
-            infection in the community is very low. 
-            When forming a group bubble, you can meet with individuals with a broad range of risk of having COVID-19 infection.`
+            Always use facemask and maintain social distance of at least 6 feet. 
+            When forming a group bubble, you can meet with individuals with a broad range of risk of having COVID-19 infection.
+            However, it is generally better to meet with those with lower risk of infection. 
+            Have your group members assess their risk of having COVID-19 using this assessment tool.`
     }
 
     export default {
