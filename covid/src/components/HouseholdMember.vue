@@ -5,7 +5,7 @@
       <td colspan="2" style="padding-left: 1rem" >
         <span class="subcategory"> Housemate {{ mem.index + 1 }} of {{ memberscount }} </span>
         <span style="float: right; margin-right: 1rem">
-          <input placeholder="Firstname or Nickname (optional)" v-model="mem.name" />
+          <input placeholder="Firstname or Nickname (optional)" v-model="mem.name" maxlength=10 />
           <span style="margin-left: 1rem"></span>
           <select v-model="mem.relationship">
             <option :value="null" disabled="true">Relation to you</option>
@@ -80,6 +80,7 @@
 import Vue from "vue";
 import more from "./more.vue";
 import BehaviorSelect from "./BehaviorSelect.vue";
+import './filters.js'
 
 export default Vue.extend({
   props: ["mem", "memberscount"],

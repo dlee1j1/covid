@@ -132,6 +132,7 @@
 import DictSelect from "./DictSelect.vue";
 import BehaviorSelect from "./BehaviorSelect";
 import more from "./more.vue";
+import './filters.js'
 
 const IndoorFrequencyDict = {
   "Less than once a week": 0.5,

@@ -159,6 +159,7 @@
 
 <script>
     import more from "./more.vue"
+    import "./filters.js"
     import {amend} from "../shared.js"
     import {ComplicationRisk} from "./ComplicationRisk.js"
     import DictSelect from "./DictSelect.vue"

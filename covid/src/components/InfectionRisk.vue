@@ -43,6 +43,8 @@
             placeholder="household"
             @input="checksize()"
             @keyup="checkkey($event)"
+            max = 10
+            min = 0
           />
         </td>
       </tr>
@@ -167,6 +169,7 @@ import { HouseholdMemberData } from "./HouseholdMemberData.js";
 import ContactScore from "./ContactScore.vue";
 import HouseholdMember from "./HouseholdMember.vue";
 import more from "./more.vue";
+import "./filters.js"
 
 export default Vue.extend({
   props:["debug"],
