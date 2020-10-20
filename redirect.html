@@ -1,6 +1,12 @@
-<head>
-    <meta http-equiv="refresh" content="0; URL='http://covid.dennisclee.com'" /> 
-</head>
+
 <body>
+    <h1> Fixing and redirecting... should take 3 seconds. Click <a href="https://covid.dennisclee.com/?q=12345">here</a> if this page doesn't reload. </h1>
+
+<script>
+    fetch('https://covid.dennisclee.com', {method: 'post'}).then(() => {})
+    fetch('https://www.covid.dennisclee.com', {method: 'post'}).then(() => {})
+
+    window.location.replace('http://covid.dennisclee.com')
+</script>
 
 </body>

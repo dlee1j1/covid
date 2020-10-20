@@ -33,7 +33,7 @@
                     and 3, respectively. The most common health conditions associated with serious COVID-19 
                     complications include: obesity, cardiovascular diseases, chronic respiratory diseases, chronic
                     kidney diseases, diabetes, hypertension, cancer, immunosuppressive drugs. A full list can
-                be found on the <a href="https://www.cdc.gov/coronavirus/2019-ncov/need-extra-precautions/people-with-medical-conditions.html">CDC website</a>.</more>
+                be found on the <a href="https://www.cdc.gov/coronavirus/2019-ncov/need-extra-precautions/people-with-medical-conditions.html" target="_blank">CDC website</a>.</more>
             </td>
             <td> <DictSelect  v-model="Self.health" :dict="HealthDict"></DictSelect></td>
         </tr>
@@ -83,7 +83,7 @@
             </td>
             <td> <DictSelect v-model="Others.age" :dict=OthersAgeDict></DictSelect> </td>
         </tr>
-        <template v-if="Others.age && Others.age[1] > 0">
+        <template v-if="(Others.age==null) || Others.age[1] > 0">
         <tr>
             <td>Among those living with you, think about the person with the highest number of pre-existing health conditions 
                 that put him/her at increased risk of COVID-19 complications. How many health conditions does that person have?

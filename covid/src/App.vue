@@ -1,10 +1,15 @@
 <template>
   <form id="app" @submit.prevent="">
-    <ComplicationRisk :debug="debug" @updated="updated($event)" ref="ComplicationRisk"/>
-    <InfectionRisk :debug="debug" @toggleDebug="toggleDebug" @updated="updated($event)" ref="InfectionRisk"/>
+    <div v-if="!start">
+    <Precheck @start="start=true"/>
+    </div> 
+    <div v-else> 
+    <ComplicationRisk :debug="debug" @updated="updated($event)" @hook:mounted="childmounted('ComplicationRisk')" ref="ComplicationRisk"/>
+    <InfectionRisk :debug="debug" @toggleDebug="toggleDebug" @updated="updated($event)" @hook:mounted="childmounted('InfectionRisk')" ref="InfectionRisk"/>
     <div style="float:right;" id="form"> 
         <button type="button" onclick="print()" >Print</button> 
         <button type="button" @click="share()" >Share</button> 
+    </div>
     </div>
   </form>
 </template>
@@ -12,6 +17,7 @@
 <script>
 import ComplicationRisk from "./components/ComplicationRisk.vue";
 import InfectionRisk from "./components/InfectionRisk.vue";
+import Precheck from "./components/Precheck.vue"
 
 const scriptURL =
   "https://script.google.com/macros/s/AKfycbwWNvUSiJiria3hew6MHD6bd3zVP_3WvpVIx0JXhHGHhLYzbAnw/exec";
@@ -24,8 +30,9 @@ export default {
   name: "App",
   data() {
       return {
-        hasmount:null,
-        debug: debug
+        hasmount:0,
+        debug: debug,
+        start: false
       }
   },
   methods: {
@@ -65,18 +72,22 @@ export default {
       }
     },
     updated(component) {
-         if (this.hasmount) component.save("auto");
-
+         if (this.hasmount >= 2) component.save("auto");
     },
+    childmounted(name) {
+      this.$refs[name].load("auto")
+      this.hasmount++
+    }
   },
-  mounted() {   
-        this.$refs.ComplicationRisk.load("auto")
-        this.$refs.InfectionRisk.load("auto")
-        this.hasmount = true
-   },
+  // mounted() {   
+  //       this.$refs.ComplicationRisk.load("auto")
+  //       this.$refs.InfectionRisk.load("auto")
+  //       this.hasmount = true
+  //  },
   components: {
     ComplicationRisk,
     InfectionRisk,
+    Precheck
   },
 };
 </script>

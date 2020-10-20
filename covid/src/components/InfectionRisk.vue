@@ -4,7 +4,7 @@
       <thead>
         <tr>
           <th colspan="2">
-            UNDERSTANDING YOUR RISK OF BEING INFECTED WITH COVID-19
+            UNDERSTANDING YOUR RISK OF BEING INFECTED WITH COVID-19 BASED ON YOUR CONTACT SCORE
           </th>
         </tr>
       </thead>
