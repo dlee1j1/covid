@@ -10,11 +10,11 @@ export class HouseholdMemberData {
     }
 
     maskScore() {
-        return this.mask == null ? 0 : this.mask[1];
+        return this.mask == null ? NaN : this.mask[1];
     }
 
     sdScore() {
-        return this.socialdistance == null ? 0 : this.socialdistance[1];
+        return this.socialdistance == null ? NaN : this.socialdistance[1];
     }
 
     score() {

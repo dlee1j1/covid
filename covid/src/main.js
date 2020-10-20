@@ -3,6 +3,8 @@ import App from './App.vue'
 
 
 
-new Vue({
+var $app = new Vue({
   render: h => h(App),
-}).$mount('#app')
+})
+$app.$mount('#app')
+

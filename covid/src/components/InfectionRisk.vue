@@ -75,8 +75,8 @@
         <td>
           <input
             readonly
-            :value="HouseholdScore | decimal"
-            :key="HouseholdScore"
+            :value="HouseholdScore() | decimal"
+            :key="HouseholdScore()"
           />
         </td>
       </tr>
@@ -102,7 +102,7 @@
       <tr>
         <td>Total Indoor Contact Score</td>
         <td>
-          <input readonly :value="InsideScore | decimal" :key="InsideScore" />
+          <input readonly :value="InsideScore() | decimal" :key="InsideScore()" />
         </td>
       </tr>
 
@@ -133,7 +133,7 @@
           </more>
         </td>
         <td>
-          <input readonly :value="TotalScore | decimal" :key="TotalScore" />
+          <input readonly :value="TotalScore() | decimal" :key="TotalScore()" />
         </td>
       </tr>
 
@@ -141,11 +141,33 @@
         <td>
           Estimated Overall Contact Risk
           <more>
-            Your risk is....
+            We estimate your risk of getting infected based on your total contact score. Less than 10 - Low Risk; Over 10 but less than 20 - Medium Risk; 
+            Over 20 but less than 30 - High Risk; Over 30 - Very High Risk. 
           </more>
         </td>
         <td>
-          <input readonly  />
+          <input readonly :value="InfectionRisk()" :key="InfectionRisk()" />
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <div v-if="!isNaN(TotalScore())"> 
+            <b> COVID Infection Risk Recommendations:</b> 
+            Based on your contact score, your risk of being infected with COVID-19 is <b>{{InfectionRisk()}}</b>.
+            {{InfRiskAdvice[InfectionRisk()]}}
+
+            <div v-if="InfRiskAdviceAlt[InfectionRisk()]"> 
+            <ul>
+            <li> Ask those you live with to increase their use of face mask and practice of social distancing when they meet with other people
+               (if they are not doing this all the time).</li> 
+            <li> Reduce the frequency of meeting with others indoor.</li>
+            <li> Move more of your close contact with others outdoor.</li>
+            <li> When meeting others indoor, meet with others in as large a room as possible and open doors and windows to increase ventilation. </li>
+            <li> When meeting with others, increase the use of face mask and the practice of social distancing (if you are not doing this all the time). </li>
+            </ul>
+            {{InfRiskAdviceAlt[InfectionRisk()]}}
+            </div>
+          </div>
         </td>
       </tr>
 
@@ -171,6 +193,32 @@ import HouseholdMember from "./HouseholdMember.vue";
 import more from "./more.vue";
 import "./filters.js"
 
+const InfRiskAdvice = {
+  "Low": `However, even a score close to zero does not mean you are not at risk for getting infected from your close
+      contacts. Continue to maintain this low contact risk level if you plan to gather with other in a
+      small group, either indoor or outdoor. You are using face mask and social distancing
+      appropriately. When the level of COVID-19 infection is at high level, consider meeting others
+      only outdoor or in a large indoor room with good ventilation.`,
+  "Medium": `If you would like to gather with others in a small group, 
+             consider whether there are ways to reduce your indoor contact risk to a low level.`,
+  "High": `If you would like to gather with others in a small group, 
+        it is important to find ways to reduce your indoor contact risk to a medium level or lower.`,
+  "Very High": `If you would like to gather with others in a small group, 
+      it is important to find ways to reduce your indoor contact risk to at least a medium level or lower.`
+}
+
+const InfRiskAdviceAlt = {
+  "Medium": `If you cannot, you should consider only meeting with others outdoor or in a large indoor room with good ventilation once 
+      the level of COVID-19 infection in your community is at a medium level or lower. 
+      You can start meeting indoor in a small room (using face mask and social distancing) when the infections drop to a low level.`,
+  "High": `If you cannot, you should consider meeting others only outdoor (using face mask and social distancing) until the level of COVID-19 
+      infection in your community drops to a medium level. But meeting in a large indoor 
+      room should only take place once the level of COVID-infection has dropped to a low level.`,
+  "Very High": `If you cannot, you should consider meeting others only outdoor (using face mask and social distancing) once the level of COVID-19 
+      infection in your community has dropped to a low level. You should avoid meeting indoor.`
+}
+
+
 export default Vue.extend({
   props:["debug"],
   data() {
@@ -178,8 +226,6 @@ export default Vue.extend({
       HouseholdSize: null,
       HouseholdMembers: [],
       DiscardedMembers: [],
-      HouseholdScore: 0,
-      InsideScore: 0,
       Insides: {
         Work: new ContactScoreData("work"),
         SocialActivities: new ContactScoreData(
@@ -193,9 +239,13 @@ export default Vue.extend({
         ),
       },
       Outside: new ContactScoreData("outside", "outside"),
-      TotalScore: 0,
       key: null,
     };
+  },
+  created() {
+    this.InfRiskAdvice = InfRiskAdvice
+    this.InfRiskAdviceAlt = InfRiskAdviceAlt
+    this.toggleCount = 0
   },
   components: {
     more: more,
@@ -204,8 +254,11 @@ export default Vue.extend({
   },
   methods: {
     checkkey(e) {
-      if (e.key === "@") {
+      if (e.key === ",") { this.toggleCount++ }
+      else { this.toggleCount = 0 }
+      if (this.toggleCount >= 2) {
         this.$emit("toggleDebug");
+        this.toggleCount = 0;
       }
     },
     checksize() {
@@ -232,24 +285,41 @@ export default Vue.extend({
       }
       this.UpdateTotalScore();
     },
-    UpdateTotalScore() {
-      this.TotalScore = 0;
-      let member;
 
-      this.HouseholdScore = 0;
-      for (member of this.HouseholdMembers) {
-        this.HouseholdScore += member.score();
-      }
-
-      this.InsideScore = 0;
+    InsideScore() {
+      let sum = 0;
       let key;
       for (key in this.Insides) {
-        this.InsideScore += this.Insides[key].score();
+        sum += this.Insides[key].score();
       }
+      return sum
+    },
 
-      this.TotalScore =
-        this.HouseholdScore + this.InsideScore + this.Outside.score();
+    HouseholdScore() {
+      let sum = 0;
+      let member;
+      sum = 0;
+      for (member of this.HouseholdMembers) {
+        sum += member.score();
+      }
+      return sum
+    },
+
+    TotalScore() {
+      return this.HouseholdScore() + this.InsideScore() + this.Outside.score();
+    },
+
+    UpdateTotalScore() {
       this.$emit("updated",this)
+    },
+
+    InfectionRisk() {
+      let TotalScore = this.TotalScore()
+      if (isNaN(TotalScore)) { return null }
+      if (TotalScore < 10) { return "Low" }
+      if (TotalScore < 20) { return "Medium"}
+      if (TotalScore < 30) { return "High"}
+      return "Very High"
     },
     resetFields() {
       Object.assign(this.$data, this.$options.data.call(this));
@@ -284,7 +354,7 @@ export default Vue.extend({
     },
     flatten(dict) {
       amend(dict, "", "HouseholdSize", this.HouseholdSize);
-      amend(dict, "", "HouseholdScore", this.HouseholdScore);
+      amend(dict, "", "HouseholdScore", this.HouseholdScore());
       let hm;
       for (hm of this.HouseholdMembers) {
         hm.flatten(dict);
@@ -293,9 +363,9 @@ export default Vue.extend({
       for (cs in this.Insides) {
         this.Insides[cs].flatten(dict);
       }
-      amend(dict, "", "InsideScore", this.InsideScore);
+      amend(dict, "", "InsideScore", this.InsideScore());
       this.Outside.flatten(dict);
-      amend(dict, "", "TotalScore", this.TotalScore);
+      amend(dict, "", "TotalScore", this.TotalScore());
     },
   },
 });

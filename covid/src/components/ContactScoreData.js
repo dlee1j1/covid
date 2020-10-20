@@ -12,24 +12,26 @@ export class ContactScoreData {
     }
 
     maskScore() {
-         return this.mask == null?0:this.mask[1];
+         return this.mask == null?NaN:this.mask[1];
     }
 
     sdScore() {
-         return this.socialdistance == null?0:this.socialdistance[1];
+         return this.socialdistance == null?NaN:this.socialdistance[1];
     }
 
     smallroomScore() {
         if (this.index == 'outside') { return 1}
-        return this.smallroom == null?0:this.smallroom[1];
+        return this.smallroom == null?NaN:this.smallroom[1];
     }
 
     frequencyScore() {
-        return this.frequency == null?0:this.frequency[1];
+        return this.frequency == null?NaN:this.frequency[1];
     }
 
     score() {
-        return  this.count*this.maskScore()*this.sdScore()*this.smallroomScore()*this.frequencyScore();
+        if (this.count == null) { return NaN }
+        if (this.count == 0) { return 0}
+        return this.count*this.maskScore()*this.sdScore()*this.smallroomScore()*this.frequencyScore();
     }
 
     flatten(dict) {
