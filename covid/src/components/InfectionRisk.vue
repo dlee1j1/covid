@@ -149,9 +149,9 @@
           <input readonly :value="InfectionRisk()" :key="InfectionRisk()" />
         </td>
       </tr>
+      <tbody v-if="!isNaN(TotalScore())"> 
       <tr>
         <td colspan="2">
-          <div v-if="!isNaN(TotalScore())"> 
             <b> COVID Infection Risk Recommendations:</b> 
             Based on your contact score, your risk of being infected with COVID-19 is <b>{{InfectionRisk()}}</b>.
             {{InfRiskAdvice[InfectionRisk()]}}
@@ -167,11 +167,81 @@
             </ul>
             {{InfRiskAdviceAlt[InfectionRisk()]}}
             </div>
-          </div>
-        </td>
-      </tr>
+        <hr/>
+        You can access your local health department’s website to find the latest number of COVID-19 infection in your community (based on 14-day rolling average):
+        <ul>
+          <li> High: More than 10 cases per 100,000 people </li>
+          <li> Medium: 4 to 10 cases per 100,000 people </li>
+          <li> Low: 2 to less than 4 cases per 100,000 people </li>
+          <li> Very low: Less than 2 case per 100,000 people </li>
+        </ul>
+      </td>
 
+      </tr>
+      </tbody>
     </table>
+    <div>
+    <more style="font-size:larger" teaser='Sample Contact Risk Profiles'>
+      <ul>
+        <li> Low risk (score from 0 to 9.9): 
+            <more teaser="A 26 year-old woman who works in a small office with three co-workers." retain=1>
+            They wear masks and enforce social distance at work. Her husband works from home. 
+            Neither of them meets anyone indoor except during brief shopping runs. 
+            She and her husband meet once a week with another couple outside on the deck using masks and maintaining social distance.
+            <ul> 
+                <li> Household contact score: 3	</li>
+                <li> Indoor contact score: 2.25 </li>
+                <li> Outdoor contact score: 0.3 </li>
+                <li> Total contact score: 5.6	 </li>
+            </ul>
+            </more>
+        </li>
+        <li> Medium risk (score from 10-19.9):
+          <more teaser="A 50 year-old woman who works in a large office with other 6 other colleagues." retain=1> 
+            They maintain social distance and wear masks.  Her husband works solely from home and meets but he does meet with
+            a couple of friends each week, sometimes without face mask or social distance. She meets with a small group of 4 other
+            women at one of their homes once a week without face mask and or maintain social distance.
+            <ul>
+              <li> Household contact score: 6.75 </li>
+              <li> Indoor contact score: 6.25 </li>
+              <li> Outdoor contact score: 0 </li>
+              <li> Total contact score: 13 </li>
+            </ul>
+          </more>
+        </li>
+        <li> High risk (score from 20-20.9): 
+          <more teaser="A 45 year-old man who works in restaurant with 6 other workers." retain=1> 
+          They all wear masks but frequently have to work together close to each other.  His wife is an essential worker 
+          who goes to work every day. She wears mask but can’t maintain social distance all of the time. Their 2 children 
+          attend a school that meet in person; children wear mask at school and maintain social distance. They meet with another 
+          family of 4 who come over once a week to “give the kids some social time.” Everyone wears a mask (but it is hard to keep it on the kids), 
+          and they do not maintain social distance.
+          <ul> 
+            <li> Household contact score: 10.5 </li>
+            <li> Indoor contact score: 15 </li>
+            <li> Outdoor contact score: 0 </li>
+            <li> Total contact score: 25.5 </li>
+          </ul>
+          </more>
+        </li>
+        <li> Very high risk (score &ge;30):
+        <more teaser="A 25 year-old single man who lives his 2 parents and 2 other siblings." retain=1>
+          He works in a medium size office with 6 other people. They wear masks but occasionally have meetings when they sit close to each other.
+          He hangs out with a group of friends (average of 4) at a restaurant or bar a couple evenings a week. 
+          Both parents are essential workers who wear masks when they work but cannot maintain social distance all the time with others.
+          His 2 other siblings hang out with friends and sometimes wear masks and maintain social distance.  
+          He also plays outdoor soccer with a group 12 friends.
+        <ul>
+          <li> Household contact score: 22.5 </li>
+          <li> Indoor contact score: 15.4 </li>
+          <li> Outdoor contact score: 0 </li>
+          <li> Total contact score: 37.9 </li>
+        </ul>
+        </more>
+        </li>
+      </ul>
+    </more>
+    </div>
     <div style="float: left">
       <span v-if="debug" class="debug" :key="debug">
         <input placeholder="key for local storage (optional)" v-model="key" />
@@ -191,36 +261,35 @@ import { HouseholdMemberData } from "./HouseholdMemberData.js";
 import ContactScore from "./ContactScore.vue";
 import HouseholdMember from "./HouseholdMember.vue";
 import more from "./more.vue";
-import "./filters.js"
+import "./filters.js";
 
 const InfRiskAdvice = {
-  "Low": `However, even a score close to zero does not mean you are not at risk for getting infected from your close
+  Low: `However, even a score close to zero does not mean you are not at risk for getting infected from your close
       contacts. Continue to maintain this low contact risk level if you plan to gather with other in a
       small group, either indoor or outdoor. You are using face mask and social distancing
       appropriately. When the level of COVID-19 infection is at high level, consider meeting others
       only outdoor or in a large indoor room with good ventilation.`,
-  "Medium": `If you would like to gather with others in a small group, 
+  Medium: `If you would like to gather with others in a small group, 
              consider whether there are ways to reduce your indoor contact risk to a low level.`,
-  "High": `If you would like to gather with others in a small group, 
+  High: `If you would like to gather with others in a small group, 
         it is important to find ways to reduce your indoor contact risk to a medium level or lower.`,
   "Very High": `If you would like to gather with others in a small group, 
-      it is important to find ways to reduce your indoor contact risk to at least a medium level or lower.`
-}
+      it is important to find ways to reduce your indoor contact risk to at least a medium level or lower.`,
+};
 
 const InfRiskAdviceAlt = {
-  "Medium": `If you cannot, you should consider only meeting with others outdoor or in a large indoor room with good ventilation once 
+  Medium: `If you cannot, you should consider only meeting with others outdoor or in a large indoor room with good ventilation once 
       the level of COVID-19 infection in your community is at a medium level or lower. 
       You can start meeting indoor in a small room (using face mask and social distancing) when the infections drop to a low level.`,
-  "High": `If you cannot, you should consider meeting others only outdoor (using face mask and social distancing) until the level of COVID-19 
+  High: `If you cannot, you should consider meeting others only outdoor (using face mask and social distancing) until the level of COVID-19 
       infection in your community drops to a medium level. But meeting in a large indoor 
       room should only take place once the level of COVID-infection has dropped to a low level.`,
   "Very High": `If you cannot, you should consider meeting others only outdoor (using face mask and social distancing) once the level of COVID-19 
-      infection in your community has dropped to a low level. You should avoid meeting indoor.`
-}
-
+      infection in your community has dropped to a low level. You should avoid meeting indoor.`,
+};
 
 export default Vue.extend({
-  props:["debug"],
+  props: ["debug"],
   data() {
     return {
       HouseholdSize: null,
@@ -243,9 +312,9 @@ export default Vue.extend({
     };
   },
   created() {
-    this.InfRiskAdvice = InfRiskAdvice
-    this.InfRiskAdviceAlt = InfRiskAdviceAlt
-    this.toggleCount = 0
+    this.InfRiskAdvice = InfRiskAdvice;
+    this.InfRiskAdviceAlt = InfRiskAdviceAlt;
+    this.toggleCount = 0;
   },
   components: {
     more: more,
@@ -254,8 +323,11 @@ export default Vue.extend({
   },
   methods: {
     checkkey(e) {
-      if (e.key === ",") { this.toggleCount++ }
-      else { this.toggleCount = 0 }
+      if (e.key === ",") {
+        this.toggleCount++;
+      } else {
+        this.toggleCount = 0;
+      }
       if (this.toggleCount >= 2) {
         this.$emit("toggleDebug");
         this.toggleCount = 0;
@@ -292,7 +364,7 @@ export default Vue.extend({
       for (key in this.Insides) {
         sum += this.Insides[key].score();
       }
-      return sum
+      return sum;
     },
 
     HouseholdScore() {
@@ -302,7 +374,7 @@ export default Vue.extend({
       for (member of this.HouseholdMembers) {
         sum += member.score();
       }
-      return sum
+      return sum;
     },
 
     TotalScore() {
@@ -310,16 +382,24 @@ export default Vue.extend({
     },
 
     UpdateTotalScore() {
-      this.$emit("updated",this)
+      this.$emit("updated", this);
     },
 
     InfectionRisk() {
-      let TotalScore = this.TotalScore()
-      if (isNaN(TotalScore)) { return null }
-      if (TotalScore < 10) { return "Low" }
-      if (TotalScore < 20) { return "Medium"}
-      if (TotalScore < 30) { return "High"}
-      return "Very High"
+      let TotalScore = this.TotalScore();
+      if (isNaN(TotalScore)) {
+        return null;
+      }
+      if (TotalScore < 10) {
+        return "Low";
+      }
+      if (TotalScore < 20) {
+        return "Medium";
+      }
+      if (TotalScore < 30) {
+        return "High";
+      }
+      return "Very High";
     },
     resetFields() {
       Object.assign(this.$data, this.$options.data.call(this));
@@ -327,7 +407,9 @@ export default Vue.extend({
     load(key) {
       let k = "infection" + (key || (this.key ? this.key : ""));
       let data = localStorage.getItem(k);
-      if (!data) {return;}
+      if (!data) {
+        return;
+      }
       Object.assign(this.$data, JSON.parse(data));
       let hm = new HouseholdMemberData();
       let h;
@@ -380,5 +462,4 @@ export default Vue.extend({
 ::v-deep .subcategory {
   font-style: italic;
 }
-
 </style>
