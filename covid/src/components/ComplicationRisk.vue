@@ -10,7 +10,9 @@
         <tr>
             <td colspan="2">Understanding your risk for serious COVID-19 complications can help you decide whether to meet with others face-to-face. 
                 Older ages and having certain health conditions are the main risk factors for COVID-19 complications. However,
-                other household members should factor into your overall risk for COVID complications.
+                other household members should factor into your overall risk for COVID complications. If you get infected, you may infect them 
+                and put them at risk for COVID-19 complications. Together, these considerations help to
+                determine your <em>Overall Risk</em> for COVID-19 complications. 
             </td>
         </tr>
         <tr>
@@ -66,12 +68,6 @@
         <tr>
             <td colspan="2" class=bold>Among those living with you</td>
         </tr>
-        <td colspan="2">
-            You should consider the risk of serious complications among those living with you. 
-            If you get infected, you may infect them and put them at risk for COVID-19 complications. 
-            Together, these considerations help to
-            determine your <em>Overall Risk</em> for COVID-19 complications. 
-            </td>
         <tr>
             <td>What is the age group of the oldest person you are living with?
                 <more teaser='How does age impact risk?'> Older people have substantially greater risk for
@@ -135,6 +131,8 @@
         <tr v-if="overallRisk()">
             <td colspan="2">
             <b>How to use your risk assessment result.</b> Since you have <b>{{overallRisk()}}</b> overall complication risk, {{riskAdvice[overallRisk()]}} 
+            <hr>
+            <LocalInfo/>
             </td>
         </tr>
     </tbody>
@@ -163,6 +161,7 @@
     import {amend} from "../shared.js"
     import {ComplicationRisk} from "./ComplicationRisk.js"
     import DictSelect from "./DictSelect.vue"
+    import LocalInfo from "./LocalInfo.vue"
 
 
     const AgeDict = {
@@ -229,8 +228,9 @@
             this.riskAdvice = riskAdvice
         },
         components : {
-            more: more,
-            DictSelect: DictSelect
+            more,
+            DictSelect,
+            LocalInfo
         },
         methods: {
             overallRisk() {

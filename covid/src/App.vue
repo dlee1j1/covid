@@ -1,15 +1,15 @@
 <template>
   <form id="app" @submit.prevent="">
+
+    <ComplicationRisk :debug="debug" @updated="updated($event)" @hook:mounted="childmounted('ComplicationRisk')" ref="ComplicationRisk"/>
+    
     <div v-if="!start">
     <Precheck @start="start=true"/>
     </div> 
-    <div v-else> 
-    <ComplicationRisk :debug="debug" @updated="updated($event)" @hook:mounted="childmounted('ComplicationRisk')" ref="ComplicationRisk"/>
-    <InfectionRisk :debug="debug" @toggleDebug="toggleDebug" @updated="updated($event)" @hook:mounted="childmounted('InfectionRisk')" ref="InfectionRisk"/>
+    <InfectionRisk v-show="start" :debug="debug" @toggleDebug="toggleDebug" @updated="updated($event)" @hook:mounted="childmounted('InfectionRisk')" ref="InfectionRisk"/>
     <div style="float:right;" id="form"> 
         <button type="button" onclick="print()" >Print</button> 
         <button type="button" @click="share()" >Share</button> 
-    </div>
     </div>
   </form>
 </template>

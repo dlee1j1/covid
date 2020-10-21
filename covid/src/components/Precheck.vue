@@ -1,46 +1,35 @@
 <template>
 <div>
-<h1 style="text-align:center">
-Initial Self Check
-</h1>
-
-<h2>
-Before proceeding, please check the following: 
+<h2 style="text-align:center">
+Understanding your risk of being infected with COVID-19: Initial Self Check
 </h2>
-<ul class="blank">
-<li> <input type="checkbox" v-model="symptoms"> 
-   I have had <i><b>no symptoms</b></i> of COVID-19 in the past 14 days such as (a full list of symptoms available at the 
-   <a href="https://www.cdc.gov/coronavirus/2019-ncov/symptoms-testing/symptoms.html" target="_blank">CDC Website</a>):
-    <ul> 
-        <li> Fever or chills </li>
-        <li> Cough </li>
-        <li> Shortness of breath or difficulty breathing </li>
-        <li> Fatigue </li>
-        <li> Muscle or body aches </li>
-        <li> Headache </li>
-        <li> New loss of taste or smell </li>
-        <li> Sore throat </li>
-        <li> Congestion or runny nose </li>
-        <li> Nausea or vomiting </li>
-        <li> Diarrhea </li>
-        <li> <a href="https://www.cdc.gov/coronavirus/2019-ncov/symptoms-testing/symptoms.html" target="_blank"> Other symptoms </a> </li>
-    </ul>
-</li>
-<li> <input type="checkbox" v-model="contact">
- I have <i><b>not been</b></i> in contact with anyone with COVID-19 symptoms in the past 14 days.
-</li>
-<li> <input type="checkbox" v-model="tested">
-I have <i><b> not been </b></i> tested for COVID-19 due to symptoms or exposure in the past 14 days.
-</li>
-<li> <input type="checkbox" v-model="largegroup">   
- I have <i><b>not been</b></i> indoor with a large group of people not wearing face masks and not practicing social distance for at least 15 minutes in the past 14 days.
-</li>
-</ul>
 
-<h3>
-If you cannot check all  of the above, you are probably at <i><b>very high risk</b></i> for COVID-19 infection. 
+<b>
+Before proceeding, please check the following: 
+</b>
+<ul class="blank">
+    <li> <input type="checkbox" v-model="symptoms"> 
+    I have one or more COVID-19 symptoms such as fever, cough, shortness of breath, sore throat, runny nose, 
+    loss of taste or smell in the past 14 days. Full list of symptoms available at the 
+    <a href="https://www.cdc.gov/coronavirus/2019-ncov/symptoms-testing/symptoms.html" target="_blank">CDC Website</a>):
+    <li> <input type="checkbox" v-model="contact">
+    I have been in close contact with another person who has COVID-19 symptoms in the past 14 days.
+    </li>
+    <li> <input type="checkbox" v-model="largegroup">   
+    I have spent 15 minutes or more indoor with a large group of people not wearing face masks and not practicing social distance in the past 14 days.
+    </li>
+</ul>
+<hr/>
+
+<h3 v-if="symptoms || contact || largegroup">
+Since you checked one of the check boxes above, you already have a much higher risk for COVID-19 infection compared with other people in the community. 
+You should consider getting tested for COVID-19 infection and quarantining yourself if you have or develop COVID-19 symptoms.
 </h3>
-<div v-if="symptoms && contact && largegroup && tested">
+<div v-if="!symptoms && !contact && !largegroup">
+    <input type="checkbox" v-model="attest">
+    Check box to confirm that I do not have any of the above. 
+</div>
+<div v-if="!symptoms && !contact && !largegroup && attest">
     <button style="font-size:large" @click="$emit('start')">Next</button>
 </div>
 
@@ -50,7 +39,7 @@ If you cannot check all  of the above, you are probably at <i><b>very high risk<
 <script>
 export default {
     data() {
-        return { symptoms:false, contact:false, largegroup: false, tested:false }
+        return { symptoms:false, contact:false, largegroup: false, tested:false, attest:false }
     }
 
 }

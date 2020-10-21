@@ -1,0 +1,19 @@
+<template functional>
+<div>
+  Find the latest number of COVID-19 infection in community by accessing your local health department’s website or 
+  <href a="https://www.statnews.com/feature/coronavirus/covid-19-tracker/">here</href>. 
+  The average daily cases based on a 7 or 14-day trend:
+        <ul>
+          <li> High: More than 5 cases per 100,000 people per day</li>
+          <li> Medium: 2 to 5 cases per 100,000 people per day</li>
+          <li> Low: 1 to less than 2 cases per 100,000 people per day </li>
+          <li> Very low: Less than 1 case per 100,000 people per day </li>
+        </ul>
+</div>
+</template>
+
+<script>
+export default {
+    
+}
+</script>

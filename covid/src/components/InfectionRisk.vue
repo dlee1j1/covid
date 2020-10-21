@@ -168,13 +168,7 @@
             {{InfRiskAdviceAlt[InfectionRisk()]}}
             </div>
         <hr/>
-        You can access your local health department’s website to find the latest number of COVID-19 infection in your community (based on 14-day rolling average):
-        <ul>
-          <li> High: More than 10 cases per 100,000 people </li>
-          <li> Medium: 4 to 10 cases per 100,000 people </li>
-          <li> Low: 2 to less than 4 cases per 100,000 people </li>
-          <li> Very low: Less than 2 case per 100,000 people </li>
-        </ul>
+        <LocalInfo/>
       </td>
 
       </tr>
@@ -260,6 +254,7 @@ import { ContactScoreData } from "./ContactScoreData.js";
 import { HouseholdMemberData } from "./HouseholdMemberData.js";
 import ContactScore from "./ContactScore.vue";
 import HouseholdMember from "./HouseholdMember.vue";
+import LocalInfo from "./LocalInfo.vue"
 import more from "./more.vue";
 import "./filters.js";
 
@@ -320,6 +315,7 @@ export default Vue.extend({
     more: more,
     ContactScore: ContactScore,
     HouseholdMember: HouseholdMember,
+    LocalInfo
   },
   methods: {
     checkkey(e) {
