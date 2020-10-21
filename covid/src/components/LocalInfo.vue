@@ -1,7 +1,7 @@
 <template functional>
 <div>
   Find the latest number of COVID-19 infection in community by accessing your local health department’s website or 
-  <a href="https://www.statnews.com/feature/coronavirus/covid-19-tracker/">here</a>. 
+  <a href="https://www.statnews.com/feature/coronavirus/covid-19-tracker/" target="_blank">here</a>. 
   The average daily cases based on a 7 or 14-day trend:
         <ul>
           <li> High: More than 5 cases per 100,000 people per day</li>
@@ -11,9 +11,3 @@
         </ul>
 </div>
 </template>
-
-<script>
-export default {
-    
-}
-</script>
