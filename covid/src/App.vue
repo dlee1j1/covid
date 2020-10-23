@@ -96,13 +96,11 @@ export default {
 
 <style>
 
-table, body {
+table {
   max-height: 999999px;
   font-family: serif;
   font-size: calc(1rem);
 }
-
-
 
 @media (min-width: 30em) {
   html {

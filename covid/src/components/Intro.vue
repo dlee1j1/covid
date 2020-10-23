@@ -32,19 +32,20 @@
         YOUR RISK OF BEING INFECTED WITH COVID-19 BASED ON YOUR RECENT CONTACTS
     </div>
 
-    <button class="item-6">
+    <div class="item-6">
         <a href="./assessment.html"> Start Assessment </a>
-    </button>
+    </div>
 </div>
 </body>
 </template>
 
 <style scoped>
-html body {
+
+body {
   max-height: 999999px;
   font-family: serif;
-/*  font-size: calc(1rem + 1vw); */
 }
+
 
 @media screen and (min-device-width: 1024px) {
   body {
@@ -121,21 +122,26 @@ html body {
 }
 
 .item-6 {
-  border-radius: 15px;
-  background: seashell;
-   /* #73AD21; */
-  padding: 20px;
-  border:slategray;
-  color: red;
-  font:larger;
-  cursor: pointer;
-  z-index: 5;
-  font-weight: bold;
-  grid-column-start: 4;
-  grid-column-end: 5;
-  visibility: hidden;
-   grid-row-start: 7;
-   animation: cssAnimation 11s 12s forwards;
+    border-radius: 15px;
+    background: seashell;
+    /* #73AD21; */
+    padding: 20px;
+    border:slategray;
+    color: red;
+    font:larger;
+    cursor: pointer;
+    z-index: 5;
+    font-weight: bold;
+    grid-column-start: 2;
+    grid-column-end: 5;
+/*
+    justify-items: stretch;
+    align-items: stretch;
+    visibility: visible;
+    float: left;
+*/
+    grid-row-start: 7;
+    animation: cssAnimation 11s 12s forwards;
 }
 
 .picture {

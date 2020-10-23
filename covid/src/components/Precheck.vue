@@ -27,7 +27,7 @@ You should consider getting tested for COVID-19 infection and quarantining yours
 </h3>
 <div v-if="!symptoms && !contact && !largegroup">
     <input type="checkbox" v-model="attest">
-    Check box to confirm that I do not have any of the above. 
+    Check the box to confirm that I do not have any of the above. 
 </div>
 <div v-if="!symptoms && !contact && !largegroup && attest">
     <button style="font-size:large" @click="$emit('start')">Next</button>
