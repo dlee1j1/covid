@@ -1,6 +1,5 @@
 <template>
   <form id="app" @submit.prevent="">
-
     <ComplicationRisk :debug="debug" @updated="updated($event)" @hook:mounted="childmounted('ComplicationRisk')" ref="ComplicationRisk"/>
     
     <div v-if="!start">
@@ -18,6 +17,7 @@
 import ComplicationRisk from "./components/ComplicationRisk.vue";
 import InfectionRisk from "./components/InfectionRisk.vue";
 import Precheck from "./components/Precheck.vue"
+//import Intro from "./components/Intro.vue"
 
 const scriptURL =
   "https://script.google.com/macros/s/AKfycbwWNvUSiJiria3hew6MHD6bd3zVP_3WvpVIx0JXhHGHhLYzbAnw/exec";
@@ -87,24 +87,25 @@ export default {
   components: {
     ComplicationRisk,
     InfectionRisk,
-    Precheck
+    Precheck,
+  //  Intro
   },
 };
 </script>
 
 
 <style>
-table html body {
+
+table, body {
   max-height: 999999px;
   font-family: serif;
-  font-size: calc(1rem + 1vw);
+  font-size: calc(1rem);
 }
+
+
 
 @media (min-width: 30em) {
   html {
-    font-size: 90%;
-  }
-  div.footnote {
     font-size: 90%;
   }
 }
@@ -115,6 +116,22 @@ table {
   width: 100%;
   text-align: left;
   border-collapse: collapse;
+}
+
+
+@media screen and (max-width: 70em) and (min-device-width: 1024px){
+  body {
+    max-width: 60em;
+    margin-left: 80px;
+    margin-right: 80px; 
+  }
+}
+
+@media screen and (min-width: 70em) and (min-device-width: 1024px) {
+  body {
+    max-width: 60em;
+    margin: auto;
+  }
 }
 
 table td,

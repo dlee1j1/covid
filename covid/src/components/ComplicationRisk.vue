@@ -8,11 +8,15 @@
     </thead>
     <tbody>
         <tr>
-            <td colspan="2">Understanding your risk for serious COVID-19 complications can help you decide whether to meet with others face-to-face. 
-                Older ages and having certain health conditions are the main risk factors for COVID-19 complications. However,
-                other household members should factor into your overall risk for COVID complications. If you get infected, you may infect them 
-                and put them at risk for COVID-19 complications. Together, these considerations help to
-                determine your <em>Overall Risk</em> for COVID-19 complications. 
+            <td colspan="2">
+                Understanding your risk for serious COVID-19 complications can help you decide whether to meet with others face-to-face. 
+                Older ages and having certain health conditions are the main risk factors for COVID-19 complications. 
+                However, other household members should factor into your overall risk for COVID complications. If you get infected, 
+                you may infect them and put them at risk for COVID-19 complications. 
+                Together, these considerations help to determine your <em> Overall Risk </em> for COVID-19 complications.
+                <p/>
+                Knowing your risk for COVID-19 complications can helps you decide when it is appropriate for you to meet with others, 
+                what kind of setting for such meetings, and who are those safest to form a group bubble with.
             </td>
         </tr>
         <tr>
@@ -137,7 +141,11 @@
         </tr>
     </tbody>
 </table>
- 
+
+    A person may have a greater concern about getting infected than is reflected by their overall complication risk. 
+    Or a person may have less concern about getting infected than their overall complication risk indicates. 
+    Below are recommendations for other risk levels.
+    <br/>
     <more teaser="Recommendations for different complication risk levels..." retain=true style="font-size:larger;">
     <ul>
         <li v-for="(advice,risk) in riskAdvice" :key=risk>
@@ -187,27 +195,36 @@
     }
 
     const riskAdvice = {
-        'High': `consider only meeting others in person when the level of COVID-19 infection in the community is low or very low. 
-                If you decide to meet with others, protect yourself by meeting them outdoor or in a larger room with good ventilation. 
-                Always use facemask and maintain social distance of at least 6 feet. 
-                When forming a group bubble with others, consider only meeting with individuals who have a very low risk of having COVID-19 infection.
-                Have your group members assess their risk of having COVID-19 using this assessment tool.`,
-        'Medium':`consider meeting with others in person when the level of COVID-19 infection in the community is at a medium level or lower.
-                If you decide to meet with others, protect yourself by meeting them outdoor or in a larger room with good ventilation. 
-                Always use facemask and maintain social distance of at least 6 feet. 
-                When forming a group bubble with others, consider meeting with individuals who have a low or very low risk of having COVID-19 infection.
-                Have your group members assess their risk of having COVID-19 using this assessment tool.`,
-        'Low':`you can meet with others in person when the level of COVID-19 infection in the community is at a medium level or lower. 
-            If you decide to meet with others, consider meeting them outdoor or in a room with good ventilation. 
-            Always use facemask and maintain social distance of at least 6 feet. When forming a bubble with others, 
-            meet with individuals who have a medium or lower risk of having COVID-19 infection.
-            Have your group members assess their risk of having COVID-19 using this assessment tool.`,
-        'Very Low': `you can meet with others in person as long as your local public health department allows it. 
-            If you decide to meet with others, consider meeting them outdoor or in a room with good ventilation. 
+        'High':  `you should be very concerned about getting COVID-19 infection from others. 
+            Therefore, consider only meeting others in person when the level of COVID-19 infection in the community is low or very low. 
+            If you decide to meet with others, protect yourself by meeting them outdoor. 
             Always use facemask and maintain social distance of at least 6 feet. 
-            When forming a group bubble, you can meet with individuals with a broad range of risk of having COVID-19 infection.
-            However, it is generally better to meet with those with lower risk of infection. 
-            Have your group members assess their risk of having COVID-19 using this assessment tool.`
+            When forming a group bubble with others, consider only meeting with individuals who have a low contact risk.
+            Have your group members assess their contact risk using this assessment tool`,
+        'Medium':`you should at least be moderately concerned about getting COVID-19 infection from others. 
+                Therefore, consider only meeting with others in person when the level of COVID-19 infection 
+                in the community is low or very lower. 
+                If you decide to meet with others, protect yourself by meeting them outdoor or in a 
+                larger room with good ventilation. Always use facemask and maintain social distance of at least 6 feet. 
+                When forming a group bubble with others, consider meeting with individuals who have a medium contact risk, 
+                or lower. Have your group members assess their contact risk using this assessment tool.`,
+        'Low':`you may only have some concern about getting COVID-19 infection from others. 
+                To protect yourself and others, consider limiting your meetings with others 
+                when the level of COVID-19 infection in the community is still high. 
+                If you decide to meet with others, consider meeting them outdoor or in a room with good ventilation. 
+                Once community level of COVID-19 is at a medium level or lower, you can meet others in smaller rooms.
+                Always use facemask and maintain social distance of at least 6 feet. 
+                When forming a bubble with others, meet with individuals who have a medium or lower contact risk. 
+                Have your group members assess their contact risk using this assessment tool.`,
+        'Very Low': `you may not be very concerned about getting COVID-19 infection from others. 
+                Nevertheless, you can play your part to protect others in case you should get infected. 
+                Consider limiting your meetings with others when the level of COIVD-19 in your community is high. 
+                You can meet with others in person as long as it meets your local public health department guidelines. 
+                If you decide to meet with others, consider meeting them outdoor or in a room with good ventilation. 
+                Always use facemask and maintain social distance of at least 6 feet. 
+                When forming a group bubble, you can meet with individuals with a broad range of risk of having COVID-19 infection, 
+                but it is generally better to meet with those with lower risk of infection. 
+                Have your group members assess their contact risk using this assessment tool.`
     }
 
     export default {
