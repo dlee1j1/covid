@@ -150,6 +150,13 @@ body {
     animation: cssAnimation 8s 9s forwards;
 }
 
+
+.item-6:hover, .item-6:focus {
+    background: red;
+    color:white;
+    text-decoration: none;
+}
+
 .picture {
     grid-column-start: first;
     grid-column-end: end;

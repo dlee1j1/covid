@@ -9,14 +9,23 @@
     <tbody>
         <tr>
             <td colspan="2">
-                Understanding your risk for serious COVID-19 complications can help you decide whether to meet with others face-to-face. 
+                <b> Complication risk </b>: 
+                <em> Risk of serious complications should you become infected with COVID-19.
+                </em>
+                <br/>
+                Knowing your risk of serious complications should you become infected with COVID-19 
+                can help you decide when it is appropriate for you to meet with others, 
+                what kind of setting for such meetings, and who are those safest to form a 
+                group bubble with.
+                <p/>
                 Older ages and having certain health conditions are the main risk factors for COVID-19 complications. 
-                However, other household members should factor into your overall risk for COVID complications. If you get infected, 
+                However, other household members should factor into your overall risk for COVID-19 complications. If you get infected, 
                 you may infect them and put them at risk for COVID-19 complications. 
                 Together, these considerations help to determine your <em> Overall Risk </em> for COVID-19 complications.
                 <p/>
-                Knowing your risk for COVID-19 complications can helps you decide when it is appropriate for you to meet with others, 
-                what kind of setting for such meetings, and who are those safest to form a group bubble with.
+                Also, of note, these are general categories for risk of complications. 
+                Each individual may have variable severity of clinical outcomes from COVID-19 despite 
+                the estimated complication risk provided by this tool.
             </td>
         </tr>
         <tr>
@@ -44,8 +53,8 @@
             <td> <DictSelect  v-model="Self.health" :dict="HealthDict"></DictSelect></td>
         </tr>
         <tr>
-            <td>Your Calculated Risk Score
-                <more teaser="How is Risk Score calculated?"> Being older and having pre-existing health conditions puts 
+            <td>Your Calculated Complication Risk Score
+                <more teaser="How is Complication Risk Score calculated?"> Being older and having pre-existing health conditions puts 
                     you at much greater risk for serious COVID-19 complications
                      than if you only have one but not the other.  
                      Your calculated risk score is determined by multiplying the risk score for your age with the risk score for
@@ -56,9 +65,9 @@
             </td>
         </tr>
         <tr>
-            <td>Your Estimated Risk
+            <td>Your Estimated Complication Risk
                 <more>  
-                    Estimated Risk provides a qualitative estimate of your risk using your calculated risk score. 
+                    Estimated Complication Risk provides a qualitative estimate of your risk using your calculated risk score. 
                     Your risk is very low if the risk score is &lt;1, low if 1-2, medium if 3-5, high if &gt;5   
                 </more>
             </td>
@@ -97,7 +106,7 @@
             <td> <DictSelect  v-model="Others.health" :dict="HealthDict"></DictSelect></td>
         </tr>
         <tr>
-            <td>Risk score for others you live with 
+            <td>Complication Risk score for others you live with 
                 <more teaser="How is Risk Score calculated?"> Being older <b>and</b> having pre-existing health conditions puts 
                     a person at much greater risk for serious COVID-19 complications
                      than if they only have one but not the other.  
@@ -111,7 +120,7 @@
             </td>
         </tr>
         <tr>
-            <td>Risk of those living with you
+            <td>Estimated Complication Risk of those living with you
                 <more>  
                     Calculated Risk provides a qualitative estimate of the risk for those living with you. 
                     Their risk is very low if the risk score is &lt;1, low if 1-2, medium if 3-5, high if &gt;5   
@@ -122,11 +131,16 @@
         </tr>
         </template>
         <tr> 
-            <td> Your Overall Risk for Covid-19 Complications 
+            <td> Your Overall Estimated Complication Risk from Covid-19 
             <more>
-            Comparing your estimated risk for COVID-19 complications to the risk of those living with you. Your overall risk is the higher of the two. 
-            This is because you have to consider the impact on others if you should become infected and then transmit COVID-19 to others who live with you. 
-            Their risk of developing serious complications is part of your overall risk.            
+            Your overall estimated complication risk is the higher of the 
+            your personal estimated complication risk
+            and the estimated complication risk of those living with you. 
+             
+            This is because you have to consider the impact on others if you should 
+            become infected then transmit COVID-19 to others who live with you. 
+            Their risk of developing serious complications is part of your 
+            overall estimated complication risk.            
             </more>
             </td>
             <td><input readonly=true :value="overallRisk()" :key="overallRisk()">
@@ -134,14 +148,15 @@
         </tr>
         <tr v-if="overallRisk()">
             <td colspan="2">
-            <b>How to use your risk assessment result.</b> Since you have <b>{{overallRisk()}}</b> overall complication risk, {{riskAdvice[overallRisk()]}} 
+            <b>How to use your estimated overall complication risk assessment result.</b> 
+            You have <b>{{overallRisk()}}</b> overall complication risk. {{riskAdvice[overallRisk()]}} 
             <hr>
             <LocalInfo/>
             </td>
         </tr>
     </tbody>
 </table>
-
+    <u>Note on Risk Tolerance</u>
     A person may have a greater concern about getting infected than is reflected by their overall complication risk. 
     Or a person may have less concern about getting infected than their overall complication risk indicates. 
     Below are recommendations for other risk levels.
@@ -149,7 +164,7 @@
     <more teaser="Recommendations for different complication risk levels..." retain=true style="font-size:larger;">
     <ul>
         <li v-for="(advice,risk) in riskAdvice" :key=risk>
-        <more :teaser="'If you have <b>' + risk + '</b> complication risk...'" retain=true >
+        <more :teaser="'If you have <b>' + risk + '</b> complication risk: '" retain=true >
            {{advice}}
         </more>  
     </li>    
@@ -195,20 +210,20 @@
     }
 
     const riskAdvice = {
-        'High':  `you should be very concerned about getting COVID-19 infection from others. 
+        'High':  `You should be very concerned about getting COVID-19 infection from others. 
             Therefore, consider only meeting others in person when the level of COVID-19 infection in the community is low or very low. 
             If you decide to meet with others, protect yourself by meeting them outdoor. 
             Always use facemask and maintain social distance of at least 6 feet. 
             When forming a group bubble with others, consider only meeting with individuals who have a low contact risk.
             Have your group members assess their contact risk using this assessment tool`,
-        'Medium':`you should at least be moderately concerned about getting COVID-19 infection from others. 
+        'Medium':`You should at least be moderately concerned about getting COVID-19 infection from others. 
                 Therefore, consider only meeting with others in person when the level of COVID-19 infection 
                 in the community is low or very lower. 
                 If you decide to meet with others, protect yourself by meeting them outdoor or in a 
                 larger room with good ventilation. Always use facemask and maintain social distance of at least 6 feet. 
                 When forming a group bubble with others, consider meeting with individuals who have a medium contact risk, 
                 or lower. Have your group members assess their contact risk using this assessment tool.`,
-        'Low':`you may only have some concern about getting COVID-19 infection from others. 
+        'Low':`You may only have some concern about getting COVID-19 infection from others. 
                 To protect yourself and others, consider limiting your meetings with others 
                 when the level of COVID-19 infection in the community is still high. 
                 If you decide to meet with others, consider meeting them outdoor or in a room with good ventilation. 
@@ -216,7 +231,7 @@
                 Always use facemask and maintain social distance of at least 6 feet. 
                 When forming a bubble with others, meet with individuals who have a medium or lower contact risk. 
                 Have your group members assess their contact risk using this assessment tool.`,
-        'Very Low': `you may not be very concerned about getting COVID-19 infection from others. 
+        'Very Low': `You may not be very concerned about getting COVID-19 infection from others. 
                 Nevertheless, you can play your part to protect others in case you should get infected. 
                 Consider limiting your meetings with others when the level of COIVD-19 in your community is high. 
                 You can meet with others in person as long as it meets your local public health department guidelines. 

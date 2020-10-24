@@ -10,18 +10,28 @@
       </thead>
       <tr>
         <td colspan="2">
-          Your risk of getting COVID-19 is related to how much close contact you
-          have with other people and the chance that they are infected with
-          COVID-19. To assess your risk, this assessment generates a contact
-          score for you. The higher the score, the greater your risk of being
-          infected through your contacts. You may choose to meet with others who
-          have a certain risk of being infected with COVID-19.
-          <p />
+          <b>Contact Risk</b>: 
+          Risk of becoming infected from COVID-19 from your close contacts.
+          <p/>
+          Your risk of having COVID-19 is related to the level of COVID-19 infection 
+          in your community and how much close contact you have with other people.
+          This assessment generates a contact score for you. The higher the score, 
+          the greater your risk of being infected through your contacts.
+          <p/>
+          This assessment helps you understand the type of contacts that 
+          increases your risk. You can use this information to reduce your contact
+          risk before meeting with others.
+          <p/>
+          In addition, when planning to meet with others or to form a group bubble,
+          it is useful know the contact risk of other individuals. 
+          You may choose to only meet with individuals who have a certain level of
+          contact risk.
+          <p/>
           <u>Important:</u> The questions below refer only to close contacts
           during the past 14 days. Close contact is defined as being together
           within <b> 6 feet or 2 meters for at least 15 minutes</b>. Multiple
-          short contacts over the past 2 weeks with the same person adding up to 15 minutes meets
-          this definition.
+          short contacts over the past 2 weeks with the same person adding up to 
+          15 minutes meets in any 24-hour period meets this definition.
         </td>
       </tr>
       <tr>
@@ -152,8 +162,8 @@
       <tbody v-if="!isNaN(TotalScore())"> 
       <tr>
         <td colspan="2">
-            <b> COVID Infection Risk Recommendations:</b> 
-            Based on your contact score, your risk of being infected with COVID-19 is <b>{{InfectionRisk()}}</b>.
+            <b> Recommendations based on your COVID-19 Contact Risk results:</b> 
+            Based on your contact risk score, your risk of being infected with COVID-19 is <b>{{InfectionRisk()}}</b>.
             {{InfRiskAdvice[InfectionRisk()]}}
 
             <div v-if="InfRiskAdviceAlt[InfectionRisk()]"> 
@@ -259,28 +269,35 @@ import more from "./more.vue";
 import "./filters.js";
 
 const InfRiskAdvice = {
-  Low: `However, even a score close to zero does not mean you are not at risk for getting infected from your close
-      contacts. Continue to maintain this low contact risk level if you plan to gather with other in a
-      small group, either indoor or outdoor. You are using face mask and social distancing
+  Low: `However, even a score close to zero does not mean you are not at risk for
+      getting infected from your close
+      contacts. Continue to maintain this low contact risk level if you plan to gather with 
+      others in a small group, either indoor or outdoor. You are using face mask and social distancing
       appropriately. When the level of COVID-19 infection is at high level, consider meeting others
       only outdoor or in a large indoor room with good ventilation.`,
   Medium: `If you would like to gather with others in a small group, 
-             consider whether there are ways to reduce your indoor contact risk to a low level.`,
+             consider whether there are ways to reduce your indoor contact risk 
+             to a low level.`,
   High: `If you would like to gather with others in a small group, 
         it is important to find ways to reduce your indoor contact risk to a medium level or lower.`,
   "Very High": `If you would like to gather with others in a small group, 
-      it is important to find ways to reduce your indoor contact risk to at least a medium level or lower.`,
+      it is important to find ways to reduce your indoor contact risk to at least 
+      a medium level or lower.`,
 };
 
 const InfRiskAdviceAlt = {
-  Medium: `If you cannot, you should consider only meeting with others outdoor or in a large indoor room with good ventilation once 
+  Medium: `If you cannot lower your contact risk, 
+      you should consider only meeting with others outdoor or in a large indoor room with good ventilation once 
       the level of COVID-19 infection in your community is at a medium level or lower. 
-      You can start meeting indoor in a small room (using face mask and social distancing) when the infections drop to a low level.`,
-  High: `If you cannot, you should consider meeting others only outdoor (using face mask and social distancing) until the level of COVID-19 
+      You can start meeting indoor in a small room 
+      (using face mask and social distancing) when the infections drop to a low level.`,
+  High: `If you cannot lower your contact risk, you should consider meeting others only outdoor (using face mask and social distancing) until the level of COVID-19 
       infection in your community drops to a medium level. But meeting in a large indoor 
       room should only take place once the level of COVID-infection has dropped to a low level.`,
-  "Very High": `If you cannot, you should consider meeting others only outdoor (using face mask and social distancing) once the level of COVID-19 
-      infection in your community has dropped to a low level. You should avoid meeting indoor.`,
+  "Very High": `If you cannot lower your contact risk, you should consider 
+      meeting others only outdoors (using face mask and social distancing)
+      once the level of COVID-19 
+      infection in your community has dropped to a low level. You should avoid meeting indoors.`,
 };
 
 export default Vue.extend({
