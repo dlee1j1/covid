@@ -32,9 +32,10 @@
         YOUR RISK OF BEING INFECTED WITH COVID-19 BASED ON YOUR RECENT CONTACTS
     </div>
 
-    <div class="item-6">
-        <a href="./assessment.html"> Start Assessment </a>
-    </div>
+    <button class="item-6" onclick="window.location.href='./assessment.html'">
+         Start Assessment 
+    </button>
+
 </div>
 </body>
 </template>
@@ -57,8 +58,8 @@ body {
 
 .container {
     display:grid;
-    grid-template-columns: 15rem auto 15rem auto;
-    grid-template-rows: 10px auto auto auto auto auto auto;
+    grid-template-columns: [first] 15rem auto auto [mid] 15rem auto [last] auto;
+    grid-template-rows: 10px auto auto auto auto auto auto 10px;
     align-items: center;
     justify-items: center;
     font-family: sans-serif;
@@ -69,30 +70,35 @@ body {
   border-radius: 15px;
   background: yellowgreen;
    /* #73AD21; */
-  padding: 20px;
+  color:midnightblue;
+  padding: 15px;
+  padding-left: 20px;
   z-index: 5;
   font-weight: bold;
-  grid-column-start: 1;
-  grid-column-end: 1;
+  grid-column-start: first;
+  grid-column-end: first;
   opacity: 0;
 }
 
 .item-1 {
   grid-row-start: 2;
   grid-row-end: 4;
+  opacity: 1;
+/*
   animation: cssAnimation 1s 2s forwards;
+*/
 }
 
 .item-2 {
   grid-row-start: 4;
   grid-row-end: 6;
-  animation: cssAnimation 2s 3s forwards;
+  animation: cssAnimation 1s 2s forwards;
 }
 
 .item-3 {
   grid-row-start: 6;
   grid-row-end: 8;
-  animation: cssAnimation 4s 5s forwards;
+  animation: cssAnimation 3s 4s forwards;
 }
 
 .item-4, .item-5 {
@@ -103,8 +109,8 @@ body {
   padding: 20px;
   z-index: 5;
   font-weight: bold;
-  grid-column-start: 3;
-  grid-column-end: 3;
+  grid-column-start: mid;
+  grid-column-end: mid;
   opacity: 0;
 }
 
@@ -112,43 +118,43 @@ body {
 .item-4 {
    grid-row-start: 3;
    grid-row-end: 5;
-   animation: cssAnimation 5.5s 6s forwards;
+   animation: cssAnimation 5s 6s forwards;
 }
 
 .item-5 {
    grid-row-start: 5;
    grid-row-end: 7;
-   animation: cssAnimation 7s 7.5s forwards;
+   animation: cssAnimation 5s 6s forwards;
 }
 
 .item-6 {
     border-radius: 15px;
-    background: seashell;
-    /* #73AD21; */
+    border:grey;
+    background: snow;
     padding: 20px;
-    border:slategray;
-    color: red;
-    font:larger;
-    cursor: pointer;
+    box-shadow: 15px 15px 10px gray;
     z-index: 5;
+
+    cursor: pointer;
+    color: black;
+    font:larger;
     font-weight: bold;
-    grid-column-start: 2;
-    grid-column-end: 5;
-/*
-    justify-items: stretch;
-    align-items: stretch;
-    visibility: visible;
-    float: left;
-*/
+    text-transform: uppercase;
+
+    grid-column-start: 3;
+    grid-column-end: 6;
     grid-row-start: 7;
-    animation: cssAnimation 11s 12s forwards;
+    justify-self: stretch;  
+
+    visibility: hidden;
+    animation: cssAnimation 8s 9s forwards;
 }
 
 .picture {
-    grid-column-start: 1;
-    grid-column-end: 5;
+    grid-column-start: first;
+    grid-column-end: end;
     grid-row-start: 1;
-    grid-row-end: 8;
+    grid-row-end: 9;
     object-fit: cover;    
     z-index: 3;
  }
