@@ -11,8 +11,8 @@
       <tr>
         <td colspan="2">
           <b>Contact Risk</b>: 
-          Risk of becoming infected from COVID-19 from your close contacts.
-          <p/>
+          <em>Risk of becoming infected from COVID-19 from your close contacts.</em>
+          <br/>
           Your risk of having COVID-19 is related to the level of COVID-19 infection 
           in your community and how much close contact you have with other people.
           This assessment generates a contact score for you. The higher the score, 
