@@ -5,7 +5,7 @@
       <td colspan="2" style="padding-left: 1rem" >
         <span class="subcategory"> Housemate {{ mem.index + 1 }} of {{ memberscount }} </span>
         <span style="float: right; margin-right: 1rem">
-          <input placeholder="Firstname or Nickname (optional)" v-model="mem.name" maxlength=10 />
+          <input placeholder="Firstname/Nickname (optional)" v-model="mem.name" maxlength=10 />
           <span style="margin-left: 1rem"></span>
           <select v-model="mem.relationship">
             <option :value="null" disabled="true">Relation to you</option>
@@ -60,7 +60,7 @@
         ></BehaviorSelect>
       </td>
     </tr>
-    <tr>
+    <tr v-if="showscore">
       <td style="text-transform: capitalize">
         Infection risk score ({{ identifier() }})
         <more teaser="How did we calculate this score?">
@@ -83,7 +83,7 @@ import BehaviorSelect from "./BehaviorSelect.vue";
 import './filters.js'
 
 export default Vue.extend({
-  props: ["mem", "memberscount"],
+  props: ["mem", "memberscount","showscore"],
 
   components: {
     more: more,

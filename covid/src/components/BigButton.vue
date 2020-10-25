@@ -1,22 +1,13 @@
 <template>
-    <div class=container>
         <button class=big-button v-on="$listeners">
             <slot/>
         </button>
-    </div>
 </template>
 
 <style scoped>
 
-.container {
-    width:100%;
-    display:flex;
-    justify-content: center;
-}
-
 .big-button:hover, .big-button:focus {
-    background:lightseagreen;
-    color:white;
+    background:lightgray;
 }
 
 .big-button {
@@ -32,8 +23,6 @@
     font-size:larger;
     font-weight: bold;
     text-transform: capitalize;
-
-    justify-self: stretch;     
 }
 
 </style>

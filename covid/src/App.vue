@@ -1,14 +1,45 @@
 <template>
   <form id="app" @submit.prevent="">
-    <ComplicationRisk :debug="debug" @updated="updated($event)" @hook:mounted="childmounted('ComplicationRisk')" ref="ComplicationRisk"/>
+    <ComplicationRisk v-show="showComplication()" :debug="debug" @updated="updated($event)" @hook:mounted="childmounted('ComplicationRisk')" ref="ComplicationRisk">
+      <template v-if="showWizard()" #next>
+        <big-button @click="next()">
+          Next: Evaluate Your Risk of Infection 
+        </big-button>
+      </template>
+    </ComplicationRisk>
     
-    <div v-if="!start">
-    <Precheck @start="start=true"/>
-    </div> 
-    <InfectionRisk v-show="start" :debug="debug" @toggleDebug="toggleDebug" @updated="updated($event)" @hook:mounted="childmounted('InfectionRisk')" ref="InfectionRisk"/>
-    <div style="float:right;" id="form"> 
+    <Precheck v-show="showPrecheck()">
+      <template v-if="showWizard()"  #previous>
+        <button @click="previous()" style="margin-top:5px"> 
+          Back to Complications Risk
+        </button>
+      </template>
+      <template v-if="showWizard()" #next>
+        <big-button @click="next()">
+          Continue 
+        </big-button>
+      </template>
+    </Precheck>
+
+    <InfectionRisk v-show="showInfection()" :debug="debug" @toggleDebug="toggleDebug" 
+          @updated="updated($event)" 
+          @riskrevealed="share()"
+          @hook:mounted="childmounted('InfectionRisk')" ref="InfectionRisk">
+      <template v-if="showWizard()" #previous>
+        <button  @click="previous()"  style="margin-top:5px"> 
+          Back to Complications Risk
+        </button>
+      </template>
+      <template v-if="showWizard()" #next>
+        <big-button @click="next()">
+          Show Both Forms 
+        </big-button>
+      </template>
+
+    </InfectionRisk>
+
+    <div style="float:right;"> 
         <button type="button" onclick="print()" >Print</button> 
-        <button type="button" @click="share()" >Share</button> 
     </div>
   </form>
 </template>
@@ -17,14 +48,17 @@
 import ComplicationRisk from "./components/ComplicationRisk.vue";
 import InfectionRisk from "./components/InfectionRisk.vue";
 import Precheck from "./components/Precheck.vue"
-//import Intro from "./components/Intro.vue"
+import BigButton from "./components/BigButton.vue"
 
 const scriptURL =
   "https://script.google.com/macros/s/AKfycbwWNvUSiJiria3hew6MHD6bd3zVP_3WvpVIx0JXhHGHhLYzbAnw/exec";
 
 let u = new URLSearchParams(window.location.search)
 let debug = u.get("debug") != null;
-console.log(`Debug = ${debug}`)
+
+/*
+  wizard states = complication -> precheck -> infection -> open 
+*/
 
 export default {
   name: "App",
@@ -32,11 +66,39 @@ export default {
       return {
         hasmount:0,
         debug: debug,
-        start: false
-      }
+        wizard: "complication"
+    }
   },
   methods: {
-    toggleDebug: function () {
+    next() {
+      let state = this.wizard
+      if (state == 'complication') { this.wizard ='precheck'}
+      if (state == 'precheck') { this.wizard = 'infection'  }
+      if (state == 'infection') { this.wizard = 'open'  }
+    },
+    previous() {
+      let state = this.wizard
+      if (state == 'precheck') { this.wizard = 'complication'  }
+      if (state == 'infection') { this.wizard = 'complication'  }
+    },
+
+    showComplication() {
+      return (this.wizard == 'complication') || (this.wizard == 'open')
+    },
+
+    showPrecheck() {
+      return (this.wizard == 'precheck')
+    },
+
+    showInfection() {
+      return (this.wizard == 'infection') || (this.wizard == 'open')
+    },
+
+    showWizard() {
+      return (this.wizard != 'open')
+    },
+
+    toggleDebug() {
       this.debug = !this.debug;
     },
     share() {
@@ -50,26 +112,17 @@ export default {
       }
       var st = JSON.stringify(dict);
       console.log(st);
-      if (
-        confirm(
-          "You are about to share this data for our research. Please confirm"
-        )
-      ) {
-        fetch(scriptURL, {
-          method: "POST",
-          body: data,
-        })
-          .then((response) => { alert("Successfully shared."); console.log(`Response: ${response}`) })
-          .catch((error) =>
-            alert(
-              "Error!" +
-                error.message +
-                " Data was not shared. Please try again later."
-            )
-          );
-      } else {
-        alert("Aborted. Data was not shared.");
-      }
+      // go ahead and post the data
+      fetch(scriptURL, {
+        method: "POST",
+        body: data,
+      })
+        .then((response) => { console.log(`Response: ${response}`) })
+        .catch((error) =>
+          console.log(
+            "Error!" +
+              error.message +
+              " Data was not shared. Please try again later."))
     },
     updated(component) {
          if (this.hasmount >= 2) component.save("auto");
@@ -88,6 +141,7 @@ export default {
     ComplicationRisk,
     InfectionRisk,
     Precheck,
+    BigButton
   //  Intro
   },
 };
@@ -213,11 +267,17 @@ table.purpleTable thead {
   background: linear-gradient(to bottom, #b958bb 0%, #ab36ad 66%, #a220a4 100%);
 }
 
+.footer-container {
+    display:grid;
+    grid-template-columns: auto auto;
+    grid-template-rows: auto;
+}
 
 @media print {
   button,
   :placeholder-shown,
   .debug,
+  .footer-container,
   .more {
     display: none;
   }

@@ -102,7 +102,7 @@
           ></DictSelect>
         </td>
       </tr>
-      <tr>
+      <tr v-if="showscore">
         <td>
           {{ isoutdoor ? "Total Outdoor" : "Indoor " + contact.index }} contact score
           <more>
@@ -152,7 +152,7 @@ const SmallRoomDict = {
 };
 
 export default {
-  props: ["contact", "isoutdoor"],
+  props: ["contact", "isoutdoor", "showscore"],
   created() {
     this.SmallRoomDict = SmallRoomDict;
     this.FrequencyDict = this.isoutdoor
@@ -168,8 +168,10 @@ export default {
     BehaviorSelect: BehaviorSelect,
   },
   methods: {
+    score() {
+      return this.contact.score()
+    },
     updateScore() {
-      this.score = this.contact.score();
       this.$emit("updatescore");
     },
     checkContact() {

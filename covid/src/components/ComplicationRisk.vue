@@ -53,7 +53,7 @@
             </td>
             <td> <DictSelect  v-model="Self.health" :dict="HealthDict"></DictSelect></td>
         </tr>
-        <tr v-if="reveal">
+        <tr v-if="inner">
             <td>Your Calculated Complication Risk Score
                 <more teaser="How is Complication Risk Score calculated?"> Being older and having pre-existing health conditions puts 
                     you at much greater risk for serious COVID-19 complications
@@ -65,7 +65,7 @@
             <td><input readonly=true :value="Self.score() | decimal" :key="Self.score()"> 
             </td>
         </tr>
-        <tr v-if="reveal">
+        <tr v-if="inner">
             <td>Your Estimated Complication Risk
                 <more>  
                     Estimated Complication Risk provides a qualitative estimate of your risk using your calculated risk score. 
@@ -74,10 +74,6 @@
             </td>
             <td><input readonly=true :value="Self.risk()" :key="Self.risk()">
             </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td colspan="2" class=bold>Among those living with you</td>
@@ -107,7 +103,7 @@
             </td>
             <td> <DictSelect  v-model="Others.health" :dict="HealthDict"></DictSelect></td>
         </tr>
-        <tr v-if="reveal">
+        <tr v-if="inner">
             <td>Complication Risk score for others you live with 
                 <more teaser="How is Risk Score calculated?"> Being older <b>and</b> having pre-existing health conditions puts 
                     a person at much greater risk for serious COVID-19 complications
@@ -121,7 +117,7 @@
             <td><input readonly=true :value="Others.score() | decimal" :key="Others.score()">
             </td>
         </tr>
-        <tr v-if="reveal">
+        <tr v-if="inner">
             <td>Estimated Complication Risk of those living with you
                 <more>  
                     Calculated Risk provides a qualitative estimate of the risk for those living with you. 
@@ -132,7 +128,7 @@
             </td>
         </tr>
         </template>
-        <tr v-if="reveal"> 
+        <tr v-if="inner"> 
             <td> Your Overall Estimated Complication Risk from Covid-19 
             <more>
             Your overall estimated complication risk is the higher of the 
@@ -149,10 +145,9 @@
             </td>
         </tr>
         <tr v-if="overallRisk() && reveal">
-            <td colspan="2">
-                <b style="font-size:large; text-justify=center">Recommendations based on your estimated overall complication risk assessment result.</b>
-                <br/>
-                You have <b>{{overallRisk()}}</b> overall complication risk. {{riskAdvice[overallRisk()]}} 
+            <td colspan="2" style="content-justify=center">
+                <div style="font-size:large">Your Estimated Overall Complication Risk: <b>{{overallRisk()}}</b>.</div>
+                Recommendations: You have <b> {{overallRisk()}} </b> overall complication risk. {{riskAdvice[overallRisk()]}} 
                 <hr>
                 <LocalInfo/>
             </td>
@@ -174,16 +169,43 @@
         </li>    
         </ul>
         </more>
-        <div> 
-            <span v-if="debug" class="debug" :key="debug" > <input placeholder="key for local storage (optional)" v-model="key">
-                <button @click="load()">Load</button> <button @click="save()">Save</button> </span>   
-            <button type="button" @click="resetFields()">Reset</button> 
+    </div>
+
+
+    <div style="width:100%; display:flex; justify-content:center">
+    <big-button v-if="!reveal && overallRisk()" @click="revealrisk()" >
+            Show your Complication Risk
+    </big-button>
+    </div>
+
+
+
+    <div v-if="reveal"> 
+        <div>
+        <span v-if="debug" class="debug" :key="debug"> 
+            <input placeholder="key for local storage (optional)" v-model="key">
+            <button @click="load()">Load</button> <button @click="save()">Save</button> 
+        </span>   
+            
+        <button @click="toggleinner()">
+            {{this.inner?"Hide":"Show"}} the Computation
+        </button>
+        <button type="button" @click="resetFields()" style='margin-left:5px'>
+            Erase the data and Restart</button> 
         </div>
     </div>
 
-    <big-button v-if="!reveal && overallRisk()" @click="revealscores()" >
-            Show your Complication Risk
-    </big-button>
+    <div style="display:grid"> 
+        <div style="justify-self:start">
+            <slot name="previous">
+            </slot>
+        </div>
+
+        <div v-if="reveal" style="justify-self:end">
+            <slot name="next">
+            </slot>
+        </div>
+    </div>
 
 </div>
 </template>
@@ -260,7 +282,8 @@
                     Self: new ComplicationRisk("self"),
                     Others: new ComplicationRisk("others"),
                     key:null,
-                    reveal: false
+                    reveal: false,
+                    inner: false
                 } )
         },
         created () {
@@ -276,10 +299,12 @@
             BigButton
         },
         methods: {
-            revealscores() {
+            revealrisk() {
                 this.reveal = true
             },
-
+            toggleinner() {
+                this.inner = !this.inner
+            },
             overallRisk() {
                 if (isNaN(this.Self.score()) || isNaN(this.Others.score()) ) {
                     return null

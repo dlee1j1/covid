@@ -72,9 +72,10 @@
         :key="member.index"
         :mem="member"
         :memberscount="HouseholdSize"
+        :showscore="inner"
         @updatescore="UpdateTotalScore()"
       ></tbody>
-      <tr v-if="HouseholdSize > 0">
+      <tr v-if="inner && HouseholdSize > 0">
         <td>
           Total Household Contact Score
           <more>
@@ -107,9 +108,10 @@
         is="ContactScore"
         :contact="insidetype"
         :key="insidetype.index"
+        :showscore=inner
         @updatescore="UpdateTotalScore()"
       ></tbody>
-      <tr>
+      <tr v-if="inner">
         <td>Total Indoor Contact Score</td>
         <td>
           <input readonly :value="InsideScore() | decimal" :key="InsideScore()" />
@@ -133,7 +135,7 @@
         @updatescore="UpdateTotalScore()"
       ></tbody>
 
-      <tr style="font-size: large; font-weight: bold">
+      <tr v-if="inner" style="font-size: large; font-weight: bold">
         <td>
           Total Overall Contact Score
           <more>
@@ -147,7 +149,7 @@
         </td>
       </tr>
 
-      <tr style="font-size: large; font-weight: bold">
+      <tr v-if="inner" style="font-size: large; font-weight: bold">
         <td>
           Estimated Overall Contact Risk
           <more>
@@ -159,10 +161,10 @@
           <input readonly :value="InfectionRisk()" :key="InfectionRisk()" />
         </td>
       </tr>
-      <tbody v-if="!isNaN(TotalScore())"> 
+      <tbody v-if="!isNaN(TotalScore()) && reveal"> 
       <tr>
         <td colspan="2">
-            <b> Recommendations based on your Contact Risk results:</b> 
+            <div style="font-size:large"> Your Estimated Contact Risk for Getting Infected:<b> {{InfectionRisk()}} </b></div> 
             Based on your contact risk score, your risk of being infected with COVID-19 is <b>{{InfectionRisk()}}</b>.
             {{InfRiskAdvice[InfectionRisk()]}}
 
@@ -184,8 +186,9 @@
       </tr>
       </tbody>
     </table>
-    <div>
-    <more style="font-size:larger" teaser='Sample Contact Risk Profiles'>
+
+    <div v-if="reveal">
+    <more style="font-size:larger" teaser='Examine Some Contact Risk Profiles'>
       <ul>
         <li> Low risk (score from 0 to 9.9): 
             <more teaser="A 26 year-old woman who works in a small office with three co-workers." retain=1>
@@ -246,14 +249,40 @@
       </ul>
     </more>
     </div>
-    <div style="float: left">
-      <span v-if="debug" class="debug" :key="debug">
-        <input placeholder="key for local storage (optional)" v-model="key" />
-        <button @click="load()">Load</button>
-        <button @click="save()">Save</button>
-      </span>
-      <button type="button" @click="resetFields()">Reset</button>
+
+   <div style="width:100%; display:flex; justify-content:center">
+    <big-button v-if="!reveal && InfectionRisk()" @click="revealrisk(); $emit('riskrevealed');" >
+            Show your Contact Risk
+    </big-button>
     </div>
+
+    <div v-if="reveal"> 
+        <div>
+        <span v-if="debug" class="debug" :key="debug"> 
+            <input placeholder="key for local storage (optional)" v-model="key">
+            <button @click="load()">Load</button> <button @click="save()">Save</button> 
+        </span>   
+            
+        <button @click="toggleinner()">
+            {{this.inner?"Hide":"Show"}} the Computation
+        </button>
+        <button type="button" @click="resetFields()" style='margin-left:5px'>
+            Erase the data and Restart</button> 
+        </div>
+    </div>
+
+    <hr/>
+    <div class="footer-container"> 
+        <span v-if="reveal" style="justify-self:end; grid-column-start:2; grid-row-start:1">
+            <slot name="next">
+            </slot>
+        </span>
+        <span style="justify-self:start; grid-column-start:1; grid-row-start:1">
+            <slot name="previous">
+            </slot>
+        </span>
+    </div>
+
   </div>
 </template>
 
@@ -266,6 +295,7 @@ import ContactScore from "./ContactScore.vue";
 import HouseholdMember from "./HouseholdMember.vue";
 import LocalInfo from "./LocalInfo.vue"
 import more from "./more.vue";
+import BigButton from "./BigButton.vue";
 import "./filters.js";
 
 const InfRiskAdvice = {
@@ -321,6 +351,8 @@ export default Vue.extend({
       },
       Outside: new ContactScoreData("outside", "outside"),
       key: null,
+      reveal: false,
+      inner: false
     };
   },
   created() {
@@ -329,10 +361,11 @@ export default Vue.extend({
     this.toggleCount = 0;
   },
   components: {
-    more: more,
-    ContactScore: ContactScore,
-    HouseholdMember: HouseholdMember,
-    LocalInfo
+    more,
+    ContactScore,
+    HouseholdMember,
+    LocalInfo,
+    BigButton
   },
   methods: {
     checkkey(e) {
@@ -345,6 +378,9 @@ export default Vue.extend({
         this.$emit("toggleDebug");
         this.toggleCount = 0;
       }
+    },
+    toggleinner() {
+      this.inner = !this.inner
     },
     checksize() {
       if (this.HouseholdSize < 0) {
@@ -396,6 +432,10 @@ export default Vue.extend({
 
     UpdateTotalScore() {
       this.$emit("updated", this);
+    },
+
+    revealrisk() {
+      this.reveal = true
     },
 
     InfectionRisk() {
