@@ -40,19 +40,20 @@
         </tr>
         <tr>
             <td>How many pre-existing health conditions do you have that put you at increased risk of COVID-19 complications?
+                The most common health conditions associated with serious COVID-19 
+                    complications include: obesity, cardiovascular diseases, chronic respiratory diseases, chronic
+                    kidney diseases, diabetes, hypertension, cancer, immunosuppressive drugs.
                 <more teaser="Learn more about health conditions that increase risk."> Those with one or more pre-existing health
                     conditions are more likely to develop serious complications
                     when infected with COVID-19. Those with more pre-existing
                     health conditions are assigned a higher risk score: Zero, one,
                     or more than one health conditions has a risk score of 1, 2,
-                    and 3, respectively. The most common health conditions associated with serious COVID-19 
-                    complications include: obesity, cardiovascular diseases, chronic respiratory diseases, chronic
-                    kidney diseases, diabetes, hypertension, cancer, immunosuppressive drugs. A full list can
-                be found on the <a href="https://www.cdc.gov/coronavirus/2019-ncov/need-extra-precautions/people-with-medical-conditions.html" target="_blank">CDC website</a>.</more>
+                    and 3, respectively. A full list of pre-existing health conditions that puts
+                    you at increased risk of complications can be found on the <a href="https://www.cdc.gov/coronavirus/2019-ncov/need-extra-precautions/people-with-medical-conditions.html" target="_blank">CDC website</a>.</more>
             </td>
             <td> <DictSelect  v-model="Self.health" :dict="HealthDict"></DictSelect></td>
         </tr>
-        <tr>
+        <tr v-if="reveal">
             <td>Your Calculated Complication Risk Score
                 <more teaser="How is Complication Risk Score calculated?"> Being older and having pre-existing health conditions puts 
                     you at much greater risk for serious COVID-19 complications
@@ -64,7 +65,7 @@
             <td><input readonly=true :value="Self.score() | decimal" :key="Self.score()"> 
             </td>
         </tr>
-        <tr>
+        <tr v-if="reveal">
             <td>Your Estimated Complication Risk
                 <more>  
                     Estimated Complication Risk provides a qualitative estimate of your risk using your calculated risk score. 
@@ -90,13 +91,14 @@
                     and 3, respectively. Those living alone are assigned a risk score of zero.
                  </more>
             </td>
-            <td> <DictSelect v-model="Others.age" :dict=OthersAgeDict></DictSelect> </td>
+            <td> <DictSelect placeholder="live alone? oldest housemate" v-model="Others.age" :dict=OthersAgeDict></DictSelect> </td>
         </tr>
-        <template v-if="(Others.age==null) || Others.age[1] > 0">
+        <template v-if="(Others.age != null) && Others.age[1] > 0">
         <tr>
             <td>Among those living with you, think about the person with the highest number of pre-existing health conditions 
                 that put him/her at increased risk of COVID-19 complications. How many health conditions does that person have?
-                <more teaser="Learn more about health conditions that increase risk"> Those with one or more pre-existing health
+                <more teaser="Learn more about health conditions that increase risk"> 
+                    Those with one or more pre-existing health
                     conditions are more likely to develop serious complications
                     when infected with COVID-19. Those with more pre-existing
                     health conditions are assigned a higher risk score: Zero, one,
@@ -105,7 +107,7 @@
             </td>
             <td> <DictSelect  v-model="Others.health" :dict="HealthDict"></DictSelect></td>
         </tr>
-        <tr>
+        <tr v-if="reveal">
             <td>Complication Risk score for others you live with 
                 <more teaser="How is Risk Score calculated?"> Being older <b>and</b> having pre-existing health conditions puts 
                     a person at much greater risk for serious COVID-19 complications
@@ -119,7 +121,7 @@
             <td><input readonly=true :value="Others.score() | decimal" :key="Others.score()">
             </td>
         </tr>
-        <tr>
+        <tr v-if="reveal">
             <td>Estimated Complication Risk of those living with you
                 <more>  
                     Calculated Risk provides a qualitative estimate of the risk for those living with you. 
@@ -130,7 +132,7 @@
             </td>
         </tr>
         </template>
-        <tr> 
+        <tr v-if="reveal"> 
             <td> Your Overall Estimated Complication Risk from Covid-19 
             <more>
             Your overall estimated complication risk is the higher of the 
@@ -146,35 +148,43 @@
             <td><input readonly=true :value="overallRisk()" :key="overallRisk()">
             </td>
         </tr>
-        <tr v-if="overallRisk()">
+        <tr v-if="overallRisk() && reveal">
             <td colspan="2">
-            <b>How to use your estimated overall complication risk assessment result.</b> 
-            You have <b>{{overallRisk()}}</b> overall complication risk. {{riskAdvice[overallRisk()]}} 
-            <hr>
-            <LocalInfo/>
+                <b style="font-size:large; text-justify=center">Recommendations based on your estimated overall complication risk assessment result.</b>
+                <br/>
+                You have <b>{{overallRisk()}}</b> overall complication risk. {{riskAdvice[overallRisk()]}} 
+                <hr>
+                <LocalInfo/>
             </td>
         </tr>
     </tbody>
 </table>
-    <u>Note on Risk Tolerance</u>
-    A person may have a greater concern about getting infected than is reflected by their overall complication risk. 
-    Or a person may have less concern about getting infected than their overall complication risk indicates. 
-    Below are recommendations for other risk levels.
-    <br/>
-    <more teaser="Recommendations for different complication risk levels..." retain=true style="font-size:larger;">
-    <ul>
-        <li v-for="(advice,risk) in riskAdvice" :key=risk>
-        <more :teaser="'If you have <b>' + risk + '</b> complication risk: '" retain=true >
-           {{advice}}
-        </more>  
-    </li>    
-    </ul>
-    </more>
-    <div> 
-        <span v-if="debug" class="debug" :key="debug" > <input placeholder="key for local storage (optional)" v-model="key">
-            <button @click="load()">Load</button> <button @click="save()">Save</button> </span>   
-        <button type="button" @click="resetFields()">Reset</button> 
+    <div v-if="reveal">
+        <u>Note on Risk Tolerance</u>
+        A person may have a greater concern about getting infected than is reflected by their overall complication risk. 
+        Or a person may have less concern about getting infected than their overall complication risk indicates. 
+        Below are recommendations for other risk levels.
+        <br/>
+        <more teaser="Recommendations for different complication risk levels..." retain=true style="font-size:larger;">
+        <ul>
+            <li v-for="(advice,risk) in riskAdvice" :key=risk>
+            <more :teaser="'If you have <b>' + risk + '</b> complication risk: '" retain=true >
+            {{advice}}
+            </more>  
+        </li>    
+        </ul>
+        </more>
+        <div> 
+            <span v-if="debug" class="debug" :key="debug" > <input placeholder="key for local storage (optional)" v-model="key">
+                <button @click="load()">Load</button> <button @click="save()">Save</button> </span>   
+            <button type="button" @click="resetFields()">Reset</button> 
+        </div>
     </div>
+
+    <big-button v-if="!reveal && overallRisk()" @click="revealscores()" >
+            Show your Complication Risk
+    </big-button>
+
 </div>
 </template>
 
@@ -185,7 +195,7 @@
     import {ComplicationRisk} from "./ComplicationRisk.js"
     import DictSelect from "./DictSelect.vue"
     import LocalInfo from "./LocalInfo.vue"
-
+    import BigButton from "./BigButton.vue"
 
     const AgeDict = {
         "Under 30":0.5,
@@ -249,8 +259,8 @@
                 {
                     Self: new ComplicationRisk("self"),
                     Others: new ComplicationRisk("others"),
-                    PerceivedRisk: null,
-                    key:null
+                    key:null,
+                    reveal: false
                 } )
         },
         created () {
@@ -262,10 +272,18 @@
         components : {
             more,
             DictSelect,
-            LocalInfo
+            LocalInfo,
+            BigButton
         },
         methods: {
+            revealscores() {
+                this.reveal = true
+            },
+
             overallRisk() {
+                if (isNaN(this.Self.score()) || isNaN(this.Others.score()) ) {
+                    return null
+                }
 
                 let risk = this.Self.risk();
                 if (risk && (this.Others.score() > this.Self.score())) {

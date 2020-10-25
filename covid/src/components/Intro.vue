@@ -36,7 +36,16 @@
          Start Assessment 
     </button>
 
+    <div class="disclaimer">
+    By clicking <b>Start Assessment</b>, you are acknowledging that: (1) You are 13-years or older;
+    (2) You understand that this tool is an estimate and does not replace medical advice; and
+    (3) You agree to the Terms of Use and Privacy Policy
+    </div>
+    <div class="privacy">
+        Terms of Use and Privacy Policy
+    </div>
 </div>
+
 </body>
 </template>
 
@@ -58,7 +67,7 @@ body {
 
 .container {
     display:grid;
-    grid-template-columns: [first] 15rem auto auto [mid] 15rem auto [last] auto;
+    grid-template-columns: [first] 15rem 5rem 5rem [mid] 15rem 5rem [last] auto;
     grid-template-rows: 10px auto auto auto auto auto auto 10px;
     align-items: center;
     justify-items: center;
@@ -77,7 +86,6 @@ body {
   font-weight: bold;
   grid-column-start: first;
   grid-column-end: first;
-  opacity: 0;
 }
 
 .item-1 {
@@ -89,16 +97,19 @@ body {
 */
 }
 
+.item-2, .item-3, .item-4, .item-5 {
+  animation: cssAnimation ease 2s;
+  visibility: visible;
+}
+
 .item-2 {
   grid-row-start: 4;
   grid-row-end: 6;
-  animation: cssAnimation 1s 2s forwards;
 }
 
 .item-3 {
   grid-row-start: 6;
   grid-row-end: 8;
-  animation: cssAnimation 3s 4s forwards;
 }
 
 .item-4, .item-5 {
@@ -111,20 +122,17 @@ body {
   font-weight: bold;
   grid-column-start: mid;
   grid-column-end: mid;
-  opacity: 0;
 }
 
 
 .item-4 {
    grid-row-start: 3;
    grid-row-end: 5;
-   animation: cssAnimation 5s 6s forwards;
 }
 
 .item-5 {
    grid-row-start: 5;
    grid-row-end: 7;
-   animation: cssAnimation 5s 6s forwards;
 }
 
 .item-6 {
@@ -147,8 +155,9 @@ body {
     justify-self: stretch;  
 
     visibility: hidden;
-    animation: cssAnimation 8s 9s forwards;
+    animation: cssAnimation 1s 2s forwards;
 }
+
 
 
 .item-6:hover, .item-6:focus {
@@ -157,16 +166,42 @@ body {
     text-decoration: none;
 }
 
+.disclaimer {
+    visibility:hidden;
+    grid-column-start: 2;
+    grid-column-end: last;
+    grid-row-start: 10;
+    z-index: 5;
+    animation: cssAnimation 1s 2s forwards ease;
+    visibility: hidden;
+}
+
+.item-6:hover + .disclaimer,
+.item-6:focus + .disclaimer {
+    color: red;
+}
+
+.privacy {
+    grid-row-start:10;
+    grid-column-start:first;
+    margin: 10px
+}
+
+.privacy:hover {
+    color: red
+}
+
 .picture {
     grid-column-start: first;
-    grid-column-end: end;
+    grid-column-end: last;
     grid-row-start: 1;
     grid-row-end: 9;
     object-fit: cover;    
     z-index: 3;
  }
 
-  @keyframes cssAnimation {
-    to   { opacity: 1; visibility: visible;}
+ @keyframes cssAnimation {
+   0%   { opacity: 0;}
+   to   { opacity: 1; visibility: visible;}
   }
 </style>

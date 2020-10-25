@@ -7,12 +7,13 @@ export class ComplicationRisk {
         this.age = null
     }
 
-    healthscore() { return this.health ? this.health[1] : null }
-    agescore() { return this.age ? this.age[1] : null }
+    healthscore() { return this.health ? this.health[1] : NaN }
+    agescore() { return this.age ? this.age[1] : NaN }
 
     score() {
+        if (this.agescore() == 0) { return 0 } 
         let t = this.healthscore() * this.agescore()
-        return t > 0 ? t : null;
+        return (t > 0 || isNaN(t)) ? t : null;
     }
 
     risk() {

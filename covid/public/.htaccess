@@ -1,0 +1,7 @@
+# BROWSER CACHING USING CACHE-CONTROL HEADERS
+<ifModule mod_headers.c> 
+    # HTML files are just template holders. Pretty small so don't cache them
+    <filesMatch ".html$">
+        Header set Cache-Control "no-store"
+    </filesMatch>
+</ifModule>

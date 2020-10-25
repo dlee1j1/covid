@@ -162,7 +162,7 @@
       <tbody v-if="!isNaN(TotalScore())"> 
       <tr>
         <td colspan="2">
-            <b> Recommendations based on your COVID-19 Contact Risk results:</b> 
+            <b> Recommendations based on your Contact Risk results:</b> 
             Based on your contact risk score, your risk of being infected with COVID-19 is <b>{{InfectionRisk()}}</b>.
             {{InfRiskAdvice[InfectionRisk()]}}
 
