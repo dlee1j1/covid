@@ -39,8 +39,9 @@
     </InfectionRisk>
 
     <div style="float:right;"> 
-        <button type="button" onclick="print()" >Print</button> 
+        <button type="button" onclick="print()" style="margin:5px">Print</button> 
     </div>
+    <div style="margin:5px"> . </div>
   </form>
 </template>
 
@@ -168,6 +169,16 @@ table {
   width: 100%;
   text-align: left;
   border-collapse: collapse;
+}
+
+body {
+  background-image: url("assets/social.jpg");
+  background-repeat: repeat; 
+}
+
+form {
+  background-color: rgba(255,255,255, 0.85); /* Black w/opacity/see-through */
+  padding: 5px;
 }
 
 

@@ -21,7 +21,7 @@
     </tr>
     <tr>
       <td>
-        When meeting with other people indoor, does he/she maintain social
+        When meeting with other people indoor, does {{identifier("he/she")}} maintain social
         distance (at least 6 feet)?
         <more>
           Maintaining social distance reduces the risk of COVID-19 transmission.
@@ -42,7 +42,7 @@
     </tr>
     <tr>
       <td>
-        When meeting with other people indoor, does he/she use a face mask?
+        When meeting with other people indoor, does {{identifier("he/she")}} use a face mask?
         <more>
           Use of a face mask reduces the risk of COVID-19 transmission. We
           assigned a score of 0.5 when face masks were always used, a score of
@@ -94,7 +94,7 @@ export default Vue.extend({
       this.score = this.mem.score();
       this.$emit("updatescore");
     },
-    identifier() {
+    identifier(def) {
       if (this.mem.name) {
         return this.mem.name;
       }
@@ -102,6 +102,7 @@ export default Vue.extend({
       if (rel && rel != "other") {
         return `your ${rel}`;
       }
+      if (def) { return def }
       return `housemate ${this.mem.index + 1} of ${this.memberscount}`;
     },
   },
