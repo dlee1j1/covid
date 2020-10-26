@@ -30,8 +30,8 @@
           <u>Important:</u> The questions below refer only to close contacts
           during the past 14 days. Close contact is defined as being together
           within <b> 6 feet or 2 meters for at least 15 minutes</b>. Multiple
-          short contacts over the past 2 weeks with the same person adding up to 
-          15 minutes meets in any 24-hour period meets this definition.
+          short contacts the same person adding up to 15 minutes in any 24-hour 
+          period in the past 14 days meets this definition.
         </td>
       </tr>
       <tr>
@@ -417,6 +417,10 @@ export default Vue.extend({
     },
 
     HouseholdScore() {
+      if (this.HouseholdSize == null || this.HouseholdSize == "") {
+        return NaN;
+      }
+
       let sum = 0;
       let member;
       sum = 0;

@@ -39,7 +39,7 @@
     </InfectionRisk>
 
     <div style="float:right;"> 
-        <button type="button" onclick="print()" style="margin:5px">Print</button> 
+        <button type="button" @click="printme()" style="margin:5px" @mousedown="pmousedown()" @mouseup="pmouseup()"  >Print</button> 
     </div>
     <div style="margin:5px"> . </div>
   </form>
@@ -70,7 +70,12 @@ export default {
         wizard: "complication"
     }
   },
+  created() {
+    this.pressTimer = null
+    this.cancelprint = false
+  },
   methods: {
+    // these methods 
     next() {
       let state = this.wizard
       if (state == 'complication') { this.wizard ='precheck'}
@@ -81,6 +86,26 @@ export default {
       let state = this.wizard
       if (state == 'precheck') { this.wizard = 'complication'  }
       if (state == 'infection') { this.wizard = 'complication'  }
+    },
+
+    pmousedown() {
+      this.pressTimer = window.setTimeout(
+        ()=> { this.debug = !this.debug; this.cancelprint = true }, 
+        1000 
+      )
+      return false;
+    },
+
+    pmouseup() {
+      clearTimeout(this.pressTimer);
+      return false;
+    },
+
+    printme() {
+      if (!this.cancelprint) {
+        print();
+      }      
+      this.cancelprint = false;
     },
 
     showComplication() {
@@ -177,7 +202,7 @@ body {
 }
 
 form {
-  background-color: rgba(255,255,255, 0.85); /* Black w/opacity/see-through */
+  background-color: rgba(255,255,255, 0.85); /* White w/opacity/see-through */
   padding: 5px;
 }
 
