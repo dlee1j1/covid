@@ -160,17 +160,11 @@ export default {
       this.hasmount++
     }
   },
-  // mounted() {   
-  //       this.$refs.ComplicationRisk.load("auto")
-  //       this.$refs.InfectionRisk.load("auto")
-  //       this.hasmount = true
-  //  },
   components: {
     ComplicationRisk,
     InfectionRisk,
     Precheck,
     BigButton
-  //  Intro
   },
 };
 </script>

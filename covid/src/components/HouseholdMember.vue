@@ -2,7 +2,7 @@
   <tbody>
     <tr></tr>
     <tr>
-      <td colspan="2" style="padding-left: 1rem" >
+      <td colspan="2">
         <span class="subcategory"> Housemate {{ mem.index + 1 }} of {{ memberscount }} </span>
         <span style="float: right; margin-right: 1rem">
           <input placeholder="Firstname/Nickname (optional)" v-model="mem.name" maxlength=10 />
@@ -23,7 +23,7 @@
       <td>
         When meeting with other people indoor, does {{identifier("he/she")}} maintain social
         distance (at least 6 feet)?
-        <more>
+        <more v-if="showscore">
           Maintaining social distance reduces the risk of COVID-19 transmission.
           We assigned a score of 0.5 when social distance was always maintained,
           a score of 0.75 when it was mostly maintained, and a score of 1 if it
@@ -43,7 +43,7 @@
     <tr>
       <td>
         When meeting with other people indoor, does {{identifier("he/she")}} use a face mask?
-        <more>
+        <more v-if="showscore">
           Use of a face mask reduces the risk of COVID-19 transmission. We
           assigned a score of 0.5 when face masks were always used, a score of
           0.75 when face masks were mostly used, and a score of 1 if it was not

@@ -11,7 +11,7 @@
       <tr>
         <td colspan="2">
           <b>Contact Risk</b>: 
-          <em>Risk of becoming infected from COVID-19 from your close contacts.</em>
+          Risk of becoming infected from COVID-19 from your close contacts.
           <br/>
           Your risk of having COVID-19 is related to the level of COVID-19 infection 
           in your community and how much close contact you have with other people.
@@ -50,7 +50,7 @@
           <input
             type="number"
             v-model="HouseholdSize"
-            placeholder="household"
+            placeholder="enter zero if none"
             @input="checksize()"
             @keyup="checkkey($event)"
             max = 10
@@ -74,6 +74,7 @@
         :memberscount="HouseholdSize"
         :showscore="inner"
         @updatescore="UpdateTotalScore()"
+        class="inner-q"
       ></tbody>
       <tr v-if="inner && HouseholdSize > 0">
         <td>
@@ -110,6 +111,7 @@
         :key="insidetype.index"
         :showscore=inner
         @updatescore="UpdateTotalScore()"
+        class="inner-q"
       ></tbody>
       <tr v-if="inner">
         <td>Total Indoor Contact Score</td>
@@ -133,6 +135,7 @@
         :contact="Outside"
         :isoutdoor="true"
         @updatescore="UpdateTotalScore()"
+        class="inner-q"
       ></tbody>
 
       <tr v-if="inner" style="font-size: large; font-weight: bold">
@@ -464,10 +467,19 @@ export default Vue.extend({
 <style scoped>
 ::v-deep .category {
   font-weight: bold;
+  font-size:large;
   text-align: center;
 }
 
 ::v-deep .subcategory {
   font-style: italic;
 }
+
+.inner-q {
+  border-left-style:solid; 
+  border-left-width:15px; 
+  border-left-color:rgba(255,255,255,0); 
+  border-bottom:2px dotted lightslategray; 
+}
+
 </style>

@@ -38,7 +38,7 @@
         <tr>
           <td>
             What age group are you in?
-            <more teaser="How does age impact your risk?">
+            <more v-if="inner" teaser="How does age impact your risk?">
               Older people have substantially greater risk for COVID-19
               complications, hospitalizations, ICU care, and deaths. Those in
               older age groups are assigned a higher risk score: &lt;30, 30-49,
@@ -56,7 +56,7 @@
             obesity, cardiovascular diseases, chronic respiratory diseases,
             chronic kidney diseases, diabetes, hypertension, cancer,
             immunosuppressive drugs.
-            <more
+            <more v-if="inner"
               teaser="Learn more about health conditions that increase risk."
             >
               Those with one or more pre-existing health conditions are more
@@ -117,7 +117,7 @@
         <tr>
           <td>
             What is the age group of the oldest person you are living with?
-            <more teaser="How does age impact risk?">
+            <more v-if="inner" teaser="How does age impact risk?">
               Older people have substantially greater risk for COVID-19
               complications, hospitalizations, ICU care, and deaths. Those in
               older age groups are assigned a higher risk score: &lt;30, 30-49,
@@ -141,7 +141,7 @@
               highest number of pre-existing health conditions that put him/her
               at increased risk of COVID-19 complications. How many health
               conditions does that person have?
-              <more
+              <more v-if="inner"
                 teaser="Learn more about health conditions that increase risk"
               >
                 Those with one or more pre-existing health conditions are more
@@ -161,7 +161,7 @@
           <tr v-if="inner">
             <td>
               Complication Risk score for others you live with
-              <more teaser="How is Risk Score calculated?">
+              <more v-if="inner" teaser="How is Risk Score calculated?">
                 Being older <b>and</b> having pre-existing health conditions
                 puts a person at much greater risk for serious COVID-19
                 complications than if they only have one but not the other.

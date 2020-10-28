@@ -2,12 +2,14 @@
 <div>
     Based on your contact risk score, your risk of being infected with COVID-19 is <b>{{risk}}</b>.
     <br/>
-    <em> What considerations should I have when planning to meet with others?</em>
+    <more style="font-size:larger" teaser="What considerations should I have when planning to meet with others?" retain=true>
     <ul style="margin-top:2px;margin-bottom:2px">
         <li> {{advice().main}} </li>
         <li> <LocalInfo/> </li>
     </ul>
-    <em> Any additional considerations when forming a group bubble with others? </em>
+    </more>
+    <br/>
+    <more style="font-size:larger" teaser="Any additional considerations when forming a group bubble with others?" retain=true>
     <ul style="margin-top:2px;margin-bottom:2px">
         <li> {{advice().alt}} </li>
         <ul v-if="!advice().skip" style="margin-top:2px;margin-bottom:2px">
@@ -19,11 +21,13 @@
             <li> When meeting with others, increase the use of face mask and the practice of social distancing (if you are not doing this all the time). </li>
         </ul>
     </ul>
+    </more>
 </div>    
 </template>
 
 <script>
 import LocalInfo from "./LocalInfo.vue";
+import more from "./more.vue";
 
 const InfRiskAdvice = {
   Low:{
@@ -69,7 +73,8 @@ export default {
   },
   created(){ this.InfRiskAdvice = InfRiskAdvice },
   components: {
-      LocalInfo
+      LocalInfo,
+      more
   }
     
 }

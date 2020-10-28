@@ -2,21 +2,25 @@
 <div>
     {{advice().a}}
     <br/>  
-    <em> What considerations should I have when planning to meet with others? </em>
+    <more style="font-size:larger" teaser="What considerations should I have when planning to meet with others?" retain=true> 
     <ul style="margin-top:2px;margin-bottom:2px">
         <li> {{advice().meet}} </li>
         <li v-if="advice().meet2"> {{advice().meet2}} </li>
         <li> <LocalInfo/> </li>
     </ul>
-    <em> What should I consider when forming a group bubble with others? </em>
+    </more>
+    <br/>
+    <more style="font-size:larger" teaser="What should I consider when forming a group bubble with others?" retain=true> 
     <ul style="margin-top:2px;margin-bottom:2px">
         <li> {{advice().bubble}}</li>
     </ul>
+    </more>
 </div>
 </template>
 
 <script>
-import LocalInfo from "./LocalInfo.vue";
+import LocalInfo from "./LocalInfo.vue"
+import more from "./more.vue"
 
 const riskAdvice = {
     High: {a:`You should be very concerned about getting COVID-19 infection from others.`,
@@ -62,6 +66,6 @@ export default {
             return riskAdvice[this.risk];
         }
     },
-    components: { LocalInfo }
+    components: { LocalInfo, more }
 }
 </script>

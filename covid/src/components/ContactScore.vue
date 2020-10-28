@@ -11,17 +11,17 @@
         <input
           type="number"
           v-model="contact.count"
-          :placeholder="contact.index"
+          :placeholder="contact.index + '/zero if none'"
           @input="checkContact()"
         />
       </td>
     </tr>
     <template v-if="contact.count > 0">
       <tr>
-        <td>
+        <td class="inner">
           When you met with them, did you maintain social distance from them (at
           least 6 feet)?
-          <more>
+          <more v-if="showscore">
             Maintaining social distance reduces the risk of COVID-19
             transmission. We assigned a score of 0.5 when social distance is
             always maintained, a score of 0.75 when it is mostly maintained, and
@@ -37,9 +37,9 @@
         </td>
       </tr>
       <tr>
-        <td>
+        <td class="inner">
           When you met with them, did you use a face mask?
-          <more>
+          <more v-if="showscore">
             Use of a face mask reduces the risk of COVID-19 transmission. We
             assigned a score of 0.5 when face masks were always used, a score of
             0.75 when face masks were mostly used, and a score of 1 if it was
@@ -55,11 +55,11 @@
         </td>
       </tr>
       <tr v-if="!isoutdoor">
-        <td>
+        <td class="inner">
           What proportion of the time did you meet them in a room the size of or
           smaller than a small restaurant or a Starbucks? (If you only met in a
           larger room, then answer “none of the time”.)
-          <more>
+          <more v-if="inner">
             Transmission increases in smaller rooms. Those who did not meet in
             small rooms get a score of 1. Less than half the time the score is
             1.5. If ofen then the score is 2.
@@ -75,9 +75,9 @@
         </td>
       </tr>
       <tr>
-        <td>
+        <td class="inner">
           How frequently did you meet with them?
-          <more>
+          <more v-if="inner">
             Your chances of getting infected increases the more often you are in
             close contact with people. Hence your frequency score increases with
             frequency of meetings.
@@ -105,7 +105,7 @@
       <tr v-if="showscore">
         <td>
           {{ isoutdoor ? "Total Outdoor" : "Indoor " + contact.index }} contact score
-          <more>
+          <more v-if="showscore">
             We estimate your risk of getting COVID-19 when you are with close
             contact {{ contact.prompt }}
             by multiplying the number of these close contacts with whether you
@@ -183,3 +183,8 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.inner {
+  padding-left:10px;}
+</style>
