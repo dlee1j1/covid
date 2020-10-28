@@ -469,6 +469,7 @@ export default Vue.extend({
   font-weight: bold;
   font-size:large;
   text-align: center;
+  border-top: solid gray
 }
 
 ::v-deep .subcategory {
