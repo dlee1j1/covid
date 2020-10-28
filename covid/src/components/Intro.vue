@@ -12,10 +12,9 @@
     </div>
 
     <div class="item-2">
-        WHEN IS IT SAFE 
-        TO GATHER?
+        BUT IS IT SAFE FOR ME TO MEET WITH OTHERS?
         <br/>
-        HOW CAN WE GATHER SAFELY WITH OTHERS?
+        HOW CAN I GATHER SAFELY WITH OTHERS?
     </div>
 
     <div class="item-3">
