@@ -39,7 +39,9 @@
     </InfectionRisk>
 
     <div style="float:right;"> 
-        <button type="button" @click="printme()" style="margin:5px" @mousedown="pmousedown()" @mouseup="pmouseup()"  >Print</button> 
+        <button type="button" @click="printme()" style="margin:5px">
+          Print
+        </button> 
     </div>
     <div style="margin:5px"> . </div>
   </form>
