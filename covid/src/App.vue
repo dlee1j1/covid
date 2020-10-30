@@ -176,6 +176,12 @@ table {
   max-height: 999999px;
   font-family: serif;
   font-size: calc(1rem);
+
+  border: 1px solid #1c6ea4;
+  background-color: #eeeeee;
+  width: 100%;
+  text-align: left;
+  border-collapse: collapse;
 }
 
 @media (min-width: 30em) {
@@ -184,13 +190,6 @@ table {
   }
 }
 
-table {
-  border: 1px solid #1c6ea4;
-  background-color: #eeeeee;
-  width: 100%;
-  text-align: left;
-  border-collapse: collapse;
-}
 
 body {
   background-image: url("assets/social.jpg");
@@ -272,7 +271,7 @@ table thead {
 }
 
 table thead th {
-  font-size: 0.9em;
+  font-size: 1rem;
   font-weight: bold;
   text-align: center;
   color: #ffffff;

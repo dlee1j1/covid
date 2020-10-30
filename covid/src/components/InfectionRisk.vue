@@ -338,6 +338,7 @@ export default Vue.extend({
     },
     checksize() {
       if (this.HouseholdSize < 0) {
+        if (this.HouseholdSize == -9) {this.$emit("toggleDebug");}
         this.HouseholdSize = 0;
         this.$forceUpdate();
       }

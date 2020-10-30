@@ -12,10 +12,8 @@
         <tr>
           <td colspan="2">
             <b> Complication risk </b>:
-            <em>
               Risk of serious complications should you become infected with
               COVID-19.
-            </em>
             <br />
             Knowing your risk of serious complications should you become
             infected with COVID-19 can help you decide when it is appropriate
