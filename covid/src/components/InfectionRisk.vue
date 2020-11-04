@@ -39,7 +39,7 @@
       </tr>
       <tr>
         <td>
-          Consider the people you live with, how many of them met with other
+          Consider the <b>people you live with</b>, how many of them met with other
           people <b>indoor</b> over the past 2 weeks?
           <more teaser="What about those who do not go out or you live alone?">
             Do not include anyone living with you who did not meet with anyone
@@ -144,6 +144,7 @@
         :contact="Outside"
         :isoutdoor="true"
         @updatescore="UpdateTotalScore()"
+        :showscore=showscore
         class="inner-q"
       ></tbody>
 
