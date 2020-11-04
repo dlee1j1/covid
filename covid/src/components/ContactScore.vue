@@ -1,7 +1,7 @@
 
 <template>
   <tbody>
-    <tr>
+    <tr class="outer">
       <td>
         Number of {{ isoutdoor ? "outdoor" : "indoor" }} close contacts you met
         with <b>{{ contact.prompt }}</b
@@ -59,7 +59,7 @@
           What proportion of the time did you meet them in a room the size of or
           smaller than a small restaurant or a Starbucks? (If you only met in a
           larger room, then answer “none of the time”.)
-          <more v-if="inner">
+          <more v-if="showscore">
             Transmission increases in smaller rooms. Those who did not meet in
             small rooms get a score of 1. Less than half the time the score is
             1.5. If ofen then the score is 2.
@@ -77,7 +77,7 @@
       <tr>
         <td class="inner">
           How frequently did you meet with them?
-          <more v-if="inner">
+          <more v-if="showscore">
             Your chances of getting infected increases the more often you are in
             close contact with people. Hence your frequency score increases with
             frequency of meetings.
@@ -103,7 +103,7 @@
         </td>
       </tr>
       <tr v-if="showscore">
-        <td>
+        <td class="inner">
           {{ isoutdoor ? "Total Outdoor" : "Indoor " + contact.index }} contact score
           <more v-if="showscore">
             We estimate your risk of getting COVID-19 when you are with close
@@ -186,5 +186,8 @@ export default {
 
 <style scoped>
 .inner {
-  padding-left:10px;}
+  padding-left:20px;}
+.outer {
+  font-size: 115%;
+}
 </style>

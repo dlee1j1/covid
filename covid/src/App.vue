@@ -39,6 +39,7 @@
     </InfectionRisk>
 
     <div style="float:right;"> 
+        <a href="mailto:feedback@covidrisk.link">Send us feedback</a>
         <button type="button" @click="printme()" style="margin:5px">
           Print
         </button> 
@@ -149,8 +150,7 @@ export default {
         .catch((error) =>
           console.log(
             "Error!" +
-              error.message +
-              " Data was not shared. Please try again later."))
+              error.message))
     },
     updated(component) {
          if (this.hasmount >= 2) component.save("auto");

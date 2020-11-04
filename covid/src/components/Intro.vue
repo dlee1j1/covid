@@ -1,4 +1,4 @@
-<template functional>
+<template>
 <body>
 <div class="container">
     <div class="picture">
@@ -41,12 +41,19 @@
     (3) You agree to the Terms of Use and Privacy Policy
     </div>
     <div class="privacy">
-        Terms of Use and Privacy Policy
+        <more style="font-size:larger" teaser='Terms of Use and Privacy Policy'> Work In Progress... </more> 
     </div>
 </div>
 
 </body>
 </template>
+
+<script>
+import more from "./more";
+export default {
+  components: { more }
+}
+</script>
 
 <style scoped>
 

@@ -1,7 +1,7 @@
 <template>
   <tbody>
     <tr></tr>
-    <tr>
+    <tr class="outer">
       <td colspan="2">
         <span class="subcategory"> Housemate {{ mem.index + 1 }} of {{ memberscount }} </span>
         <span style="float: right; margin-right: 1rem">
@@ -20,7 +20,7 @@
       </td>
     </tr>
     <tr>
-      <td>
+      <td class="inner">
         When meeting with other people indoor, does {{identifier("he/she")}} maintain social
         distance (at least 6 feet)?
         <more v-if="showscore">
@@ -41,7 +41,7 @@
       </td>
     </tr>
     <tr>
-      <td>
+      <td class="inner">
         When meeting with other people indoor, does {{identifier("he/she")}} use a face mask?
         <more v-if="showscore">
           Use of a face mask reduces the risk of COVID-19 transmission. We
@@ -61,7 +61,7 @@
       </td>
     </tr>
     <tr v-if="showscore">
-      <td style="text-transform: capitalize">
+      <td style="text-transform: capitalize" >
         Infection risk score ({{ identifier() }})
         <more teaser="How did we calculate this score?">
           We multiplied the scores from mask-wearing and social distancing, and then by a factor of 12. 
@@ -108,3 +108,18 @@ export default Vue.extend({
   },
 });
 </script>
+
+<style scoped>
+.inner {
+  padding-left:20px;}
+.outer {
+  font-size: 115%;
+}
+.empty:focus {
+  background-color:white;
+}
+.empty {
+  background-color:lightgray;
+}
+
+</style>

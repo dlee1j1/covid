@@ -52,7 +52,6 @@
             v-model="HouseholdSize"
             placeholder="enter zero if none"
             @input="checksize()"
-            @keyup="checkkey($event)"
             max = 10
             min = 0
           />
@@ -76,7 +75,18 @@
         @updatescore="UpdateTotalScore()"
         class="inner-q"
       ></tbody>
-      <tr v-if="inner && HouseholdSize > 0">
+<!--- 
+      <tr v-if="wizardstate == 'household'">
+        <td colspan="2">
+          <span style="display:float; float:right">
+            <big-button v-if="!isNaN(HouseholdScore())">
+              Next: Indoor Contacts
+            </big-button> 
+          </span>
+        </td>
+      </tr>
+--->
+      <tr v-if="showscore && HouseholdSize > 0">
         <td>
           Total Household Contact Score
           <more>
@@ -93,10 +103,10 @@
         </td>
       </tr>
 
-      <tr>
+      <tr class="indoor">
         <td colspan="2" class="category">Close indoor contacts</td>
       </tr>
-      <tr>
+      <tr class="indoor">
         <td colspan="2">
           Consider the close contacts whom you don&apos;t live with but met with
           indoor over the past 2 weeks. What is the number of close contact you
@@ -104,16 +114,15 @@
           activities?
         </td>
       </tr>
-      <tbody
+      <contact-score
+        class="indoor inner-q"
         v-for="insidetype in Insides"
-        is="ContactScore"
         :contact="insidetype"
         :key="insidetype.index"
-        :showscore=inner
+        :showscore=showscore
         @updatescore="UpdateTotalScore()"
-        class="inner-q"
-      ></tbody>
-      <tr v-if="inner">
+      ></contact-score>
+      <tr class="indoor" v-if="showscore">
         <td>Total Indoor Contact Score</td>
         <td>
           <input readonly :value="InsideScore() | decimal" :key="InsideScore()" />
@@ -138,7 +147,7 @@
         class="inner-q"
       ></tbody>
 
-      <tr v-if="inner" style="font-size: large; font-weight: bold">
+      <tr v-if="showscore" style="font-size: large; font-weight: bold">
         <td>
           Total Overall Contact Score
           <more>
@@ -152,7 +161,7 @@
         </td>
       </tr>
 
-      <tr v-if="inner" style="font-size: large; font-weight: bold">
+      <tr v-if="showscore" style="font-size: large; font-weight: bold">
         <td>
           Estimated Overall Contact Risk
           <more>
@@ -251,8 +260,8 @@
             <button @click="load()">Load</button> <button @click="save()">Save</button> 
         </span>   
             
-        <button @click="toggleinner()">
-            {{this.inner?"Hide":"Show"}} the Computation
+        <button @click="toggleshowscore()">
+            {{this.showscore?"Hide":"Show"}} the Computation
         </button>
         <button type="button" @click="resetFields()" style='margin-left:5px'>
             Erase the data and Restart</button> 
@@ -308,7 +317,9 @@ export default Vue.extend({
       Outside: new ContactScoreData("outside", "outside"),
       key: null,
       reveal: false,
-      inner: false
+      showscore: false,
+      wizardstate: 'household',
+      wizardsubstate: 'null'
     };
   },
   created() {
@@ -322,19 +333,12 @@ export default Vue.extend({
     InfRec
   },
   methods: {
-    checkkey(e) {
-      if (e.key === ",") {
-        this.toggleCount++;
-      } else {
-        this.toggleCount = 0;
-      }
-      if (this.toggleCount >= 2) {
-        this.$emit("toggleDebug");
-        this.toggleCount = 0;
-      }
+    toggleshowscore() {
+      this.showscore = !this.showscore
     },
-    toggleinner() {
-      this.inner = !this.inner
+    // states - household, household<n>, indoor<n>, outdoor, showall
+    updateState(state) {
+      this.wizardsate = state;
     },
     checksize() {
       if (this.HouseholdSize < 0) {
@@ -483,5 +487,13 @@ export default Vue.extend({
   border-left-color:rgba(255,255,255,0); 
   border-bottom:2px dotted lightslategray; 
 }
+
+.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+  touch-action: none;
+}
+
+
 
 </style>
