@@ -1,5 +1,14 @@
 <template>
   <form id="app" @submit.prevent="">
+    
+    <div style="color:white;background:black;font-size:larger;text-align:center;margin=10px">
+    This form currently in limited testing for friends and family. Please give us 
+    <em> <a style="color:white"
+      class="mailtoui" 
+      :href="'mailto:feedback@covidlink.com?subject=Feedback%20on%20covid%20assessment%20tool&body=Please%20tell%20us%3A%0AWhat%20did%20you%20find%20useful%3F%0AOr%20not%3F%C2%A0%C2%A0%0AAny%20part%20not%20clear%3F%C2%A0%0AAny%20suggestions%20for%20modification%3F'"> 
+      feedback</a></em>. Please do <b>not</b> distribute widely yet.
+    </div>
+
     <ComplicationRisk v-show="showComplication()" :debug="debug" @updated="updated($event)" @hook:mounted="childmounted('ComplicationRisk')" ref="ComplicationRisk">
       <template v-if="showWizard()" #next>
         <big-button @click="next()">
@@ -39,7 +48,9 @@
     </InfectionRisk>
 
     <div style="float:right;"> 
-        <a href="mailto:feedback@covidrisk.link">Send us feedback</a>
+       <a class="mailtoui" 
+          href="'mailto:feedback@covidlink.com?subject=Feedback%20on%20covid%20assessment%20tool&body=Please%20tell%20us%3A%0AWhat%20did%20you%20find%20useful%3F%0AOr%20not%3F%C2%A0%C2%A0%0AAny%20part%20not%20clear%3F%C2%A0%0AAny%20suggestions%20for%20modification%3F'"> 
+        Send us feedback</a>
         <button type="button" @click="printme()" style="margin:5px">
           Print
         </button> 
@@ -53,6 +64,8 @@ import ComplicationRisk from "./components/ComplicationRisk.vue";
 import InfectionRisk from "./components/InfectionRisk.vue";
 import Precheck from "./components/Precheck.vue"
 import BigButton from "./components/BigButton.vue"
+
+const MailtoUI = require("../node_modules/mailtoui/dist/mailtoui-min.js")
 
 const scriptURL =
   "https://script.google.com/macros/s/AKfycbwWNvUSiJiria3hew6MHD6bd3zVP_3WvpVIx0JXhHGHhLYzbAnw/exec";
@@ -159,6 +172,9 @@ export default {
       this.$refs[name].load("auto")
       this.hasmount++
     }
+  },
+  mounted() {
+    MailtoUI.run(); 
   },
   components: {
     ComplicationRisk,
