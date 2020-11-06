@@ -5,7 +5,7 @@
     This form currently in limited testing for friends and family. Please give us 
     <em> <a style="color:white"
       class="mailtoui" 
-      :href="'mailto:feedback@covidlink.com?subject=Feedback%20on%20covid%20assessment%20tool&body=Please%20tell%20us%3A%0AWhat%20did%20you%20find%20useful%3F%0AOr%20not%3F%C2%A0%C2%A0%0AAny%20part%20not%20clear%3F%C2%A0%0AAny%20suggestions%20for%20modification%3F'"> 
+      :href="'mailto:feedback@covidlink.risk?subject=Feedback%20on%20covid%20assessment%20tool&body=Please%20tell%20us%3A%0AWhat%20did%20you%20find%20useful%3F%0AOr%20not%3F%C2%A0%C2%A0%0AAny%20part%20not%20clear%3F%C2%A0%0AAny%20suggestions%20for%20modification%3F'"> 
       feedback</a></em>. Please do <b>not</b> distribute widely yet.
     </div>
 
@@ -49,7 +49,7 @@
 
     <div style="float:right;"> 
        <a class="mailtoui" 
-          :href="'mailto:feedback@covidlink.com?subject=Feedback%20on%20covid%20assessment%20tool&body=Please%20tell%20us%3A%0AWhat%20did%20you%20find%20useful%3F%0AOr%20not%3F%C2%A0%C2%A0%0AAny%20part%20not%20clear%3F%C2%A0%0AAny%20suggestions%20for%20modification%3F'"> 
+          :href="'mailto:feedback@covidrisk.link?subject=Feedback%20on%20covid%20assessment%20tool&body=Please%20tell%20us%3A%0AWhat%20did%20you%20find%20useful%3F%0AOr%20not%3F%C2%A0%C2%A0%0AAny%20part%20not%20clear%3F%C2%A0%0AAny%20suggestions%20for%20modification%3F'"> 
         Send us feedback</a>
         <button type="button" @click="printme()" style="margin:5px">
           Print
