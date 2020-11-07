@@ -12,6 +12,7 @@
     :value="value?value[0]:null"
     :key="value?value[0]:null"
    >
+    <option selected disabled value></option>
     <option v-for="(val, key) in dict" :key="key">{{ key }}</option>
   </select>
 </template>
