@@ -254,12 +254,9 @@
     </big-button>
     </div>
 
+    <debug v-if="debug" class="debug" :key="debug"/>  
     <div v-if="reveal"> 
         <div>
-        <span v-if="debug" class="debug" :key="debug"> 
-            <input placeholder="key for local storage (optional)" v-model="key">
-            <button @click="load()">Load</button> <button @click="save()">Save</button> 
-        </span>   
             
         <button @click="toggleshowscore()">
             {{this.showscore?"Hide":"Show"}} the Computation
@@ -295,6 +292,7 @@ import more from "./more.vue";
 import BigButton from "./BigButton.vue";
 import "./filters.js";
 import InfRec from "./InfRec.vue"
+import Debug from "./Debug.vue"
 
 export default Vue.extend({
   props: ["debug"],
@@ -331,7 +329,8 @@ export default Vue.extend({
     ContactScore,
     HouseholdMember,
     BigButton,
-    InfRec
+    InfRec,
+    Debug
   },
   methods: {
     toggleshowscore() {
@@ -421,12 +420,7 @@ export default Vue.extend({
     resetFields() {
       Object.assign(this.$data, this.$options.data.call(this));
     },
-    load(key) {
-      let k = "infection" + (key || (this.key ? this.key : ""));
-      let data = localStorage.getItem(k);
-      if (!data) {
-        return;
-      }
+    loadData(data) {
       Object.assign(this.$data, JSON.parse(data));
       let hm = new HouseholdMemberData();
       let h;
@@ -444,7 +438,15 @@ export default Vue.extend({
         this.Insides[i].__proto__ = cs;
       }
       this.Outside.__proto__ = cs;
-      this.$forceUpdate();
+      this.$forceUpdate();      
+    },
+    load(key) {
+      let k = "infection" + (key || (this.key ? this.key : ""));
+      let data = localStorage.getItem(k);
+      if (!data) {
+        return;
+      }
+      this.loadData(data)
     },
     save(key) {
       let infection = JSON.stringify(this.$data);

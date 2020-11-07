@@ -260,13 +260,10 @@
       </big-button>
     </div>
 
+    <debug v-if="debug" class="debug" :key="debug"/>
+
     <div v-if="reveal">
       <div>
-        <span v-if="debug" class="debug" :key="debug">
-          <input placeholder="key for local storage (optional)" v-model="key" />
-          <button @click="load()">Load</button>
-          <button @click="save()">Save</button>
-        </span>
 
         <button @click="toggleinner()">
           {{ this.inner ? "Hide" : "Show" }} the Computation
@@ -297,6 +294,7 @@ import { ComplicationRisk } from "./ComplicationRisk.js";
 import DictSelect from "./DictSelect.vue";
 import BigButton from "./BigButton.vue";
 import CompRec from "./CompRec.vue"
+import Debug from "./Debug.vue";
 
 const AgeDict = {
   "Under 30": 0.5,
@@ -344,7 +342,8 @@ export default {
     more,
     DictSelect,
     BigButton,
-    CompRec
+    CompRec,
+    Debug
   },
   methods: {
     revealrisk() {
@@ -370,16 +369,20 @@ export default {
       Object.assign(this.$data, this.$options.data.call(this));
     },
 
+    loadData(data) {
+      Object.assign(this.$data, JSON.parse(data));
+      let cr = new ComplicationRisk();
+      this.Self.__proto__ = cr;
+      this.Others.__proto__ = cr;
+    },
+
     load(key) {
       let k = "complications" + (key || (this.key ? this.key : ""));
       let data = localStorage.getItem(k);
       if (!data) {
         return;
       }
-      Object.assign(this.$data, JSON.parse(data));
-      let cr = new ComplicationRisk();
-      this.Self.__proto__ = cr;
-      this.Others.__proto__ = cr;
+      this.loadData(data);
     },
     save(key) {
       let complications = JSON.stringify(this.$data);
