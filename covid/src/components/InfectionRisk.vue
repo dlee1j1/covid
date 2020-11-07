@@ -71,7 +71,7 @@
         :key="member.index"
         :mem="member"
         :memberscount="HouseholdSize"
-        :showscore="inner"
+        :showscore="showscore"
         @updatescore="UpdateTotalScore()"
         class="inner-q"
       ></tbody>
