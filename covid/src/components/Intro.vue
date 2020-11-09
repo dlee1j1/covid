@@ -41,7 +41,9 @@
     (3) You agree to the Terms of Use and Privacy Policy
     </div>
     <div class="privacy">
-        <more style="font-size:larger" teaser='Terms of Use and Privacy Policy'> Work In Progress... </more> 
+        <more style="font-size:larger" teaser='Terms of Use and Privacy Policy'>
+           <TOC/>           
+        </more> 
     </div>
 </div>
 
@@ -50,8 +52,9 @@
 
 <script>
 import more from "./more";
+import TOC from "./TOC";
 export default {
-  components: { more }
+  components: { more, TOC }
 }
 </script>
 
@@ -174,7 +177,7 @@ body {
 
 .disclaimer {
     visibility:hidden;
-    grid-column-start: 2;
+    grid-column-start: first;
     grid-column-end: last;
     grid-row-start: 10;
     z-index: 5;
@@ -188,9 +191,13 @@ body {
 }
 
 .privacy {
-    grid-row-start:10;
+    grid-row-start:11;
     grid-column-start:first;
-    margin: 10px
+    grid-column-end:last;
+    margin: 10px;
+    justify-self: left;
+    animation: cssAnimation 1s 2s forwards ease;
+    visibility: hidden;
 }
 
 .privacy:hover {
