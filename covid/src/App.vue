@@ -5,7 +5,7 @@
     This form currently in limited testing for friends and family. Please give us 
     <em> <a style="color:white"
       class="mailtoui" 
-      :href="'mailto:feedback@covidlink.risk?subject=Feedback%20on%20covid%20assessment%20tool&body=Please%20tell%20us%3A%0AWhat%20did%20you%20find%20useful%3F%0AOr%20not%3F%C2%A0%C2%A0%0AAny%20part%20not%20clear%3F%C2%A0%0AAny%20suggestions%20for%20modification%3F'"> 
+      :href="'mailto:feedback@covidrisk.link?subject=Feedback%20on%20covid%20assessment%20tool&body=Please%20tell%20us%3A%0AWhat%20did%20you%20find%20useful%3F%0AOr%20not%3F%C2%A0%C2%A0%0AAny%20part%20not%20clear%3F%C2%A0%0AAny%20suggestions%20for%20modification%3F'"> 
       feedback</a></em>. Please do <b>not</b> distribute widely yet.
     </div>
 
@@ -190,7 +190,6 @@ export default {
 
 table {
   max-height: 999999px;
-  font-family: serif;
   font-size: calc(1rem);
 
   border: 1px solid #1c6ea4;
@@ -210,6 +209,7 @@ table {
 body {
   background-image: url("assets/social.jpg");
   background-repeat: repeat; 
+  font-family:Verdana, Geneva, Tahoma, sans-serif;
 }
 
 form {
@@ -236,7 +236,7 @@ form {
 table td,
 table th {
   border: 1px solid #aaaaaa;
-  padding: 2px 3px;
+  padding: 4px 4px;
   padding-left: 5px;
   vertical-align: top;
 }
