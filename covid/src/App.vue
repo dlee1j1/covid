@@ -1,6 +1,6 @@
 <template>
   <form id="app" @submit.prevent="">
-    
+    <!---
     <div style="color:white;background:black;font-size:larger;text-align:center;margin=10px">
     This form currently in limited testing for friends and family. Please give us 
     <em> <a style="color:white"
@@ -8,6 +8,7 @@
       :href="'mailto:feedback@covidrisk.link?subject=Feedback%20on%20covid%20assessment%20tool&body=Please%20tell%20us%3A%0AWhat%20did%20you%20find%20useful%3F%0AOr%20not%3F%C2%A0%C2%A0%0AAny%20part%20not%20clear%3F%C2%A0%0AAny%20suggestions%20for%20modification%3F'"> 
       feedback</a></em>. Please do <b>not</b> distribute widely yet.
     </div>
+    --->
 
     <ComplicationRisk v-show="showComplication()" :debug="debug" @updated="updated($event)" @hook:mounted="childmounted('ComplicationRisk')" ref="ComplicationRisk">
       <template v-if="showWizard()" #next>
@@ -91,7 +92,7 @@ export default {
     this.cancelprint = false
   },
   methods: {
-    // these methods 
+    // these methods walk the state of 'next' and 'previous' 
     next() {
       let state = this.wizard
       if (state == 'complication') { this.wizard ='precheck'}
@@ -236,8 +237,8 @@ form {
 table td,
 table th {
   border: 1px solid #aaaaaa;
-  padding: 4px 4px;
-  padding-left: 5px;
+  padding: 4px 10px;
+  padding-left: 10px;
   vertical-align: top;
 }
 
