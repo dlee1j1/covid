@@ -227,6 +227,19 @@
             <comp-rec :risk="overallRisk()"/>
           </td>
         </tr>
+        <tr v-if="overallRisk() && reveal">
+          <td colspan="2" style="padding: 12px">
+            <more style="font-size: larger" 
+                teaser="<span style='text-align:center'> <button type='button' style='font-size:larger;font-weight:bold'>
+                    What if my household and I get the vaccine?</button></span>">
+              If you and your household get the vaccine, your Complication Risk becomes: 
+              <b>{{ vaccinedRisk() }}</b>.
+            <comp-rec :risk="vaccinedRisk()"/>
+            </more>
+          </td>
+        </tr>
+
+
       </tbody>
     </table>
     <div v-if="reveal">
@@ -352,18 +365,34 @@ export default {
     toggleinner() {
       this.inner = !this.inner;
     },
-    overallRisk() {
-      if (isNaN(this.Self.score()) || isNaN(this.Others.score())) {
+
+    compute_overallRisk(self_score,others_score,self_risk,others_risk) {
+      if (isNaN(self_score) || isNaN(others_score)) {
         return null;
       }
 
-      let risk = this.Self.risk();
-      if (risk && this.Others.score() > this.Self.score()) {
-        risk = this.Others.risk();
+      let risk = self_risk;
+      if (risk && others_score > self_score) {
+        risk = others_risk;
       }
+      return risk;
+
+    },
+
+    overallRisk() {
+      let risk = this.compute_overallRisk(this.Self.score(), this.Others.score(), 
+                                      this.Self.risk(), this.Others.risk());
       this.$emit("updated", this);
       return risk;
     },
+
+    vaccinedRisk() {
+      let risk = this.compute_overallRisk(this.Self.vaccine_score(), this.Others.vaccine_score(), 
+                                      this.Self.vaccine_risk(), this.Others.vaccine_risk());
+      this.$emit("updated", this);
+      return risk;
+    },
+
 
     resetFields() {
       Object.assign(this.$data, this.$options.data.call(this));

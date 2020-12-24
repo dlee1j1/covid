@@ -181,6 +181,17 @@
             <inf-rec :risk="InfectionRisk()"/>
       </td>
 
+      <tr>
+        <td colspan="2" style="padding:12px">
+          <more style="font-size: larger" 
+                teaser="<span style='text-align:center'> <button type='button' style='font-size:larger;font-weight:bold'>
+                    What if I get the vaccine?</button></span>">
+            If you get vaccinated, 
+                your Estimated Contact Risk for Getting Infected drops to:<b> {{VaccineInfectionRisk()}} </b> 
+            <inf-rec :risk="VaccineInfectionRisk()"/>
+          </more>
+      </td>
+
       </tr>
       </tbody>
     </table>
@@ -393,6 +404,10 @@ export default Vue.extend({
       return this.HouseholdScore() + this.InsideScore() + this.Outside.score();
     },
 
+    VaccineTotalScore() {
+      return this.TotalScore()*0.10
+    },
+
     UpdateTotalScore() {
       this.$emit("updated", this);
     },
@@ -401,8 +416,7 @@ export default Vue.extend({
       this.reveal = true
     },
 
-    InfectionRisk() {
-      let TotalScore = this.TotalScore();
+    computeInfectionRisk(TotalScore) {
       if (isNaN(TotalScore)) {
         return null;
       }
@@ -417,6 +431,15 @@ export default Vue.extend({
       }
       return "Very High";
     },
+
+    InfectionRisk() {
+      return this.computeInfectionRisk(this.TotalScore())
+    },
+
+    VaccineInfectionRisk() {
+      return this.computeInfectionRisk(this.VaccineTotalScore())
+    },
+
     resetFields() {
       Object.assign(this.$data, this.$options.data.call(this));
     },

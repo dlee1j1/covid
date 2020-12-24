@@ -16,13 +16,25 @@ export class ComplicationRisk {
         return (t > 0 || isNaN(t)) ? t : null;
     }
 
-    risk() {
-        if (this.score() == null) return null;
-        if (this.score() < 1) return "Very Low";
-        if (this.score() < 3) return "Low";
-        if (this.score() <= 5) return "Medium";
-        if (this.score() > 5) return "High";
+    vaccine_score() {
+        return this.score()*0.10;
+    }
+
+    compute_risk(score) {
+        if (score == null) return null;
+        if (score < 1) return "Very Low";
+        if (score < 3) return "Low";
+        if (score <= 5) return "Medium";
+        if (score > 5) return "High";
         return null
+    }
+
+    risk() {
+        return this.compute_risk(this.score());
+    }
+
+    vaccine_risk() {
+        return this.compute_risk(this.vaccine_score());        
     }
 
     flatten(dict) {
