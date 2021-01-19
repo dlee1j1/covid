@@ -1,6 +1,6 @@
 <template>
   <div id="complications">
-    <table class="purpleTable">
+    <table>
       <thead>
         <tr>
           <th colspan="2">

@@ -209,7 +209,7 @@ table {
 
 body {
   background-image: url("assets/social.jpg");
-  background-repeat: repeat; 
+  background-repeat: repeat-y; 
   font-family:Verdana, Geneva, Tahoma, sans-serif;
 }
 
@@ -272,6 +272,7 @@ table td select {
 
 table tr:nth-child(even) {
   background: #d0e4f5;
+/*  background: white; */
 }
 
 table thead {
@@ -284,6 +285,7 @@ table thead {
     #1c6ea4 100%
   );
   background: linear-gradient(to bottom, #5592bb 0%, #327cad 66%, #1c6ea4 100%);
+/*  background: black; */
   border-bottom: 2px solid #444444;
 }
 
