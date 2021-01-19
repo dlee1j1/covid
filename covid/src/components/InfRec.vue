@@ -1,6 +1,6 @@
 <template>
 <div>
-    Based on your contact risk score, your risk of being infected with COVID-19 is <b>{{risk}}</b>.
+    Based on your contact risk score, your risk of being exposed to COVID-19 is <b>{{risk}}</b>.
     <br/>
     <more style="font-size:larger" teaser="What considerations should I have when planning to meet with others?" retain=true>
     <ul style="margin-top:2px;margin-bottom:2px">
@@ -32,7 +32,7 @@ import more from "./more.vue";
 const InfRiskAdvice = {
   Low:{
     main: `However, even a score close to zero does not mean you are not at risk for
-      getting infected from your close
+      getting exposed to COVID-19 from your close
       contacts. Continue to maintain this low contact risk level if you plan to gather with 
       others in a small group, either indoor or outdoor. You are using face mask and social distancing
       appropriately. When the level of COVID-19 infection is at high level, consider meeting others

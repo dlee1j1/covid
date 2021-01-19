@@ -4,19 +4,18 @@
       <thead>
         <tr>
           <th colspan="2">
-            UNDERSTANDING YOUR RISK OF BEING INFECTED WITH COVID-19 BASED ON YOUR CONTACT SCORE
+            UNDERSTANDING YOUR RISK OF GETTING EXPOSED TO COVID-19 BASED ON YOUR CONTACT SCORE
           </th>
         </tr>
       </thead>
       <tr>
         <td colspan="2">
           <b>Contact Risk</b>: 
-          Risk of becoming infected from COVID-19 from your close contacts.
+          Risk of being exposed to COVID-19 from your close contacts.
           <br/>
-          Your risk of having COVID-19 is related to the level of COVID-19 infection 
-          in your community and how much close contact you have with other people.
-          This assessment generates a contact score for you. The higher the score, 
-          the greater your risk of being infected through your contacts.
+          Your risk of having COVID-19 is related to your risk of being exposed to COVID-19 from your close contacts. 
+          We call this risk your contact risk. This assessment generates a contact score for you. The higher the score, 
+          the greater your risk of being exposed to COVID-19 through your contacts.
           <p/>
           This assessment helps you understand the type of contacts that 
           increases your risk. You can use this information to reduce your contact
@@ -39,8 +38,8 @@
       </tr>
       <tr>
         <td>
-          Consider the <b>people you live with</b>, how many of them met with other
-          people <b>indoor</b> over the past 2 weeks?
+          Consider the <b>people you live with</b>, how many of them met with people other than
+          your housemates <b>indoor</b> over the past 2 weeks?
           <more teaser="What about those who do not go out or you live alone?">
             Do not include anyone living with you who did not meet with anyone
             outside your home, e.g. a toddler, stay-at-home spouse. If you live alone, enter zero.
@@ -90,7 +89,7 @@
         <td>
           Total Household Contact Score
           <more>
-            We added up each of your household member's infection risk score to
+            We added up each of your household member's contact risk score to
             come up with your household contact score.
           </more>
         </td>
@@ -166,7 +165,8 @@
         <td>
           Estimated Overall Contact Risk
           <more>
-            We estimate your risk of getting infected based on your total contact score. Less than 10 - Low Risk; Over 10 but less than 20 - Medium Risk; 
+            We estimate your risk of getting exposed to COVID-19 based on your total 
+            contact score. Less than 10 - Low Risk; Over 10 but less than 20 - Medium Risk; 
             Over 20 but less than 30 - High Risk; Over 30 - Very High Risk. 
           </more>
         </td>
@@ -177,10 +177,11 @@
       <tbody v-if="!isNaN(TotalScore()) && reveal"> 
       <tr>
         <td colspan="2" style="padding:12px">
-            <div style="font-size:large"> Your Estimated Contact Risk for Getting Infected:<b> {{InfectionRisk()}} </b></div> 
+            <div style="font-size:large"> Your Estimated Contact Risk for Getting Exposed to COVID-19:<b> {{InfectionRisk()}} </b></div> 
             <inf-rec :risk="InfectionRisk()"/>
       </td>
-
+      </tr>
+<!---
       <tr>
         <td colspan="2" style="padding:12px">
           <more style="font-size: larger" 
@@ -190,9 +191,9 @@
                 your Estimated Contact Risk for Getting Infected drops to:<b> {{VaccineInfectionRisk()}} </b> 
             <inf-rec :risk="VaccineInfectionRisk()"/>
           </more>
-      </td>
-
+        </td>
       </tr>
+--->
       </tbody>
     </table>
 
